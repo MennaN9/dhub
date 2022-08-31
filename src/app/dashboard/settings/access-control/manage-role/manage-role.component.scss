@@ -1,0 +1,45 @@
+@import "./../../../../shared/scss/colors";
+
+.access-control {
+  border-radius: 0px;
+
+  .mat-expansion-panel {
+    background: none;
+    border-radius: 0px;
+    margin-bottom: 15px;
+    box-shadow: none;
+    border: none;
+
+    .mat-expanded:focus {
+      height: 49px !important;
+    }
+
+    mat-expansion-panel-header {
+      color: $o-orange;
+      border: 1px solid $o-orange;
+    }
+  }
+
+  .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+
+  .cancel {
+    background-color: $o-light-gray;
+  }
+
+  .o-add-btn {
+    color: white !important;
+  }
+}
+
+:host ::ng-deep {
+  .mat-label {
+    color: $o-orange;
+  }
+
+  mat-expansion-panel {
+    background: none;
+    color: green($color: #000000);
+  }
+}

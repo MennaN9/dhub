@@ -1,0 +1,12 @@
+@import "./../../../../shared/scss/colors";
+
+form {
+    h2 {
+        color: $o-orange;
+        font-size: 16px;
+    }
+
+    .cancel {
+        cursor: pointer;
+    }
+}

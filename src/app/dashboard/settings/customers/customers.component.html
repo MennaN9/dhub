@@ -1,0 +1,162 @@
+<section class="customers row m-2 mt-4" *ngxPermissionsOnly="['ReadCustomer']">
+    <!-- filter -->
+    <mat-form-field appearance="fill" class="col-md-7 col-sm-12">
+        <mat-label (click)="seachInCustomers()">
+            <mat-icon matSuffix class="search-icon">search</mat-icon>
+        </mat-label>
+        <input matInput [(ngModel)]="keywords" (keyup.enter)="seachInCustomers()"
+            placeholder='{{"Search Customer" | translate}}' class="search-input">
+    </mat-form-field>
+
+    <div class="col-md-4 col-sm-12 actions mb-3">
+        <button mat-raised-button color="primary" class="circle-btn" (click)="seachInCustomers()"
+            class="o-add-btn ml-1 mr-1 p-0">
+            {{'Search' | translate}}
+        </button>
+
+        <button mat-raised-button color="primary" (click)="Clear()" class="o-add-btn ml-1 mr-1 p-0">
+            {{'Clear' | translate}}
+        </button>
+
+        <button mat-flat-button color="warn" class="o-add-btn ml-1 mr-1 pl-53 pr-3"
+            (click)="manageCustomerDialog('add')" *ngxPermissionsOnly="['CreateCustomer']">
+            {{'Add Customer' | translate}}
+        </button>
+
+        <button mat-button *ngxPermissionsOnly="['ExportCustomer']" matTooltip="{{'Export customers' | translate}}"
+            (click)="exportCustomers()" class="ico-color">
+            <mat-icon>call_made</mat-icon>
+        </button>
+
+        <button mat-button matTooltip="{{'Import customers' | translate}}" *ngxPermissionsOnly="['ImportCustomer']"
+            (click)="importCustomers()" class="ico-color p-0">
+            <mat-icon>call_received</mat-icon>
+        </button>
+
+        <button mat-button matTooltip="{{'Filter customers table' | translate}}" [matMenuTriggerFor]="filters"
+            class="ico-color p-0">
+            <mat-icon>hourglass_empty</mat-icon>
+        </button>
+
+        <button mat-button matTooltip="delete row(s)" *ngIf="selection.hasValue()">
+            <mat-icon>delete_outline</mat-icon>
+            <app-confirm-deletion [dialogContent]="bulkDeleteContent" (confirm)="onConfirmBulkDelete($event)">
+            </app-confirm-deletion>
+        </button>
+    </div>
+
+    <div class="col-md-12 col-sm-12 mt-2 table-content" *ngIf="sortedData?.length > 0 && selectedColumns.length > 0">
+
+        <!-- customers table -->
+        <table mat-table [dataSource]="sortedData" class="custom-table" matSort (matSortChange)="sortData($event)"
+            matSortDirection="asc" matSortDisableClear fxFlex="100%">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select" sticky>
+                <th mat-header-cell *matHeaderCellDef class="bg-white">
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="onSelectRow()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)" [aria-label]="onSelectRow(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> # </th>
+                <td mat-cell *matCellDef="let element; let index = index"> {{index + 1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> {{"Name" | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">{{"Phone" | translate}} </th>
+                <td mat-cell *matCellDef="let element"> +{{element?.country?.code}}{{element.phone}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="email">{{"Email" | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cid">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="cid">{{"CID" | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.cid}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tags">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="tags"> {{"Tags" | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.tags}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="address">{{"Address" | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+
+                    {{ element.address| slice:0:150 }}</td>
+            </ng-container>
+
+            <!-- actions -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>{{"Actions" | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <button (click)="setTSelectableCustomer(element)" mat-icon-button [matMenuTriggerFor]="actions"
+                        aria-label="Actions" *ngxPermissionsOnly="['UpdateCustomer','DeleteCustomer']">
+                        <mat-icon class="dms-icon-color">more_horiz</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="selectedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: selectedColumns;"></tr>
+        </table>
+
+
+    </div>
+
+    <div class="col-12" *ngIf="sortedData?.length > 0 && selectedColumns.length > 0">
+        <mat-paginator [length]="length" *ngIf="customers?.length > 0" [pageSize]="pageSize"
+            [pageSizeOptions]="[10, 25, 50 ,100]" (page)="onChangePage($event)">
+        </mat-paginator>
+    </div>
+
+    <div class="col-12 mt-5 m-auto" *ngIf="customers?.length == 0 &&  !searchMode">
+
+        <div class="text-center mt-5">
+            <img src="assets/images/icons/customer.svg">
+            <h1>{{"No Customer" | translate}}</h1>
+            <div>
+                <button mat-flat-button color="warn" class="add" (click)="manageCustomerDialog('add')"
+                    *ngxPermissionsOnly="['CreateCustomer']">
+                    {{'Add Customer' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- actions menu -->
+<mat-menu #actions="matMenu">
+    <button mat-menu-item (click)="manageCustomerDialog('edit')" *ngxPermissionsOnly="['UpdateCustomer']">{{'Edit' |
+        translate}}</button>
+    <button mat-menu-item *ngxPermissionsOnly="['DeleteCustomer']">
+        <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+</mat-menu>
+
+<!-- filters  menu -->
+<mat-menu #filters="matMenu">
+    <mat-selection-list #list [(ngModel)]="selectedColumns" dir="auto">
+        <mat-list-option *ngFor="let column of displayedFilterColumns" [value]="column.key">
+            {{column.value}}
+        </mat-list-option>
+    </mat-selection-list>
+</mat-menu>

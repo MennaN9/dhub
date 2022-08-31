@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>OBOX, Delivery Management System</title>
+  <base href="./" data-apiUrl="" data-mapsKey="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="assets/images/dm-orange-logo.png">
+  <style>
+    /* initial loader
+      Styles should reside in style files only, this is an exception to show initial loader directly after html is loaded without need to load css
+    */
+    .initial-loader {
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 80px;
+      height: 80px;
+    }
+
+    .initial-loader div {
+      position: absolute;
+      top: 33px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffa500;
+      ;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .initial-loader div:nth-child(1) {
+      left: 8px;
+      animation: initial-loader1 0.6s infinite;
+    }
+
+    .initial-loader div:nth-child(2) {
+      left: 8px;
+      animation: initial-loader2 0.6s infinite;
+    }
+
+    .initial-loader div:nth-child(3) {
+      left: 32px;
+      animation: initial-loader2 0.6s infinite;
+    }
+
+    .initial-loader div:nth-child(4) {
+      left: 56px;
+      animation: initial-loader3 0.6s infinite;
+    }
+
+    @keyframes initial-loader1 {
+      0% {
+        transform: scale(0);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes initial-loader3 {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    @keyframes initial-loader2 {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(24px, 0);
+      }
+    }
+
+    @media only screen and (max-width: 600px) {
+      .initial-loader {
+        left: 40%;
+        top: 40%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="initial-loader">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <app-root></app-root>
+
+</body>
+
+</html>

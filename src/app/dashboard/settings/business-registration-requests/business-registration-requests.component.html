@@ -1,0 +1,33 @@
+<section class="row p-2 m-1">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <h2>
+            {{'Business Registration Requests' | translate}}
+        </h2>
+    </div>
+
+    <!-- tabs -->
+    <mat-tab-group mat-stretch-tabs class="col-md-12 col-sm-12 col-xs-12">
+
+        <!-- @todo send conditions to view  -->
+
+        <!-- New Requests -->
+        <mat-tab label="{{'New Requests' | translate}}">
+            <app-business-registration-requests-view [status]="newStatus"></app-business-registration-requests-view>
+        </mat-tab>
+        <!-- end New Requests tab -->
+
+        <!-- Pending Requests tab -->
+        <mat-tab label="{{'Pending Requests' | translate}}">
+            <app-business-registration-requests-view [status]="pendingStatus"></app-business-registration-requests-view>
+        </mat-tab>
+        <!-- end Pending Requests tab -->
+
+        <!-- All Requests tab -->
+        <mat-tab label="{{'All Requests' | translate}}">
+            <app-business-registration-requests-view [status]="approvedAndRejectedStatus">
+            </app-business-registration-requests-view>
+        </mat-tab>
+        <!-- end All Requests tab -->
+
+    </mat-tab-group>
+</section>

@@ -1,0 +1,36 @@
+<mat-divider></mat-divider>
+
+<h4 class="dms-page-title">
+  {{'Send Order To Armada Delivery' | translate}}
+  <mat-slide-toggle (change)="onChange($event)" [checked]="settingSendOrderToArmada.value=='true' ? true : false"></mat-slide-toggle>
+</h4>
+
+<mat-divider></mat-divider>
+
+<h4 class="dms-page-title">
+  {{'Send Order To Delicon Delivery' | translate}}
+  <mat-slide-toggle (change)="onChangeDeliconDelivery($event)" [checked]="settingSendOrderToDelicon.value=='true' ? true : false"></mat-slide-toggle>
+</h4>
+
+<mat-divider></mat-divider>
+<h4 class="dms-page-title">
+  {{'Send Order To Mashkor Delivery' | translate}}
+  <mat-slide-toggle (change)="onChangeMashkorDelivery($event)" [checked]="settingSendOrderToMashkor.value=='true' ? true : false"></mat-slide-toggle>
+</h4>
+
+<mat-divider></mat-divider>
+
+<form class="row" [formGroup]="form">
+
+  <mat-form-field appearance="fill" class="col-md-12 col-sm-12 mt-3">
+    <mat-label>{{'API Key' | translate}}</mat-label>
+    <textarea matInput placeholder="..." li formControlName="apiKey"></textarea>
+  </mat-form-field>
+
+  <div class="col-6 align-right-button">
+    <button mat-raised-button color="primary" type="button" (click)="generatAPIKey()" class="confirm-btn o-add-btn">
+      {{'Renew' | translate}}
+    </button>
+  </div>
+</form>
+

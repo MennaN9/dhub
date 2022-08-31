@@ -1,0 +1,77 @@
+@import "./../../../shared/scss/colors";
+
+section {
+  padding: 15px;
+
+  .mat-checkbox .mat-checkbox-frame {
+    border-color: $o-orange;
+    border-width: 3px;
+  }
+
+  .mat-card {
+    padding: 15px !important;
+    border-radius: 15px;
+  }
+
+  .mat-icon {
+    font-size: 35px;
+    color: $o-orange;
+  }
+
+  .manager {
+    padding: 15px;
+
+    p {
+      color: $grey;
+    }
+  }
+
+  .mat-menu-item:hover {
+    border-left: 3px solid $o-orange;
+    background: none !important;
+    padding-left: 13px;
+  }
+
+  table {
+    width: 100%;
+  }
+}
+
+th {
+  color: blue;
+}
+
+#search {
+  cursor: pointer;
+  position: absolute;
+  left: 25px;
+  width: 20px;
+  height: 20px;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+#search:hover {
+  color: $o-orange;
+}
+
+.search-input {
+  background-color: white;
+  padding-left: 45px;
+  height: 50px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.table-content {
+  max-width: 100%;
+  overflow: auto;
+}
+
+:host ::ng-deep {
+  .mat-paginator-container,
+  .mat-paginator-page-size .mat-select-trigger {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,35 @@
+<form [formGroup]='form' novalidate>
+    <h3>
+        {{'If you are deleting your account' | translate}},
+        {{'you will not be able to regain access to your account again' | translate}}.
+        {{'Most personally identifiable information will be removed from our database' | translate}}.
+    </h3>
+
+    <div>{{'Your favorite season is' | translate}}: <b>{{form.get('deactivationReason').value}}</b></div>
+
+    <mat-radio-group aria-labelledby="reason-radio-group-label" class="reason-radio-group"
+        formControlName='deactivationReason'>
+        <mat-radio-button class="reason-radio-button" *ngFor="let season of seasons" [value]="season">
+            {{season}}
+        </mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="!form.controls['deactivationReason'].valid">
+        {{getError('reason')}}
+    </mat-error>
+
+    <!-- reason  -->
+    <mat-form-field appearance="fill">
+        <mat-label class="dms-label-color">{{'Enter current password' | translate}}</mat-label>
+        <input matInput type="password" formControlName='password'>
+    </mat-form-field>
+    <mat-error *ngIf="!form.get('password').valid">
+        {{getError('password')}}
+    </mat-error>
+
+    <div class="align-right-button">
+        <button mat-raised-button color="primary" class="confirm-btn o-add-btn" [hidden]='!form.valid'>
+            <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+        </button>
+    </div>
+
+</form>

@@ -1,0 +1,40 @@
+<section class="contianer">
+    <div class="dialog-header" mat-dialog-title>
+        <div class="row p-0">
+            <h4 class="col-11 d-flex justify-content-start">{{'Print Barcode' | translate}}</h4>
+            <i class="col-1 d-flex justify-content-end material-icons dialog-close" mat-dialog-close>close</i>
+        </div>
+    </div>
+
+    <div mat-dialog-content class="m-2">
+        <div class="row p-3" id="print-section">
+          <div *ngFor="let barcode of barcodes" class="col-md-6 mt-5 mb-5">
+
+            <div  id="list_{{barcode.code}}">
+              <span class="barcode-label">#{{barcode.code}} | {{todayDate | date:'d-M-yyyy h:mm a'}}</span>
+              <ngx-barcode  [bc-value]="barcode.code" [bc-display-value]="false"></ngx-barcode>
+            </div>
+
+
+          </div>
+        </div>
+    </div>
+
+    <!-- start actions -->
+    <div mat-dialog-actions class="d-flex justify-content-end m-2">
+        <button type="button" mat-button class="print-btn" (click)="printLalesUsingPrintJs()">
+            <span *ngIf="loading">
+                {{'Processing ...' | translate}}
+            </span>
+
+            <span *ngIf="!loading">
+                {{'Print Barcode(s)' | translate}}
+            </span>
+        </button>
+
+        <button type="button" mat-button class="close-btn" mat-dialog-close>
+            {{'Close' | translate}}
+        </button>
+    </div>
+    <!-- end actions -->
+</section>

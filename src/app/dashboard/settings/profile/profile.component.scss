@@ -1,0 +1,33 @@
+@import "./../../../shared/scss/_colors.scss";
+
+section {
+  .mat-expansion-panel {
+    margin-top: 1em;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+
+  .mat-expansion-panel-header-title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .mat-panel-title {
+    color: black;
+    font-weight: bold;
+  }
+
+  .change-lang-form {
+    width: 100%;
+  }
+
+  .select-option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  [dir="rtl"] .select-option-img {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+}

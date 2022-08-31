@@ -1,0 +1,21 @@
+@import "./../scss/colors";
+
+:host ::ng-deep {
+  .full-width {
+    width: 100%;
+    height: 30px !important;
+  
+    .code {
+      color: $o-dark-gray;
+    }
+  
+    .option-img {
+      margin-right: 10px;
+      height: 12px;
+    }
+  
+    .selected-code {
+      max-height: 30px;
+    }
+  }
+}

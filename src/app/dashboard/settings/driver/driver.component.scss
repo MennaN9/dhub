@@ -1,0 +1,110 @@
+@import "./../../../shared/scss/colors";
+
+.dirvers {
+  .add {
+    border-radius: 50px;
+    background-color: $o-orange;
+    color: white;
+
+    .mat-icon {
+      color: white;
+    }
+  }
+
+  .actions {
+    padding-left: 15px;
+    padding-top: 5px;
+  }
+
+  .mat-icon {
+    color: $o-orange;
+    cursor: pointer;
+  }
+}
+
+.mat-card {
+  padding: 15px !important;
+  border-radius: 15px;
+}
+
+.Driver {
+  padding: 15px;
+
+  p {
+    color: $grey;
+  }
+
+  .custom-table {
+    margin-top: 1em;
+  }
+}
+
+td {
+  img {
+    padding: 5px;
+    height: 64px;
+    width: 64px;
+  }
+}
+
+.mat-menu-item:hover {
+  border-left: 3px solid $o-orange;
+  background: none !important;
+  padding-left: 13px;
+}
+
+table {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+.search-icon {
+  height: 48px;
+  width: 48px;
+  color: $o-orange;
+}
+
+.image {
+  width: 64px;
+  border-radius: 50%;
+}
+
+.p-15 {
+  padding-left: 15px;
+}
+
+td.mat-cell,
+th.mat-header-cell {
+  border: none;
+}
+
+th {
+  color: blue;
+}
+
+.table-content {
+  max-width: 100%;
+  overflow: auto;
+}
+
+:host ::ng-deep {
+  .dms-check .mat-checkbox-frame {
+    border-color: $o-orange;
+    border-width: 3px;
+  }
+
+  .mat-elevation-z8 {
+    box-shadow: none;
+  }
+
+  .mat-list-item-content {
+    height: 15px !important;
+  }
+
+  .mat-button {
+    padding: 0px;
+    min-width: 35px;
+  }
+}

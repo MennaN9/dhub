@@ -1,0 +1,358 @@
+<div class="main-wrap">
+
+    <!-- map -->
+    <app-main-map></app-main-map>
+
+    <button mat-button id="btn-right" *ngIf="!driversContent && !manageTask" (click)="showDriversSection()"
+        matTooltip="Drivers">
+        <img src="assets/images/icons/left-arrow.png" class="arrow-icon">
+    </button>
+
+    <button mat-button id="btn-left" *ngIf="!tasksContent && !manageTask" (click)="showTasksSection()"
+        matTooltip="Tasks">
+        <img src="assets/images/icons/right-arrow.png" class="arrow-icon">
+    </button>
+
+    <!-- create task -->
+    <div *ngIf="manageTask" id="create-task">
+        <app-manage-task [opend]="manageTask" (close)="onClose($event)">
+        </app-manage-task>
+    </div>
+
+    <!-- tasks -->
+    <div class="scroll side mt-5" id="left" [hidden]="!tasksContent">
+        <div fxLayout="row wrap" fxLayoutAlign="flex-start" class="title-bg">
+            <p fxFlex="95%" class="title">
+                {{"Tasks" | translate}}
+            </p>
+        </div>
+
+        <mat-tab-group mat-stretch-tabs (selectedIndexChange)="onTasksTabChanage($event)" *ngIf="!viewTaskDetails">
+            <mat-tab label="{{unassignedTasksTotalCount}} {{'UNASSIGNED' | translate}}"
+                *ngxPermissionsOnly="['ReadUnassignedTask']">
+
+                <div id="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event)" class="search p-2 m-2"
+                        placeholder="{{'Search Task' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="searchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch()"
+                        *ngIf="searchBy.length > 0">
+                </div>
+
+                <section *ngFor="let mainTask of unassignedTasks;let index = index" class="m-3">
+                    <div class="assigned-tasks row">
+                        <div class="date-stepper col-2 text-center p-0">
+                            <ul class="date-list">
+                                <li>
+                                    <button mat-fab color="accent" class="add"
+                                        (click)="openAssignDriverDialog(mainTask)">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </li>
+                                <li>
+                                    <p>
+                                        {{"Assign Driver" | translate}}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="wrapper col-10" (click)="onTaskDetailsClicked(mainTask,'unassigned')">
+                            <ul class="StepProgress">
+                                <li *ngFor="let task of mainTask.tasks;let index = index"
+                                    [class.is-done]="task.taskTypeId == 2 && index < mainTask.tasks.length - 1"
+                                    [class.current]="task.taskTypeId==1"
+                                    [ngClass]="{'StepProgress-item':index < mainTask.tasks.length }">
+                                    <strong *ngIf="task.taskTypeId==1">{{task.pickupDate | date:'shortTime'}}</strong>
+                                    <strong *ngIf="task.taskTypeId==2">{{task.deliveryDate | date:'shortTime'}}</strong>
+
+                                    <a class="show-on-map Unassigned" *ngIf="index == 0"
+                                        (click)="addMarkerToMap(task.latitude,task.longitude,task.taskTypeId)">
+                                        {{'Unassigned' | translate}}
+                                    </a>
+
+                                    <strong class="mt-2">
+                                        <h3>
+                                            {{task.customer.name}}
+                                        </h3>
+                                        <h5>
+                                            <a class="completed" *ngIf="index == 0">
+                                                {{mainTask.noOfCompletedTasks}}/{{mainTask.noOfTasks}}
+                                                Completed
+                                            </a>
+                                        </h5>
+                                    </strong>
+                                    <h5 class="location mt-0 mb-0">{{task.customer.address}}</h5>
+                                    <h5 [ngClass]="task.taskStatusName + '-text'">{{task.taskStatusName | translate}}
+                                    </h5>
+                                    <p>
+                                        <a class="completed" *ngIf="index == 0 ">
+                                            <mat-icon>keyboard_arrow_right</mat-icon>
+                                        </a>
+                                    </p>
+                                    <br>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row m-1 blue-color"
+                        *ngIf="mainTask?.isEnableAutoAllocation && (!mainTask?.isFailToAutoAssignDriver)">
+                        <div class="col-6 text-left mb-1">
+                            <mat-spinner [diameter]="25"></mat-spinner>
+                        </div>
+                        <div class="col-6 text-right mb-2">
+                            {{'Auto Assigning' | translate}}
+                        </div>
+                    </div>
+
+                    <div class="row m-1 red-color"
+                        *ngIf="mainTask?.isEnableAutoAllocation && mainTask?.isFailToAutoAssignDriver">
+                        <div class="col-8 text-right mb-2">
+                            {{'Faild To Assign Automaticaly' | translate}}
+                        </div>
+                        <a class="col-4 text-right mb-2" (click)="tryAutoAssignmentAgain(mainTask)" mat-button>
+                            Try again
+                            <mat-icon>refresh</mat-icon>
+                        </a>
+
+                    </div>
+                </section>
+
+                <div class="mt-5 text-center" *ngIf="unassignedTasks.length == 0">
+                    <img src="assets/images/icons/no-tasks.png" class="no-tasks">
+                    <br>
+                    <div>
+                        {{'No tasks' | translate}}
+                        <a mat-button (click)="createTask()" *ngxPermissionsOnly="['CreateTask']">
+                            <span class="add-label">
+                                {{'Add task' | translate}}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- assigned -->
+            <mat-tab label="{{assignedTasksTotalCount}} {{'ASSIGNED' | translate}}">
+                <div id="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event)" class="search p-2 m-2"
+                        placeholder=" {{'Search Task' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="searchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch()"
+                        *ngIf="searchBy.length > 0">
+                </div>
+
+                <section *ngFor="let mainTask of assignedTasks" class="m-3">
+                    <div class="assigned-tasks row">
+                        <div class="date-stepper col-2 text-center p-0">
+                            <ul class="date-list">
+                                <li>
+                                    <p class="char mx-auto">
+                                        {{mainTask?.driverName | slice:0:1}}
+                                    </p>
+                                </li>
+                                <li>
+                                    <h5>
+                                        {{mainTask.driverName}}
+                                    </h5>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="wrapper col-10" (click)="onTaskDetailsClicked(mainTask,'assigned')">
+                            <div class="row mb-3">
+                                <div class="col-md-6 col-sm-12">
+                                    <a class="estimated-time" *ngIf="mainTask?.totalEstimationTime != null">
+                                        ETA:
+                                        {{mainTask?.totalEstimationTime.day>0 ? mainTask?.totalEstimationTime.day +' day
+                                        ':'' }}
+                                        {{mainTask?.totalEstimationTime.hour>0 ? mainTask?.totalEstimationTime.hour +'
+                                        hour ':'' }}
+                                        {{mainTask?.totalEstimationTime.minute>0 ? mainTask?.totalEstimationTime.minute
+                                        +' min ':'' }}
+                                        {{mainTask?.totalEstimationTime.second>0 ? mainTask?.totalEstimationTime.second
+                                        +' sec':'' }}
+                                    </a>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12">
+                                    <a [class]="mainTask?.mainTaskStatusName"
+                                        (click)="addMarkerToMap(task.latitude,task.longitude,task.taskTypeId)">
+                                        {{mainTask?.mainTaskStatusName | translate}}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <ul class="StepProgress">
+                                <li *ngFor="let task of mainTask.tasks;let index = index"
+                                    [class.is-done]="task.taskTypeId == 2 && index < mainTask.tasks.length - 1"
+                                    [class.current]="task.taskTypeId==1" class="is-done"
+                                    [ngClass]="{'StepProgress-item':index < mainTask.tasks.length }">
+
+                                    <strong *ngIf="task.taskTypeId==1">{{task.pickupDate | date:'shortTime'}}</strong>
+                                    <strong *ngIf="task.taskTypeId==2">{{task.deliveryDate | date:'shortTime'}}</strong>
+
+                                    <div class="mt-2 row">
+                                        <h3 class="col-md-8 col-sm-12 col-xs-12">
+                                            {{task.customer.name}}
+                                        </h3>
+
+                                        <h5 class="col-md-4 col-sm-12 col-xs-12">
+                                            <a class="completed"
+                                                *ngIf="index == 0">{{mainTask.noOfCompletedTasks}}/{{mainTask.noOfTasks}}
+                                                {{"Completed" | translate}}
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <h5 class="location mt-0 mb-0">{{task.customer.address}}</h5>
+
+                                    <div class="row">
+                                        <h5 [ngClass]="task.taskStatusName + '-text'" class="col-6">
+                                            {{task.taskStatusName | translate}}
+                                        </h5>
+
+                                        <p class="col-6 d-flex justify-content-end">
+                                            <button *ngIf="mainTask.isDelayed" mat-stroked-button color="warn"
+                                                class="delayed">
+                                                <mat-icon>error_outline</mat-icon> {{"Delayed" | translate}}
+                                            </button>
+                                        </p>
+
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="mt-5 text-center" *ngIf="assignedTasks?.length == 0">
+                    <img src="assets/images/icons/no-tasks.png" class="no-tasks">
+                    <div class="mt-2">
+                        {{'No tasks' | translate}} <a mat-button (click)="createTask()"
+                            *ngxPermissionsOnly="['CreateTask']">
+                            <span class="add-label">
+                                {{'Add task' | translate}}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- completed tasks -->
+            <mat-tab label="{{completedTasksTotalCount}} {{'COMPLETED' | translate}} ">
+                <div id="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event)" class="search p-2 m-2"
+                        placeholder="{{'Search Task' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="searchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch()"
+                        *ngIf="searchBy.length > 0">
+                </div>
+
+                <section *ngFor="let mainTask of completedTasks" class="m-3">
+                    <div class="assigned-tasks row">
+                        <div class="date-stepper col-2 text-center p-0">
+                            <ul class="date-list mt-1">
+                                <li>
+                                    <p class="char mx-auto">
+                                        {{mainTask?.driverName | slice:0:1}}
+                                    </p>
+                                </li>
+                                <li>
+                                    <h5>
+                                        {{mainTask.driverName }}
+                                    </h5>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="wrapper col-10" (click)="onTaskDetailsClicked(mainTask,'completed')">
+
+                            <div class="row mb-3">
+                                <div class="col-md-6 col-sm-12">
+                                    <a class="estimated-time" *ngIf="mainTask?.totalEstimationTime!=null">
+                                        ETA:
+                                        {{mainTask?.totalEstimationTime.day>0 ? mainTask?.totalEstimationTime.day +' day
+                                        ':'' }}
+                                        {{mainTask?.totalEstimationTime.hour>0 ? mainTask?.totalEstimationTime.hour +'
+                                        hour ':'' }}
+                                        {{mainTask?.totalEstimationTime.minute>0 ? mainTask?.totalEstimationTime.minute
+                                        +' min ':'' }}
+                                        {{mainTask?.totalEstimationTime.second>0 ? mainTask?.totalEstimationTime.second
+                                        +' sec':'' }}
+                                    </a>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12">
+                                    <a [class]="mainTask?.mainTaskStatusName"
+                                        (click)="addMarkerToMap(task.latitude,task.longitude,task.taskTypeId)">
+                                        {{mainTask?.mainTaskStatusName | translate}}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <ul class="StepProgress">
+                                <li *ngFor="let task of mainTask.tasks;let index = index"
+                                    [class.is-done]="task.taskTypeId == 2 && index < mainTask.tasks.length - 1"
+                                    [class.current]="task.taskTypeId==1"
+                                    [ngClass]="{'StepProgress-item':index < mainTask.tasks.length }">
+
+                                    <strong *ngIf="task.taskTypeId==1">{{task.pickupDate | date:'shortTime'}}</strong>
+                                    <strong *ngIf="task.taskTypeId==2">{{task.deliveryDate | date:'shortTime'}}</strong>
+
+                                    <strong class="mt-2">
+                                        {{task.customer.name}}
+                                    </strong>
+
+                                    <h5 class="location mt-0 mb-0">{{task.customer.address}}</h5>
+                                    <h5 [ngClass]="task.taskStatusName + '-text'">{{task.taskStatusName | translate}}
+                                    </h5>
+
+                                    <p class="assigend">
+                                        <a class="completed" *ngIf="index == 0">
+                                            <mat-icon>keyboard_arrow_right</mat-icon>
+                                        </a>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="mt-5 text-center" *ngIf="completedTasks?.length == 0">
+                    <img src="assets/images/icons/no-tasks.png" class="no-tasks">
+                    <br>
+                    <div>
+                        {{'No tasks' | translate}} <a mat-button (click)="createTask()"
+                            *ngxPermissionsOnly="['CreateTask']">
+                            <span class="add-label">
+                                {{'Add task' | translate}}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <!-- customer details -->
+        <app-task-details *ngIf="viewTaskDetails" [mainTaskData]="mainTaskObject"
+            (onCloseTaskDetails)="closeTaskDetails($event)" (onDrawTaskTracking)="drawTaskTracking($event)"
+            (onShowLocationOnMap)="showLocationOnMap($event)">
+        </app-task-details>
+
+        <div id="outside-task-icon" (click)="showTasksSection()" matTooltip="{{'Close tasks' | translate}} ">
+            <img src="assets/images/icons/open-task.png" alt="">
+        </div>
+    </div>
+
+    <!-- drivers -->
+    <div class="drivers-side side mt-5" id="right" [hidden]="!driversContent"
+        *ngxPermissionsOnly="['ReadAgent','ReadPlatformAgent']">
+        <app-drivers (close)="onCloseDrivers($event)" (onOpenDriverDetails)="onOpenDriverDetails($event)"></app-drivers>
+    </div>
+</div>

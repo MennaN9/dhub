@@ -1,0 +1,44 @@
+<div class="row mb-1">
+  <div class="col-7">
+    <h4 class="dialog-title">
+      {{'Import customers' | translate}}
+    </h4>
+  </div>
+
+  <div class="col-5 pt-3">
+    <a (click)="downloadTemplete()">
+      Download xlsx file
+    </a>
+  </div>
+
+</div>
+
+<mat-divider></mat-divider>
+
+<ngx-dropzone (change)="onSelect($event)">
+  <ngx-dropzone-label>
+    <img src="assets/images/icons/excel-file.png">
+    <h3>
+      <b>
+        {{'Drag & Drop' | translate}}
+      </b>
+    </h3>
+  </ngx-dropzone-label>
+
+  <ngx-dropzone-preview *ngFor="let file of files" [removable]="false">
+    <ngx-dropzone-label>
+      {{ file.name }} ({{ file.type }}
+    </ngx-dropzone-label>
+  </ngx-dropzone-preview>
+</ngx-dropzone>
+
+<mat-divider></mat-divider>
+
+<div class="row">
+  <div mat-dialog-actions class="col-12">
+    <button mat-button color="primary" type="button" (click)="cancel()"
+      class="cancel-btn">{{'Cancel' | translate}}</button>
+    <button mat-flat-button color="primary" type="button" class="confirm-btn o-add-btn"
+      (click)="import()">{{'Upload' | translate}}</button>
+  </div>
+</div>

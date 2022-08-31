@@ -1,0 +1,85 @@
+@import "./../../../../shared/scss/colors";
+
+mat-icon {
+    cursor: pointer;
+}
+
+mat-icon:hover {
+    color: $o-orange;
+}
+
+.avatar {
+    padding-top: 30px;
+    margin-left: -2em;
+    border-left: 2px solid lightgrey;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    img {
+        height: 200px;
+        width: 200px;
+        margin-left: 5em;
+    }
+}
+
+.transport-type {
+    img {
+        height: 50px;
+        width: auto;
+        padding: 5px;
+    }
+}
+
+.mat-hint {
+    color: #e91e63;
+}
+
+.warn {
+    color: #e91e63;
+}
+
+.image-to-upload-label {
+    display: inline-block;
+    padding: 0.5rem;
+    border: 1px solid $o-orange;
+    font-family: sans-serif;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+:host ::ng-deep {
+    .mat-form-field-label,
+    .mat-select-value-text {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+.close-btn {
+    color: $o-orange;
+}
+
+.create-btn {
+    border-radius: 50px;
+    color: white;
+    background-color: $o-orange;
+}
+
+@media only screen and (max-width: 600px) {
+    .transport-type {
+        img {
+            height: 25px;
+            width: 25px;
+            padding: 0px;
+        }
+
+        .col-2 {
+            padding: 0px;
+        }
+    }
+
+    .dialog-title {
+        font-size: 14px;
+        font-weight: bold;
+    }
+}

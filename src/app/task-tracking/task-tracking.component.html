@@ -1,0 +1,21 @@
+<mat-card class="tracking-card p-0">
+    <mat-card-content>
+        <div id="map"></div>
+
+        <div class="p-3">
+            <h2>
+                {{'Driver' | translate}}: {{cardRouteData?.driver}}
+            </h2>
+            <h4>
+                <b>
+                    {{cardRouteData?.taskType}}: {{cardRouteData?.time}}H, {{cardRouteData?.distance}}KM
+                </b>
+            </h4>
+            <h4>
+                <b>
+                    {{"Address" | translate}}: {{cardRouteData?.address}}
+                </b>
+            </h4>
+        </div>
+    </mat-card-content>
+</mat-card>

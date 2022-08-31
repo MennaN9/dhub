@@ -1,0 +1,287 @@
+<section fxLayout="row wrap" fxLayoutGap="15px" class="dirvers mt-3 pl-4 pr-4">
+  <!-- filter -->
+  <mat-form-field class="full-width dms-input" appearance="fill" fxFlex.lg="20%" fxFlex.md="50%">
+    <mat-label (click)="seachInDrivers()">
+      <mat-icon matSuffix class="search-icon">search</mat-icon>
+      {{"Search Driver" | translate}}
+    </mat-label>
+    <input matInput [(ngModel)]="keywords" name="keywords" (keyup.enter)="seachInDrivers()"
+      placeholder="{{'Search Driver' | translate}}" class="search-input" />
+  </mat-form-field>
+
+  <mat-form-field fxFlex.lg="20%" appearance="fill" fxFlex.md="50%" class="dms-input">
+    <select matNativeControl [(ngModel)]="selecteddriverType" name="selecteddriverType" #driverType>
+      <option value="0" selected>
+        {{'All types' | translate}}
+      </option>
+      <option *ngFor="let type of agentTypes" [value]="type.name">
+        {{ type.name | translate}}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex.lg="20%" appearance="fill" fxFlex.md="50%" class="dms-input">
+    <select matNativeControl [(ngModel)]="selectedstatusType" name="statusType" #statusType>
+      <option value="0" selected>
+        {{'All statuses' | translate}}
+      </option>
+      <option *ngFor="let type of agentStatus" [value]="type.value">
+        {{ type.name | translate}}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <div fxFlex.lg="35%" fxFlex.md="50%" class="actions">
+    <button mat-flat-button color="warn" class="o-add-btn ml-2 mr-2" (click)="seachInDrivers()">
+      {{'Search' | translate}}
+    </button>
+
+    <button mat-flat-button color="warn" class="o-add-btn" (click)="manageDriverDialog('add')"
+      *ngxPermissionsOnly="['CreateAgent']">
+      {{'Add Driver' | translate}}
+    </button>
+
+    <button *ngxPermissionsOnly="['ExportAgent']" mat-button matTooltip="{{'Export drivers' | translate}}"
+      (click)="exportDriver()">
+      <mat-icon>call_made</mat-icon>
+    </button>
+
+    <button mat-button matTooltip="{{'Import drivers' | translate }}" *ngxPermissionsOnly="['ImportAgent']"
+      (click)="importDriver()">
+      <mat-icon>call_received</mat-icon>
+    </button>
+
+    <button mat-button matTooltip='{{"filter drivers table" | translate}}' [matMenuTriggerFor]=" filters">
+      <mat-icon>hourglass_empty</mat-icon>
+    </button>
+
+    <button mat-flat-button color="warn" class="add" *ngIf="selectedRows?.length > 0"
+      matTooltip="{{'Bulk drivers action' | translate}}" [matMenuTriggerFor]="bulkActions">
+      {{'Bulk Actions'|translate}} <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  </div>
+
+  <!-- drivers table -->
+  <section fxFlex="100%" class="table-content" *ngIf="dataSource?.data?.length > 0">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table" matSort
+      (matSortChange)="sortData($event)" matSortDirection="asc" matSortDisableClear fxFlex="100%" [@.disabled]="true">
+
+      <ng-container matColumnDef="select" sticky>
+        <th mat-header-cell *matHeaderCellDef class="bg-white">
+          <mat-checkbox class="dms-check" *ngxPermissionsOnly="['DeleteAllAgent', 'UpdateAllAgent']"
+            (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row" style="width: 60px;">
+          <mat-checkbox *ngxPermissionsOnly="['DeleteAllAgent', 'UpdateAllAgent']" class="dms-check"
+            (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="imageUrl">
+        <th mat-header-cell *matHeaderCellDef>{{'Image' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <div fxFlex="20%" class="avatar">
+            <img src="{{ element.imageUrl ? ImageURL + element.imageUrl : 'assets/images/users/avatar.png'}}"
+              class="image" />
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="username">
+          {{'Username' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="fullName">
+          {{'Full Name' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.firstName }} {{ element.lastName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="email">{{'Email' | translate}}</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="phoneNumber">
+          {{'Phone Number' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ processPhone(element) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deviceType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="deviceType">
+          {{'Device Type' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.deviceType || "--" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="deviceVersion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="deviceVersion">
+          {{'Device Version'| translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.version || "--" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="teamName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="teamName">{{'Team Name' | translate}}</th>
+        <td mat-cell *matCellDef="let element">{{ element.teamName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="tags">{{'Tags' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.tags }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="rating">{{'Rating' | translate}}</th>
+        <td mat-cell *matCellDef="let element">{{ element.driverAvgRate?.toFixed(2) }}</td>
+      </ng-container>
+
+      <!--<ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> STATUS </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-template>
+          <span *ngIf="element.agentStatusName == 'Blocked'" style="color: red">
+            {{element.agentStatusName}}
+          </span>
+
+          <span *ngIf="element.agentStatusName != 'Blocked'">
+            {{element.agentStatusName}}
+          </span>
+        </ng-template>
+      </td>
+    </ng-container>-->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">{{'Status' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <label *ngIf="element.agentStatusName == 'Blocked'" style="color: red;">
+            {{ element.agentStatusName | translate}}
+          </label>
+
+          <label *ngIf="element.agentStatusName != 'Blocked'">
+            {{ element.agentStatusName | translate}}
+          </label>
+          <!--<ng-template #Other_State>
+
+  </ng-template>-->
+        </td>
+      </ng-container>
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <span *ngxPermissionsOnly="['ChangeAgentPassword','UpdateAgent','DeleteAgent']">
+            {{"Actions" | translate}}
+          </span>
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+          <button (click)="setTSelectableDriver(element)" mat-icon-button [matMenuTriggerFor]="actions"
+            aria-label="Actions" *ngxPermissionsOnly="['ChangeAgentPassword','UpdateAgent','DeleteAgent']">
+            <mat-icon class="mat-actions">more_horiz</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columsToDisply"></tr>
+      <tr mat-row *matRowDef="let row; columns: columsToDisply"></tr>
+    </table>
+  </section>
+
+  <div fxFlex="100%" *ngIf="dataSource?.data?.length > 0">
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="length" [pageSize]="pageSize"
+      (page)="onChangePage($event)">
+    </mat-paginator>
+  </div>
+
+
+  <div *ngIf="drivers?.length ==  0" class="mt-5 m-auto">
+
+    <div class="text-center mt-5">
+      <img src="assets/images/icons/driver.svg">
+      <h1>{{"No Driver" | translate}}</h1>
+      <div>
+        <button mat-flat-button color="warn" class="add" (click)="manageDriverDialog('add')"
+          *ngxPermissionsOnly="['CreateAgent']">
+          {{'Add Driver' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- actions menu -->
+<mat-menu #actions="matMenu">
+  <button mat-menu-item (click)="manageDriverDialog('edit')" *ngxPermissionsOnly="['UpdateAgent']">
+    {{'Edit Driver' | translate}}
+  </button>
+
+  <button mat-menu-item *ngxPermissionsOnly="['ChangeAgentPassword']">
+    <app-change-password [userId]="selectedDriver?.userId"></app-change-password>
+  </button>
+
+  <div *ngxPermissionsOnly="['UpdateAgent']">
+    <button mat-menu-item *ngIf="isBlockedBefore">
+      <app-confirm-deletion [dialogContent]="unblockContent" (confirm)="onUnBlock($event)"></app-confirm-deletion>
+    </button>
+  </div>
+
+  <div *ngxPermissionsOnly="['UpdateAgent']">
+    <button mat-menu-item *ngIf="!isBlockedBefore">
+      <span>
+        <app-confirm-deletion [dialogContent]="blockContent" (confirm)="onBlock($event)"></app-confirm-deletion>
+      </span>
+    </button>
+  </div>
+
+  <div>
+    <button mat-menu-item>
+      <app-confirm-deletion *ngxPermissionsOnly="['DeleteAgent']" [dialogContent]="dialogContent"
+        (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+  </div>
+
+</mat-menu>
+
+<!-- filters  menu -->
+<mat-menu #filters="matMenu">
+  <mat-selection-list #filterColumns dir="auto">
+    <mat-list-option *ngFor="let column of displayedFilterColumns" [value]="column.key">
+      {{ column.value }}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-menu>
+
+<!-- Bulk actions menu -->
+<mat-menu #bulkActions="matMenu" dir="auto">
+  <button mat-menu-item *ngxPermissionsOnly="['DeleteAllAgent']">
+    <app-confirm-deletion [dialogContent]="dialogContentBulkDelete" (confirm)="onConfirmBulkDelete($event)">
+    </app-confirm-deletion>
+  </button>
+  <button mat-menu-item *ngxPermissionsOnly="['UpdateAllAgent']">
+    <app-confirm-deletion [dialogContent]="dialogContentBulkBlock" (confirm)="onConfirmBulkBlock($event)">
+    </app-confirm-deletion>
+  </button>
+  <button mat-menu-item *ngxPermissionsOnly="['UpdateAllAgent']">
+    <app-confirm-deletion [dialogContent]="dialogContentBulkUnBlock" (confirm)="onConfirmBulkUnBlock($event)">
+    </app-confirm-deletion>
+  </button>
+  <button mat-menu-item (click)="openBulkDriversTypeDialog()" *ngxPermissionsOnly="['UpdateAllAgent']">
+    {{"Change Driver Type" | translate}}
+  </button>
+</mat-menu>

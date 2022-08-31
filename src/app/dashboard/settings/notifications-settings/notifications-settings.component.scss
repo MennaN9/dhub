@@ -1,0 +1,65 @@
+@import "./../../../shared/scss/colors";
+
+.notifications {
+    padding: 15px;
+
+    h2 {
+        color: $o-orange;
+    }
+
+    p {
+        color: $o-dark-gray;
+    }
+
+    .custom-table {
+        margin-top: 1em;
+    }
+}
+
+table {
+    width: 100%;
+
+    th {
+        font-weight: bold;
+        font-size: medium;
+        color: black;
+    }
+
+    tr:nth-child(even) {
+        background-color: $bg;
+    }
+
+    tr:hover {
+        background-color: $light-grey;
+    }
+}
+
+:host ::ng-deep {
+    .mat-elevation-z8 {
+        box-shadow: none;
+    }
+
+    mat-panel-title {
+        color: $o-dark-orange;
+        font-weight: bold;
+    }
+
+    .mat-menu-item:hover {
+        border-left: 3px solid $o-dark-orange;
+        background: none !important;
+        padding-left: 13px;
+    }
+
+    mat-select {
+        width: 80%;
+        height: 30px;
+        border-radius: 5px;
+        background-color: $bg;
+        border: 1px solid grey;
+        padding: 5px;
+    }
+}
+
+.o-add-btn {
+    height: 40px;
+}

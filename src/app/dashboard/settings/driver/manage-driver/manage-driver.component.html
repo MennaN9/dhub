@@ -1,0 +1,208 @@
+<section dir="auto">
+  <div class="row mb-1">
+    <div class="col-11">
+      <h4 class="dialog-title">
+        {{formTitle}} {{'Driver' | translate}}
+      </h4>
+    </div>
+    <div class="col-1 pt-2" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <p>
+    <mat-error *ngIf="isError">
+      {{"Please fill the mandatory fields." | translate}}
+    </mat-error>
+  </p>
+
+  <mat-divider></mat-divider>
+  <form fxLayout="row wrap" fxLayoutGap="15px" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div fxFlex="82.5%" appearance="fill" class="mt-2">
+      <div fxLayout="row wrap" fxLayoutGap="15px">
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"First name" | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="text" formControlName="firstName">
+          <mat-error *ngIf="!form.controls['firstName'].valid">
+            {{getError('firstName')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Last name" | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="text" formControlName="lastName">
+          <mat-error *ngIf="!form.controls['lastName'].valid">
+            {{getError('lastName')}}
+          </mat-error>
+        </mat-form-field>
+
+        <div fxFlex="45%">
+          <app-country-codes (country)="onChangeCountry($event)" [previousCountryId]="previousCountryId" fxFlex="25%">
+          </app-country-codes>
+
+          <mat-form-field fxFlex="75%" appearance="fill">
+            <mat-label class="dms-label-color">{{"Phone" | translate}} <span class="warn">*</span></mat-label>
+            <input matInput type="number" formControlName="phoneNumber" (keyup)="validateNumberWithCode()">
+            <mat-error *ngIf="!form.controls['phoneNumber'].valid" matTooltip=" {{getError('phoneNumber')}}">
+              {{getError('phoneNumber')}}
+            </mat-error>
+            <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Email" | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="email" formControlName="email" [readonly]='isEditMode'>
+          <mat-error *ngIf="!form.controls['email'].valid">
+            {{getError('email')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Username" | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="text" formControlName="username" [readonly]='isEditMode'>
+          <mat-error *ngIf="!form.controls['username'].valid">
+            {{getError('username')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" *ngIf="!isEditMode" appearance="fill">
+          <mat-label class="dms-label-color">{{"Password" | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="{{type}}" formControlName="password">
+          <mat-icon matSuffix (click)="togglePassword()">remove_red_eye</mat-icon>
+          <mat-error *ngIf="!form.controls['password'].valid">
+            {{getError('password')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="tags-chip-list" fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{'Tags' | translate}}</mat-label>
+          <mat-chip-list #tagsChips aria-label="Tag selection">
+            <mat-chip *ngFor="let tag of tags" [removable]="removable" (removed)="remove(tag)">
+              {{tag}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input [matChipInputFor]="tagsChips" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+            <mat-icon matTooltipPosition="above"
+              matTooltip='{{"Please insert comma separated values. These tags will be used to categorize your Team" | translate}}'>
+              help_outline
+            </mat-icon>
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Assign team" | translate}} <span class="warn">*</span></mat-label>
+          <mat-select formControlName="teamId">
+            <mat-option *ngFor="let team of teams" [value]="team.id">
+              {{team.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!form.controls['teamId'].valid">
+            {{getError('teamId')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Driver Type" | translate}} <span class="warn">*</span></mat-label>
+          <mat-select formControlName="agentTypeId">
+            <mat-option *ngFor="let type of agentTypes" [value]="type.id">
+              {{type.name | translate}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!form.controls['agentTypeId'].valid">
+            {{getError('agentTypeId')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{'Role' | translate}}<span class="warn">*</span></mat-label>
+          <mat-select formControlName="roleName">
+            <mat-option *ngFor="let agentAccess of agentAccesses" [value]="agentAccess">
+              {{agentAccess}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Pick-Up From" | translate}} </mat-label>
+          <mat-select multiple="true" formControlName="driverPickUpGeoFences">
+            <mat-option value="All">
+              {{"All" | translate}}
+            </mat-option>
+            <mat-option *ngFor="let fence of fences" [(value)]="fence">
+              {{fence.geoFenceName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill">
+          <mat-label class="dms-label-color">{{"Deliver To" | translate}} </mat-label>
+          <mat-select multiple formControlName="driverDeliveryGeoFences">
+            <mat-option value="All">
+              {{"All" | translate}}
+            </mat-option>
+            <mat-option *ngFor="let fence of fences" [(value)]="fence">
+              {{fence.geoFenceName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <a *ngIf="registrationRoute.length>0" href="{{registrationRoute}}" target="_blank">
+          {{"View Driver's Request" | translate}}</a>
+
+        <mat-button-toggle-group #group="matButtonToggleGroup" class="transport-type row mb-4 ml-5 mr-5"
+          (change)="onChangeType($event)" [value]="selectedTransportionType.toLocaleLowerCase()">
+          <mat-button-toggle [value]="type.name.toLocaleLowerCase()" *ngFor="let type of transportTypes"
+            [ngClass]="selectedTransportionType == type.name? 'mat-button-toggle-checked':''">
+            <img src="assets/images/driver/{{type.name.toLocaleLowerCase()}}.png">
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="92.5%" *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !==''"
+          appearance="fill">
+          <mat-label class="dms-label-color">{{'Transport description' | translate}} (year,model)</mat-label>
+          <input matInput type="text" formControlName="transportDescription">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill"
+          *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !== 'cycle' && selectedTransportionType !==''">
+          <mat-label class="dms-label-color">{{'Licence plate' | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="text" formControlName="licensePlate" trim>
+          <mat-error>
+            {{getError('licensePlate')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="45%" appearance="fill"
+          *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !== 'cycle' && selectedTransportionType !==''">
+          <mat-label class="dms-label-color">{{'Color' | translate}} <span class="warn">*</span></mat-label>
+          <input matInput type="text" formControlName="color" trim>
+          <mat-error>
+            {{getError('color')}}
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div fxFlex="15%" class="avatar text-center">
+      <img src="{{dispalyImage}}">
+      <label for="upload" class="image-to-upload-label">{{'Choose an image' | translate}}</label>
+      <input type="file" formControlName="formFile" id="upload" hidden (change)="onSelectImage($event)"
+        accept="{{accept}}" />
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions fxFlex="100%" fxLayoutAlign="flex-end">
+      <button mat-button color="primary" (click)="cancel()" class="cancel-btn" type="button">{{"Cancel" |
+        translate}}</button>
+      <button mat-flat-button color="primary" class="confirm-btn o-add-btn" type="submit" [disabled]="isSubmitted">
+        {{formAction}}
+      </button>
+    </div>
+
+  </form>
+</section>

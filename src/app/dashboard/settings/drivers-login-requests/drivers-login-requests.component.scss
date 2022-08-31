@@ -1,0 +1,127 @@
+@import "./../../../shared/scss/colors";
+
+.drivers {
+    margin-top: 1em;
+
+    h2 {
+        color: $o-orange;
+    }
+
+    .add {
+        border-radius: 50px;
+        background-color: $o-orange;
+        color: white;
+    }
+
+    .actions {
+        padding-left: 15px;
+        padding-top: 5px;
+
+        button {
+            background: none;
+            border: none;
+        }
+
+        button:hover {
+            color: $o-orange;
+            cursor: pointer;
+        }
+    }
+}
+
+table {
+    td,
+    td {
+        padding: 5px;
+    }
+
+    width: 100%;
+    overflow-x: hidden;
+
+    .mat-icon {
+        cursor: pointer;
+    }
+}
+
+.full-width {
+    width: 100%;
+}
+
+.search-icon {
+    height: 32px;
+    width: 32px;
+    color: $o-orange;
+}
+
+.custom-table {
+    margin-top: 1% !important;
+}
+
+.export {
+    background-color: $o-orange;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 25px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.table-content {
+    max-width: 100%;
+    overflow: auto;
+}
+
+:host ::ng-deep {
+    #dms-datetimepicker {
+        .e-keyboard,
+        .e-icons {
+            color: black !important;
+        }
+
+        .mat-menu-panel {
+            max-width: none !important;
+        }
+    }
+
+    .mat-sort-header-arrow {
+        opacity: 0.4 !important;
+    }
+
+    .mat-elevation-z8 {
+        box-shadow: none;
+    }
+
+    .mat-tab-body-content {
+        overflow-x: hidden;
+    }
+
+    .mat-tab-labels {
+        border: 1px solid $o-orange;
+    }
+
+    .mat-tab-label {
+        min-width: 25px !important;
+        padding: 5px;
+        background-color: transparent;
+        color: $o-black;
+        font-weight: 700;
+    }
+
+    .mat-tab-label {
+        opacity: 1;
+        background-color: white !important;
+    }
+
+    .mat-tab-label.mat-tab-label-active {
+        min-width: 25px !important;
+        padding: 5px;
+        color: white;
+        font-weight: 700;
+        background-color: $o-orange !important;
+    }
+
+    .mat-ink-bar {
+        background-color: var(--primary-color, none) !important;
+    }
+}

@@ -1,0 +1,185 @@
+<section dir="auto">
+    <div class="row mb-1">
+        <h4 class="col-10 dialog-title">
+            {{'Complete Driver’s Profile' | translate}}
+        </h4>
+
+        <div class="col-2 pt-2 justify-content-end" (click)="cancel()">
+            <mat-icon class="close-btn">close</mat-icon>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <form class="row mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="col-md-10 col-sm-12 row p-0">
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Full name" | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput type="text" formControlName="firstName">
+                <mat-error *ngIf="!form.controls['firstName'].valid">
+                    {{getError('firstName')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Username" | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput type="text" formControlName="userName">
+                <mat-error *ngIf="!form.controls['userName'].valid">
+                    {{getError('userName')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"password" | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput type="{{type}}" formControlName="password">
+                <mat-icon matSuffix (click)="togglePassword()">remove_red_eye</mat-icon>
+                <mat-error *ngIf="!form.controls['password'].valid">
+                    {{getError('password')}}
+                </mat-error>
+            </mat-form-field>
+            <div class="col-md-6 col-sm-12">
+                <app-country-codes (country)="onChangeCountry($event)" [previousCountryId]="previousCountryId"
+                    fxFlex="25%">
+                </app-country-codes>
+
+                <mat-form-field fxFlex="75%" appearance="fill">
+                    <mat-label class="dms-label-color">{{"Phone" | translate}} <span class="warn">*</span>
+                    </mat-label>
+                    <input matInput type="number" formControlName="phoneNumber" (keyup)="validateNumberWithCode()">
+                    <mat-error *ngIf="!form.controls['phoneNumber'].valid" matTooltip=" {{getError('phoneNumber')}}">
+                        {{getError('phoneNumber')}}
+                    </mat-error>
+                    <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Email" | translate}} <span class="warn">*</span></mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-error *ngIf="!form.controls['email'].valid">
+                    {{getError('email')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Driver Type" | translate}} <span class="warn">*</span>
+                </mat-label>
+                <mat-select formControlName="agentTypeId">
+                    <mat-option *ngFor="let type of agentTypes" [value]="type.id">
+                        {{type.name | translate}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!form.controls['agentTypeId'].valid">
+                    {{getError('agentTypeId')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{'Role' | translate}}<span class="warn">*</span></mat-label>
+                <mat-select formControlName="roleName">
+                    <mat-option *ngFor="let agentAccess of agentAccesses" [value]="agentAccess">
+                        {{agentAccess}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!form.controls['roleName'].valid">
+                    {{getError('roleName')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Pick-Up From" | translate}} </mat-label>
+                <input matInput [value]="'All'" [readonly]="true">
+                <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Deliver To" | translate}} </mat-label>
+                <input matInput [value]="'All'" [readonly]="true">
+                <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="tags-chip-list" class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{'Tags' | translate}}</mat-label>
+                <mat-chip-list #tagsChips aria-label="Tag selection">
+                    <mat-chip *ngFor="let tag of tags" [removable]="removable" (removed)="remove(tag)">
+                        {{tag}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input [matChipInputFor]="tagsChips" [matChipInputAddOnBlur]="addOnBlur"
+                        (matChipInputTokenEnd)="add($event)">
+                    <mat-icon matTooltipPosition="above"
+                        matTooltip='{{"Please insert comma separated values. These tags will be used to categorize your Team" | translate}}'>
+                        help_outline
+                    </mat-icon>
+                </mat-chip-list>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill">
+                <mat-label class="dms-label-color">{{"Assign team" | translate}} <span class="warn">*</span>
+                </mat-label>
+                <mat-select formControlName="teamId">
+                    <mat-option *ngFor="let team of teams" [value]="team.id">
+                        {{team.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!form.controls['teamId'].valid">
+                    {{getError('teamId')}}
+                </mat-error>
+            </mat-form-field>
+
+            <div class="col-12 row mb-3">
+                <mat-button-toggle-group #group="matButtonToggleGroup" class="transport-type row m-2"
+                    (change)="onChangeType($event)" [value]="selectedTransportionType">
+                    <mat-button-toggle [value]="type.id" *ngFor="let type of transportTypes"
+                        [ngClass]="selectedTransportionType == type.id? 'mat-button-toggle-checked col-2':'col-2'">
+                        <img src="assets/images/driver/{{type.name.toLocaleLowerCase()}}.png" alt="">
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <mat-form-field class="col-12" *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !==''"
+                appearance="fill">
+                <mat-label class="dms-label-color">{{'Transport description' | translate}} (year,model)</mat-label>
+                <input matInput type="text" formControlName="transportDescription">
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill"
+                *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !== 'cycle' && selectedTransportionType !==''">
+                <mat-label class="dms-label-color">{{'Licence plate' | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput type="text" formControlName="licensePlate" trim>
+                <mat-error>
+                    {{getError('licensePlate')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6 col-sm-12" appearance="fill"
+                *ngIf="selectedTransportionType !== 'walk' && selectedTransportionType !== 'cycle' && selectedTransportionType !==''">
+                <mat-label class="dms-label-color">{{'Color' | translate}} <span class="warn">*</span></mat-label>
+                <input matInput type="text" formControlName="color" trim>
+                <mat-error>
+                    {{getError('color')}}
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-2 col-sm-12">
+            <img src="{{personalPhotoSrc}}" width="175" height="200" alt="{{personalPhotoSrc}}">
+        </div>
+
+        <div mat-dialog-actions class="col-12 justify-content-end">
+            <button mat-button color="primary" (click)="cancel()" class="cancel-btn" type="button">
+                {{"Cancel" | translate}}
+            </button>
+
+            <button mat-flat-button class="create-btn" type="submit" [disabled]="isSubmitted">
+                Create
+            </button>
+        </div>
+
+    </form>
+</section>

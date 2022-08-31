@@ -1,0 +1,72 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="row">
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+        <mat-label class="dms-label-color">{{'Full Name' | translate}}</mat-label>
+        <input matInput formControlName="firstName">
+        <mat-error *ngIf="!form.controls['firstName'].valid">
+            {{getError('firstName')}}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+        <mat-label class="dms-label-color">{{'Email' | translate}}</mat-label>
+        <input matInput type="email" formControlName="email">
+        <mat-error *ngIf="!form.controls['email'].valid">
+            {{getError('email')}}
+        </mat-error>
+    </mat-form-field>
+
+    <div class="col-md-4 col-sm-12 row p-0 m-0">
+        <app-country-codes class="col-md-3" [previousCountryId]="countryId" (country)="onChangeCountry($event)">
+        </app-country-codes>
+
+        <mat-form-field class="col-md-9" appearance="fill">
+            <mat-label class="dms-label-color">{{'Phone' | translate}}</mat-label>
+            <input matInput type="number" formControlName="phone">
+            <mat-error *ngIf="!form.controls['phone'].valid">
+                {{getError('phone')}}
+            </mat-error>
+
+            <span class="error ml-5" *ngIf="numberMessage !=''">
+                *{{numberMessage}}
+            </span>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill" class="col-md-4 mt-4 col-sm-12">
+        <mat-label class="dms-label-color"> {{'What is Your Company Address ?' | translate}} </mat-label>
+        <input matInput formControlName="companyAddress" [readonly]="basicData.isManager">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4 col-sm-12 mt-4" appearance="fill">
+        <mat-label class="dms-label-color">{{'What is Your Company Name ?' | translate}}</mat-label>
+        <input matInput formControlName="companyName" [readonly]="basicData.isManager">
+    </mat-form-field>
+
+    <div class="col-md-4 col-sm-12">
+        <mat-label class="dms-label-color">{{'Country' | translate}}</mat-label>
+        <app-countries [previousCountryId]="residentCountryId" (country)="onChangeResidentCountry($event)"
+            [disabled]="basicData.isManager">
+        </app-countries>
+    </div>
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-12 mt-3">
+        <mat-label class="dms-label-color"> {{'User ID' | translate}}</mat-label>
+        <input matInput formControlName="id" [readonly]="basicData.isManager">
+    </mat-form-field>
+
+    <div class="col-md-4 col-sm-12 mt-3">
+        <input type="file" id="upload" hidden (change)="onSelectImage($event)" accept="{{accept}}" />
+        <label for="upload" class="image-to-upload-label">{{'Choose Logo' | translate}}</label>
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+        <img src="{{imageToDisplay}}" class="image-selected">
+    </div>
+
+    <div class="col-12 align-right-button">
+        <button mat-raised-button color="primary" type="submit" class="confirm-btn o-add-btn">{{'Update' |
+            translate}}</button>
+    </div>
+
+</form>

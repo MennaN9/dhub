@@ -1,0 +1,48 @@
+@import "./../../../../shared/scss/colors";
+.save-btn {
+  background-color: $o-orange;
+}
+
+.approve-btn {
+  background-color: #417505;
+}
+
+.reject-btn,
+.save-btn,
+.approve-btn {
+  width: 120px;
+  color: white;
+  font-weight: 600;
+}
+:host ::ng-deep {
+  .mat-card-header {
+    background-color: $o-orange;
+    color: white;
+    font-weight: bold;
+  }
+
+  .mat-card {
+    margin-bottom: 50px;
+  }
+
+  .mat-list-item {
+    border: 1px $o-orange solid;
+  }
+  .mat-radio-button {
+    padding: 10px;
+  }
+  .margin-input mat-form-field {
+    margin-top: 26px;
+  }
+}
+table {
+  width: 100%;
+  th,
+  td {
+    padding: 12px;
+  }
+  th {
+    background-color: $o-orange !important;
+    color: white !important;
+  }
+}

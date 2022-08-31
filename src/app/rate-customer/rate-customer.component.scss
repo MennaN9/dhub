@@ -1,0 +1,22 @@
+@import "./../shared//scss/colors";
+
+.rate {
+    .custom-btn {
+        max-width: 200px;
+        border-radius: 50px;
+        background-color: $o-orange;
+    }
+
+    .comment {
+        font-size: 16px;
+        border-radius: 10px;
+        border: 2px solid $o-orange;
+    }
+
+    .driver-icon {
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+}

@@ -1,0 +1,82 @@
+@import "./../../../shared/scss/colors";
+
+.auto-allocation {
+  .add {
+    border-radius: 50px;
+    background-color: $o-orange;
+    color: white;
+  }
+
+  padding: 0px 15px;
+
+  p {
+    color: $o-dark-gray;
+  }
+
+  .select {
+    color: black;
+  }
+
+  .mat-button-toggle {
+    max-height: 225px;
+    border-radius: 15px;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.29);
+
+    h5 {
+      margin: 0px;
+    }
+  }
+
+  .mat-button-toggle-group {
+    border: none;
+  }
+
+  .active-method {
+    background-color: white;
+    border: 1px solid grey;
+    border-left: 5px solid $o-orange !important;
+  }
+
+  mat-button-toggle {
+    margin-bottom: 1em;
+
+    img {
+      max-height: 170px;
+      max-width: 165px;
+    }
+  }
+
+  section {
+    padding-top: 2em;
+    padding-bottom: 5em;
+  }
+
+  .form {
+    background-color: white;
+    border-radius: 25px;
+    padding: 15px;
+  }
+
+  .default {
+    color: rgb(8, 100, 219);
+    cursor: pointer;
+  }
+
+  .default:hover {
+    text-decoration: underline;
+  }
+
+  .mat-button-toggle-group-appearance-standard .mat-button-toggle {
+    border-left: 0px;
+  }
+}
+
+:host ::ng-deep {
+  mat-accent mat-checkbox-checked {
+    background-color: $o-orange;
+  }
+
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: $o-orange;
+  }
+}

@@ -1,0 +1,243 @@
+<div class="main-container">
+    <mat-toolbar color="primary" class="topbar telative row p-0 m-0">
+        <div class="col-1">
+            <button mat-icon-button (click)="onToggle()" *ngIf="currentState">
+                <mat-icon class="menu-icon">menu</mat-icon>
+            </button>
+        </div>
+
+        <div class="col-1 d-flex" class="navbar-header" (click)="setDefaultView()">
+            <a class="navbar-brand" [routerLink]="'/'">
+                <img src="assets/images/dm-orange-logo.png" class="light-logo" alt="homepage">
+            </a>
+        </div>
+
+
+        <div class="p-0 d-flex justify-content-end" [ngClass]="{'col-6': isMobile,'col-8': isTablet}"
+            *ngIf="(isMobile || isTablet) && currentState">
+            <button mat-icon-button (click)="showMobileHeaderMenu()">
+                <mat-icon class="menu-icon">filter_list</mat-icon>
+            </button>
+        </div>
+
+        <div [hidden]="!(currentState && showMobileMenu)"
+            [ngClass]="{'mobile-bg col-sm-12': isMobile,'col-md-10':isTablet,'col-md-7':isDesktop}">
+            <div class="row menu-select">
+
+                <!-- calender view -->
+                <div [hidden]="!(state.viewType == 'list')" class="col-md-2 col-sm-12 p-2">
+                    <ejs-daterangepicker (change)="onSelectDate($event,'dateRange')" [startDate]='start'
+                        [endDate]='end'>
+                    </ejs-daterangepicker>
+                </div>
+
+                <div [hidden]="!(state.viewType == 'map')" class="col-md-2 col-sm-12 p-2">
+                    <ejs-datepicker (change)="onSelectDate($event,'date')" [value]="dateValue">
+                    </ejs-datepicker>
+                </div>
+
+                <mat-button-toggle-group (change)="onSelectTasksTypeView($event)" class="col-md-2 col-sm-12 p-2"
+                    *ngIf="state.viewType !=''">
+                    <mat-button-toggle value="map" [checked]="state.viewType == 'map'">
+                        <h6>
+                            <a [routerLink]="['/', 'app']">
+                                {{'MAP' | translate}}
+                            </a>
+                        </h6>
+                    </mat-button-toggle>
+                    <mat-button-toggle value="list" [checked]="state.viewType == 'list'">
+                        <h6>
+                            <a [routerLink]="['/','tasks']">
+                                {{'LIST' | translate}}
+                            </a>
+                        </h6>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+
+                <div class="col-md-2 col-sm-12 p-2" *ngIf="enableRoleSelect">
+                    <select matNativeControl class="header-select" (change)="onChangeType($event)" [(ngModel)]="role">
+                        <option value="driver" *ngxPermissionsOnly="['CreateAgent']">
+                            {{"Driver" | translate}}
+                        </option>
+                        <option value="manager" *ngxPermissionsOnly="['AddManager']">
+                            {{"Manager" | translate}}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- <div class="col-2 p-2">
+                    <select matNativeControl class="header-select"
+                        *ngIf="(state.viewType == 'list' || state.viewType == 'map')"
+                        (change)="onChange($event,'teams')">
+                        <option value="0" (click)="listTeams()">{{teamsLoading ? 'loading ...':'All teams'}}</option>
+                        <option [value]="team.id" *ngFor="let team of teams">{{team.name}}</option>
+                    </select>
+                </div> -->
+
+                <div class="col-md-2 col-sm-12 p-2" *ngIf="(state.viewType == 'list' || state.viewType == 'map')">
+                    <button mat-button class="header-select" [matMenuTriggerFor]="zonesMenu" (click)="listZones()">
+                        <span *ngIf="zonesLoading">
+                            {{'loading' | translate}}
+                        </span>
+
+                        <span *ngIf="!zonesLoading">
+                            {{'Zones' | translate}} {{'(' + selectedZones?.length +')'}}
+                        </span>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #zonesMenu="matMenu">
+                        <mat-list *ngIf="zones?.length == 0">
+                            <mat-list-item>
+                                {{'No zones' | translate}}
+                            </mat-list-item>
+                        </mat-list>
+
+                        <mat-selection-list (click)="$event.stopPropagation()" [(ngModel)]="selectedZones"
+                            (selectionChange)="onChange($event,'zones')" *ngIf="zones?.length > 0" dir="auto">
+
+                            <mat-list-option #menuSelectedZones (click)="toggleAllSelection('zones')" [value]="0"
+                                *ngIf="zones?.length > 0">
+                                {{'All' | translate}}
+                            </mat-list-option>
+                            <mat-list-option *ngFor="let zone of zones" [value]="zone.id" matTooltip="{{zone.name}}"
+                                (click)="selectOne('zones')">
+                                {{zone.name | truncateText:[20]}}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </mat-menu>
+                </div>
+
+                <div class="col-md-2 col-sm-12 p-2" *ngIf="(state.viewType == 'list' || state.viewType == 'map')">
+                    <button mat-button class="header-select" [matMenuTriggerFor]="restaurantsMenu"
+                        (click)="listRestaurants()">
+                        <span *ngIf="restaurantsLoading">
+                            {{'loading' | translate}}
+                        </span>
+
+                        <span *ngIf="!restaurantsLoading">
+                            {{'Restaurants' | translate}} {{'('+ selectedRestuarants?.length +')'}}
+                        </span>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #restaurantsMenu="matMenu">
+                        <mat-list *ngIf="restaurants?.length == 0">
+                            <mat-list-item>
+                                {{'No restaurants' | translate}}
+                            </mat-list-item>
+                        </mat-list>
+
+                        <mat-selection-list (click)="$event.stopPropagation()" [(ngModel)]="selectedRestuarants"
+                            (selectionChange)="onChange($event,'restaurants')" *ngIf="restaurants?.length > 0"
+                            dir="auto">
+
+                            <mat-list-option #menuSelectedRestaurants (click)="toggleAllSelection('restaurants')"
+                                [value]="0" *ngIf="restaurants?.length > 0">
+                                {{'All' | translate}}
+                            </mat-list-option>
+
+                            <mat-list-option *ngFor="let restaurant of restaurants" [value]="restaurant.id"
+                                matTooltip="{{restaurant.name}}" (click)="selectOne('restaurants')">
+                                {{restaurant.name | truncateText:[20]}}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </mat-menu>
+                </div>
+
+                <div class="col-md-2 col-sm-12 p-2" *ngIf="(state.viewType == 'list' || state.viewType == 'map')">
+                    <button mat-button class="header-select" [matMenuTriggerFor]="branchesMenu"
+                        (click)="listBranches()">
+                        <span *ngIf="branchesLoading">
+                            {{'loading' | translate}}
+                        </span>
+                        <span *ngIf="!branchesLoading">
+                            {{'Branches' | translate}} {{'('+ selectedBranches?.length +')'}}
+                        </span>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #branchesMenu="matMenu">
+                        <mat-list *ngIf="branches?.length == 0">
+                            <mat-list-item>
+                                {{'No Branches' | translate}}
+                            </mat-list-item>
+                        </mat-list>
+
+                        <mat-selection-list (click)="$event.stopPropagation()" [(ngModel)]="selectedBranches"
+                            (selectionChange)="onChange($event,'branches')" dir="auto">
+                            <mat-list-option *ngIf="branches?.length > 0" #menuSelectedBranches
+                                (click)="toggleAllSelection('branches')" [value]="0">
+                                {{'All' | translate}}
+                            </mat-list-option>
+
+                            <mat-list-option [value]="branch.id" *ngFor="let branch of branches"
+                                matTooltip="{{branch.restaurant.name}} /  {{branch.name}}"
+                                (click)="selectOne('branches')" [value]="branch.id">
+                                {{branch.restaurant.name + ' / ' + branch.name | truncateText:[20]}}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </mat-menu>
+                </div>
+
+                <div class="col-md-2 col-sm-12 p-2" *ngIf="(state.viewType == 'list' || state.viewType == 'map')">
+                    <button mat-button color="warn" (click)="clearFilter()" class="text-white reset"
+                        matTooltip="{{'Reset' | translate}}">
+                        <mat-icon>refresh</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div [ngClass]="{'mobile-bg col-sm-12': isMobile,'col-md-12':isTablet,'col-md-2':isDesktop}">
+            <div fxFlex="20" class="create-task-group" *ngIf="currentState && showMobileMenu && state.viewType != ''">
+                <button mat-flat-button (click)="createTask()" class="btn-create-task btn-gradient"
+                    *ngxPermissionsOnly="['Tenant','CreateTask']">{{'Create Task' | translate}}</button>
+                <button mat-button [matMenuTriggerFor]="notificationsMenu" (click)="getAllNotifications()">
+                    <mat-icon [matBadge]="unReadCount" matBadgeColor="warn">
+                        notifications
+                    </mat-icon>
+                </button>
+
+                <mat-menu #notificationsMenu="matMenu">
+
+                    <ul class="list-group notifications" *ngIf="notifications.length > 0">
+                        <li class="list-group-item" *ngFor="let notification of notifications"
+                            (click)="goToPage(notification)">
+
+                            <h3>
+                                {{notification.title}}
+                            </h3>
+
+                            <h5>
+                                {{notification.body}}
+                            </h5>
+
+                            <h5>
+                                {{notification.createdDate | dateToTimezone}}
+                            </h5>
+                        </li>
+                        <li class="text-center">
+                            <a [routerLink]="['/app/settings/notifications/all']">{{'Show All' | translate}}</a>
+                        </li>
+                    </ul>
+
+                    <h5 class="text-center" *ngIf="notifications.length == 0">
+                        {{'No notifications found' | translate}}
+                    </h5>
+                </mat-menu>
+            </div>
+        </div>
+    </mat-toolbar>
+
+    <mat-sidenav-container (click)="close()">
+        <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" mode="over" fixedTopGap="0" [opened]="newStatus">
+            <app-sidebar class="scroll"></app-sidebar>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="page-wrapper scroll">
+            <div class="page-content">
+                <router-outlet>
+                </router-outlet>
+            </div>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>

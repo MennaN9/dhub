@@ -1,0 +1,103 @@
+@import "./../../../shared/scss/colors";
+
+section {
+    table {
+        width: 100%;
+        box-shadow: none;
+
+        th {
+            color: blue;
+        }
+
+        .mat-icon {
+            cursor: pointer;
+            color: $o-orange;
+        }
+    }
+
+    .filter {
+        background-color: white;
+
+        .clear {
+            border: 1px solid red;
+            border-radius: 50px;
+        }
+    }
+
+    .cut-address {
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+:host ::ng-deep {
+    .mat-checkbox .mat-checkbox-frame {
+        border-color: $o-orange;
+        border-width: 2px;
+    }
+
+    .mat-form-field-required-marker {
+        color: red;
+    }
+}
+
+:host ::ng-deep {
+  #dms-datetimepicker ,#dms-datetimepickerTo {
+      .e-keyboard,
+      .e-icons {
+          color: black !important;
+      }
+
+      .mat-menu-panel {
+          max-width: none !important;
+      }
+  }
+
+  .mat-sort-header-arrow {
+      opacity: 0.4 !important;
+  }
+
+  .mat-elevation-z8 {
+      box-shadow: none;
+  }
+
+  .mat-tab-body-content {
+      overflow-x: hidden;
+  }
+
+  .mat-tab-labels {
+      border: 1px solid $o-orange;
+  }
+
+  .mat-tab-label {
+      min-width: 25px !important;
+      padding: 5px;
+      background-color: transparent;
+      color: $o-black;
+      font-weight: 700;
+  }
+
+  .mat-tab-label {
+      opacity: 1;
+      background-color: white !important;
+  }
+
+  .mat-tab-label.mat-tab-label-active {
+      min-width: 25px !important;
+      padding: 5px;
+      color: white;
+      font-weight: 700;
+      background-color: $o-orange !important;
+  }
+
+  .mat-ink-bar {
+      background-color: var(--primary-color, none) !important;
+  }
+}
+
+.date-class{
+  border-bottom: 1px solid gray;
+  line-height: 2.5;
+}

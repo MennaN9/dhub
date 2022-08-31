@@ -1,0 +1,28 @@
+@import "./../../../../shared/scss/colors";
+
+.mat-dialog-content {
+  padding: 0px;
+  margin: 0px;
+}
+
+.error {
+  color: #e91e63;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.close {
+  cursor: pointer;
+}
+
+h4 {
+  line-height: 0px;
+}

@@ -1,0 +1,25 @@
+@import "./../../../../shared/scss/_colors.scss";
+
+/* delete account section*/
+
+.reason-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+
+.reason-radio-button {
+    margin: 5px;
+}
+
+.align-right-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+:host ::ng-deep {
+    .mat-radio-inner-circle {
+        background-color: $o-orange !important;
+    }
+}

@@ -1,0 +1,82 @@
+<section class="p-3">
+    <div class="row mb-1" dir="auto">
+        <div class="col-11">
+            <h4 class="dialog-title">
+                {{'Task ID' | translate}}: {{task.id}} {{'Order Progress' | translate}}
+            </h4>
+        </div>
+        <div class="col-1" (click)="cancel()">
+            <mat-icon>close</mat-icon>
+        </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" dir="auto">
+        <ng-container matColumnDef="dateTime">
+            <th mat-header-cell *matHeaderCellDef>{{' Order Date & Time' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.createdDate | dateToTimezone}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> {{'Order Status' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.actionName.trim() | translate }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="driverName">
+            <th mat-header-cell *matHeaderCellDef [hidden]="hideDriverColumn"> {{'Driver Name' | translate}} </th>
+            <td mat-cell *matCellDef="let element" [hidden]="hideDriverColumn"> {{task.driverName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="attachment">
+            <th mat-header-cell *matHeaderCellDef> {{'Attachment' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-button color="primary"
+                    *ngIf="element?.actionName.trim() == 'ADDED A SIGNATURE'"
+                    (click)="openTaskSignaturesLightBox(task?.signatureURL)">
+                    {{'View Signature' | translate}}
+                </button>
+
+                <button mat-button color="primary"
+                    *ngIf="element?.actionName.trim() == 'ADDED THIS IMAGE' "
+                    (click)="openTasksGalleryLightBox(task?.taskGallaries)">
+                    {{'View Image(s)' | translate}}
+                </button>
+
+                <span *ngIf="element?.actionName.trim() == 'ADDED THIS NOTE'">
+                    {{element?.description}}
+                </span>
+                <span
+                    *ngIf="element?.actionName.trim() != 'ADDED A SIGNATURE' && element?.actionName.trim() != 'ADDED THIS IMAGE'  && element?.actionName.trim() != 'ADDED THIS NOTE'">
+                    --
+                </span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reason">
+            <th mat-header-cell *matHeaderCellDef> {{'Reason' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+                <span
+                    *ngIf="element?.actionName.trim() == 'MARKED AS FAILED'  || element?.actionName.trim() == 'FAILED' || element?.actionName.trim() == 'CANCELLED'  ">
+                    {{element.reason}}
+                </span>
+                <span
+                    *ngIf="element?.actionName.trim() != 'MARKED AS FAILED'  && element?.actionName.trim() != 'FAILED' && element?.actionName.trim() != 'CANCELLED'">
+                    --
+                </span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef> {{'Location' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.latitude && element.longitude">
+                    {{element.latitude}} : {{element.longitude}}
+                </span>
+                <span *ngIf="!element.latitude && !element.longitude">
+                    --
+                </span>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</section>

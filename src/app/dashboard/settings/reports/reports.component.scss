@@ -1,0 +1,135 @@
+@import "./../../../shared/scss/colors";
+
+section {
+    table {
+        width: 100%;
+        box-shadow: none;
+
+        th {
+            color: blue;
+        }
+
+        .mat-icon {
+            cursor: pointer;
+            color: $o-orange;
+        }
+    }
+
+    .filter {
+        background-color: white;
+
+        .clear {
+            border: 1px solid red;
+            border-radius: 50px;
+        }
+    }
+
+    .cut-address {
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.Unassigned {
+  background-color: #2f9e2c;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Assigned {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Accepted {
+  color: white;
+  background-color: #ba68c8;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Started {
+  color: white;
+  background-color: #1393ff;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.Successful {
+  color: white;
+  background-color: #2f9e2c;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Failed {
+  color: white;
+  background-color: #d0021b;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.Declined {
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+  color: white;
+}
+
+.Cancelled {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Inprogress {
+  color: white;
+  background-color: #244f8e;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+
+:host ::ng-deep {
+    .mat-checkbox .mat-checkbox-frame {
+        border-color: $o-orange;
+        border-width: 2px;
+    }
+
+    .mat-form-field-required-marker {
+        color: red;
+    }
+}

@@ -1,0 +1,118 @@
+<section class="pl-5 pr-5">
+    <h2>
+        {{'Driver Working Hours Report' | translate}}
+    </h2>
+
+    <!-- filters -->
+    <div class="row filter pt-3 mb-3">
+        <div class="col-md-4 col-sm-12">
+            <div appearance="fill">
+                <mat-label class="dms-label-color">
+                    {{'Date from' | translate}}
+                </mat-label>
+                <input matInput class="startDatetimepicker date-class" [(ngModel)]="reportParam.startDate"
+                    name="startDate" #startDate="ngModel" autocomplete="off">
+                <mat-hint *ngIf="!startDate.valid && startDate.touched" style="color: rgb(219, 47, 76);">
+                    {{'Start date is required' | translate}}!
+                </mat-hint>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div appearance="fill">
+                <mat-label class="dms-label-color">
+                    {{'Date to' | translate}}
+                </mat-label>
+                <input matInput class="endDatetimepicker date-class" [(ngModel)]="reportParam.endDate" name="endDate"
+                    #endDate="ngModel" autocomplete="off">
+
+                <mat-hint *ngIf="!endDate.valid && endDate.touched" style="color: rgb(219, 47, 76);">
+                    {{'End date is required' | translate}}!
+                </mat-hint>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <mat-form-field appearance="fill">
+                <mat-label class="dms-label-color">{{'Driver name' | translate }}</mat-label>
+                <mat-select [(ngModel)]="reportParam.driverIds" name="DriversIds" #driverIds="ngModel" required
+                    multiple="true">
+                    <mat-option [value]="0">
+                        {{"Select All" | translate}}
+                    </mat-option>
+                    <mat-option *ngFor="let driver of drivers" [value]="driver.id"
+                        [disabled]="this.reportParam.driverIds.includes(0)">
+                        {{driver.firstName +" " +driver.lastName}}
+                    </mat-option>
+                </mat-select>
+                <mat-hint *ngIf="reportParam.driverIds.length ==0 && driverIds.touched"
+                    style="color: rgb(219, 47, 76);">
+                    {{'Driver name is required' | translate}}!
+                </mat-hint>
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-4 col-sm-12 mb-2">
+            <button mat-button color="warn" type="button" (click)="clear()" class="clear mr-2">
+                {{'Clear' | translate}}
+            </button>
+
+            <button mat-flat-button color="primary" type="button" (click)="getReports()" class="o-add-btn ml-1 mr-1">
+                {{'Search' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <!-- export -->
+    <div class="row mb-3" *ngIf="dataSource?.data?.length > 0">
+        <div class="col-md-4 col-sm-12">
+            <div class="text-left">
+                <b>{{'Total Records' | translate}}: {{length }}</b>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="text-right">
+                <button mat-flat-button *ngxPermissionsOnly="['ExportReport']" color="primary" class="o-add-btn"
+                    (click)="export()">{{'Export' | translate}}</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- orders -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0">
+        <ng-container matColumnDef="driverId">
+            <th mat-header-cell *matHeaderCellDef> {{'Driver ID' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.driverId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="driverName">
+            <th mat-header-cell *matHeaderCellDef> {{'Driver Name' | translate}} </th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{element?.driverName}}">
+                {{element?.driverName | truncateText:[15]}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> {{'Date' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.dayOfMonth | date:'d-M-yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalHours">
+            <th mat-header-cell *matHeaderCellDef> {{'Total Hours' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalHours }} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+        </tr>
+    </table>
+
+    <mat-paginator [length]="length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+        *ngIf="dataSource?.data?.length > 0" (page)="onChangePage($event)">
+    </mat-paginator>
+
+    <div *ngIf="dataSource?.data?.length === 0">
+        {{'No Records Found' | translate}}!
+    </div>
+</section>

@@ -1,0 +1,219 @@
+@import "./../../../shared/scss/colors";
+.mat-card {
+  padding: 15px !important;
+  border-radius: 15px;
+}
+
+.mat-menu-item:hover {
+  border-left: 3px solid $o-orange;
+  background: none !important;
+  padding-left: 13px;
+}
+
+.barcode-label {
+  font-weight: bold;
+  font-size: small;
+}
+
+table {
+  width: 100%;
+
+  td,
+  th {
+    padding: 5px;
+  }
+
+  td {
+    img {
+      padding: 5px;
+      height: 64px;
+      width: 64px;
+    }
+  }
+}
+
+.mat-sort-header-arrow {
+  opacity: 0.4 !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.search-icon {
+  height: 32px;
+  width: 32px;
+  color: $o-orange;
+}
+
+.mat-list-item-content {
+  height: 15px !important;
+}
+
+.Unassigned {
+  background-color: #2f9e2c;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Assigned {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Accepted {
+  color: white;
+  background-color: #ba68c8;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Started {
+  color: white;
+  background-color: #1393ff;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.Successful {
+  color: white;
+  background-color: #2f9e2c;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Failed {
+  color: white;
+  background-color: #d0021b;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.Declined {
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+  color: white;
+}
+
+.Cancelled {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Inprogress {
+  color: white;
+  background-color: #244f8e;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+:host ::ng-deep {
+  .tasks {
+    .search {
+      background-color: white;
+      height: 50px;
+    }
+
+    padding: 15px;
+
+    .add {
+      border-radius: 50px;
+      background-color: $o-orange;
+      color: white;
+    }
+
+    .actions {
+      padding-left: 15px;
+      padding-top: 5px;
+    }
+
+    .mat-icon {
+      color: $o-orange;
+      cursor: pointer;
+    }
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0px;
+    padding-left: 5px;
+    border-radius: 0px;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-subscript-wrapper {
+    padding: 0px;
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+}
+
+.details .mat-dialog-container {
+  background-color: white;
+  border-radius: 0px !important;
+  padding: 0px !important;
+}
+
+.status-width {
+  text-align: center;
+  width: 100px;
+}
+
+.material-icons {
+  font-size: 24px;
+}
+
+.table-content {
+  width: 100%;
+  overflow: auto;
+}
+
+:host ::ng-deep {
+  mat-icon {
+    color: $o-orange;
+  }
+}
+
+.cell-header {
+  padding-top: 20px;
+  min-height: 55px;
+  height: auto;
+}
+
+.check-btn {
+  width: 200px;
+  text-align: start;
+}

@@ -1,0 +1,11 @@
+<mat-form-field class="full-width" appearance="fill">
+    <mat-select matNativeControl name="states" [(ngModel)]="selectedState" class="selected-code" required>
+        <mat-select-trigger>
+            <img class="option-img" [src]="imageUrl + selectedState?.flag" height="25" width="32">
+        </mat-select-trigger>
+        <mat-option *ngFor="let state of states" [value]="state" (click)="setValue()">
+            <img class="option-img" [src]="imageUrl + state?.flag" height="25" width="32">
+            {{state?.name}} <span class="code"> +{{state?.code}}</span>
+        </mat-option>
+    </mat-select>
+</mat-form-field>

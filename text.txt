@@ -1,0 +1,8 @@
+IsEnableAutoAllocation
+NearestAvailableMethodRadiusInKM
+OneByOneAllocationNumberOfRetries
+OneByOneAllocationRequestExpiresInSEC
+StartAllocationBeforeTaskTimeInMins
+SelectedAutoAllocationMethodName
+OneByOneMethod
+NearestAvailableMethod

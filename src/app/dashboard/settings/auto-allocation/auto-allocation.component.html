@@ -1,0 +1,169 @@
+<div class="auto-allocation" *ngxPermissionsOnly="['UpdateAutoAllocation']">
+  <p>
+    {{'Enable this option to automatically assign Task to your Agent. You can select the assignment logic that best suits your business needs.' | translate}}
+  </p>
+
+  <h2 class="dms-page-title">
+    {{'Auto Allocation' | translate}}
+    <mat-slide-toggle (change)="onChange($event)" [checked]="settingEnableAutoAllocation.value=='true' ? true : false"
+      *ngxPermissionsOnly="['UpdateAutoAllocation']"></mat-slide-toggle>
+  </h2>
+
+  <p class="select">
+    {{'Select a method to auto-allocate the tasks' | translate}}
+  </p>
+
+  <mat-button-toggle-group #group="matButtonToggleGroup" (change)="onChangeMethod($event)" fxLayout="row wrap"
+    fxLayout.lt-sm="column" fxLayoutGap="15px" fxLayoutAlign="flex-start"
+    *ngxPermissionsOnly="['UpdateAutoAllocation']">
+    <mat-button-toggle value="OneByOneMethod" aria-label="Text align left"
+        [ngClass]="(selectedMehtod === 'OneByOneMethod')? 'active-method' :''" fxFlex="15%"
+        fxFlex.sm="100%" fxFlex.md="45%">
+        <img src="assets/images/auto/one-by-one.png">
+        <h5>
+            One By One
+            <mat-checkbox [checked]="selectedMehtod === 'OneByOneMethod'">
+            </mat-checkbox>
+        </h5>
+    </mat-button-toggle>
+
+    <mat-button-toggle value="NearestAvailableMethod" [disabled]="settingEnableAutoAllocation.value == 'false'"
+      fxFlex="15%" fxFlex.sm="100%" [ngClass]="selectedMehtod === 'NearestAvailableMethod'? 'active-method' :''"
+      fxFlex.md="45%">
+      <img src="assets/images/auto/nearest-available.png">
+      <h5>
+        {{'Nearest Available' | translate}}
+        <mat-checkbox
+          [checked]="selectedMehtod === 'NearestAvailableMethod' && settingEnableAutoAllocation.value=='true'"
+          [disabled]="true">
+        </mat-checkbox>
+      </h5>
+    </mat-button-toggle>
+    <!--
+    <mat-button-toggle value="sendToAll" [disabled]="true" fxFlex="15%" fxFlex.sm="100%" fxFlex.md="45%">
+        <img src="assets/images/auto/send-to-all.png">
+        <h5>
+            Send To All
+            <mat-checkbox [checked]="!isDisabledTwo && selectedMehtod === 'sendToAll'" [disabled]="true">
+            </mat-checkbox>
+        </h5>
+    </mat-button-toggle>
+
+    <mat-button-toggle value="batchWise" [disabled]="true" fxFlex="15%" fxFlex.sm="100%" fxFlex.md="45%">
+        <img src="assets/images/auto/batch-wise.png">
+        <h5>
+            Batch Wise
+            <mat-checkbox [checked]="!isDisabledTwo && selectedMehtod === 'batchWise'" [disabled]="true">
+            </mat-checkbox>
+        </h5>
+    </mat-button-toggle>
+
+    <mat-button-toggle value="roundRobin" [disabled]="true" fxFlex="15%" fxFlex.sm="100%" fxFlex.md="45%">
+        <img src="assets/images/auto/round-robin.png">
+        <h5>
+            Round Robin
+            <mat-checkbox [checked]="!isDisabledTwo && selectedMehtod === 'roundRobin'" [disabled]="true">
+            </mat-checkbox>
+        </h5>
+    </mat-button-toggle>-->
+
+    <mat-button-toggle value="FirstInFirstOutMethod" [disabled]="settingEnableAutoAllocation.value=='false'"
+      fxFlex="15%" fxFlex.sm="100%" [ngClass]="selectedMehtod === 'FirstInFirstOutMethod'? 'active-method' :''"
+      fxFlex.md="45%">
+      <img src="assets/images/auto/fifo.png">
+      <h5>
+        {{'First In, First Out' | translate}}
+        <mat-checkbox
+          [checked]="selectedMehtod === 'FirstInFirstOutMethod' && settingEnableAutoAllocation.value=='true'"
+          [disabled]="true">
+        </mat-checkbox>
+      </h5>
+    </mat-button-toggle>
+
+  </mat-button-toggle-group>
+
+  <p *ngIf="settingEnableAutoAllocation.value=='true'">
+    {{descMessage}}
+  </p>
+
+  <section *ngxPermissionsOnly="['UpdateAutoAllocation']">
+    <form class="form" (ngSubmit)="SaveForm()"
+      *ngIf="(selectedMehtod === 'OneByOneMethod' || selectedMehtod === 'NearestAvailableMethod' || selectedMehtod === 'FirstInFirstOutMethod') && (settingEnableAutoAllocation.value=='true')">
+      <div *ngIf="selectedMehtod === 'OneByOneMethod'" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px"
+        fxLayoutAlign="flex-start">
+
+        <mat-form-field appearance="legacy" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.xs="100%">
+          <mat-label>{{'Request Expires in Sec' | translate}}</mat-label>
+          <input matInput [(ngModel)]="settingExpires.value" name="Expires">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.xs="100%">
+          <mat-label>
+            {{'Number of Retries' | translate}} <small>
+              -
+              {{'The number of attempts that the system will try assign' | translate}}
+            </small>
+          </mat-label>
+          <input matInput [(ngModel)]="settingNumberOfRetries.value" name="NumberOfRetries">
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="selectedMehtod === 'NearestAvailableMethod' && settingEnableAutoAllocation.value=='true'" class="row">
+
+        <mat-form-field appearance="legacy" class="col-6">
+          <mat-label>{{'Distance (KM)' | translate}}</mat-label>
+          <input matInput [(ngModel)]="settingAvailableRadius.value" name="AvailableRadius">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy" class="col-6">
+          <mat-label>
+            {{'Number of Retries' | translate}} <small>
+              -
+              {{'The number of attempts that the system will try assign' | translate}}
+            </small>
+          </mat-label>
+          <input matInput [(ngModel)]="settingNearestAvailableMethodNumberOfRetries.value" name="NumberOfRetries">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy" class="col-6">
+          <mat-label>
+            {{'Driver Order Capacity' | translate}}
+          </mat-label>
+          <input matInput [(ngModel)]="settingNearestAvailableMethodOrderCapacity.value"
+            name="nearestAvailableMethodOrderCapacity">
+        </mat-form-field>
+
+      </div>
+
+      <div *ngIf="selectedMehtod === 'FirstInFirstOutMethod' && settingEnableAutoAllocation.value=='true'"
+        fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="32px" fxLayoutAlign="flex-start">
+
+        <mat-form-field appearance="legacy" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.xs="100%">
+          <mat-label>
+            {{'Clubbing of timeout (sec)' | translate}}
+          </mat-label>
+          <input matInput [(ngModel)]="settingClubbingTimeInSec.value" name="clubbingTimeInSec">
+        </mat-form-field>
+
+        <mat-form-field appearance="legacy" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.xs="100%">
+          <mat-label>
+            {{'Driver Order Capacity' | translate}}
+          </mat-label>
+          <input matInput [(ngModel)]="settingFifoDriverOrderCapacity.value" name="driverOrderCapacity">
+        </mat-form-field>
+
+      </div>
+
+      <button mat-flat-button color="warn" class="confirm-btn o-add-btn" type="submit"
+        *ngIf="settingEnableAutoAllocation.value=='true'">
+        {{'Save' | translate}}
+      </button>
+
+    </form>
+  </section>
+
+</div>

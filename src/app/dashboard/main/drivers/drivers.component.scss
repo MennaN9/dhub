@@ -1,0 +1,175 @@
+@import "./../../../shared/scss/colors";
+
+section {
+  position: relative;
+
+  #outside-icon {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    border: 2px solid $o-orange;
+    padding: 10px;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background-color: white;
+    border-right: none;
+    cursor: pointer;
+
+    img {
+      height: 32px;
+      width: 32px;
+    }
+  }
+
+  .driver {
+    border-bottom: 1px solid $o-gray;
+
+    .image_outer_container {
+      margin-top: auto;
+      margin-bottom: auto;
+      border-radius: 50%;
+      position: relative;
+
+      .image_inner_container {
+        border-radius: 50%;
+        padding: 5px;
+
+        img {
+          height: 64px;
+          width: 64px;
+          border-radius: 50%;
+          border: 5px solid white;
+        }
+      }
+
+      .icon {
+        position: absolute;
+        right: 30px;
+        bottom: 15px;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+      }
+
+      [lang="ar"] .icon {
+        right: 5px;
+      }
+
+      .busy {
+        background-color: #ec4a2a;
+      }
+
+      .available {
+        background-color: #01de51;
+      }
+
+      .offline {
+        background-color: gray;
+      }
+
+      .arrow {
+        vertical-align: middle;
+      }
+    }
+
+    .driver-info {
+      line-height: 0px;
+
+      .name {
+        font-size: 1em;
+        font-weight: bold;
+        color: black;
+      }
+
+      .phone {
+        font-size: 1em;
+        color: gray;
+      }
+
+      .count {
+        font-weight: bold;
+        border: 1px solid $o-orange;
+        border-radius: 50%;
+        text-align: center;
+        width: 35px;
+
+        .number {
+          top: 5px;
+        }
+      }
+
+      .task {
+        margin: 25;
+        margin-top: 10px;
+        font-size: 14px;
+        color: gray;
+        line-height: 0;
+      }
+    }
+  }
+
+  .max-height {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+  }
+
+  .driver:hover {
+    cursor: pointer;
+    background-color: $o-gray;
+  }
+
+  .driver-details {
+    padding-left: 0px;
+    padding-right: 0px;
+    overflow-x: hidden;
+  }
+
+  .no-drivers {
+    margin-top: 10em;
+    height: 150px;
+  }
+
+  .search-container {
+    position: relative;
+  }
+
+  #search {
+    border: none;
+    height: 40px;
+    width: 94%;
+    text-indent: 30px;
+  }
+
+  .search-img {
+    position: absolute;
+    left: 20px;
+    width: 24px;
+    height: 24px;
+    top: 15px;
+  }
+
+  .clear-img {
+    position: absolute;
+    right: 20px;
+    width: 14px;
+    height: 14px;
+    top: 20px;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .driver-info {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.search-results {
+  height: 20rem;
+  overflow: scroll;
+}

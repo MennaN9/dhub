@@ -1,0 +1,36 @@
+@import "./../../../shared/scss/colors";
+.cancel-btn {
+    cursor: pointer;
+    height: 40px;
+    border-radius: 25px;
+    width: 150px;
+    font-weight: 700;
+    border: 2px solid $o-orange;
+}
+
+.cancel-btn {
+    color: black;
+    background-color: $light-grey;
+    border: 2px solid $light-grey;
+}
+
+.cancel-btn:hover {
+    background-color: white;
+    border: 2px solid $light-grey;
+}
+
+.confirm-btn {
+    border-radius: 25px;
+    width: 150px;
+    font-weight: 700;
+    border: 2px solid $o-orange;
+    color: white;
+    background: $o-orange;
+    background: linear-gradient(180deg, rgba(252, 197, 0, 1) 35%, rgba(224, 88, 51, 1) 100%);
+}
+
+.confirm-btn:hover {
+    background-color: white;
+    color: white;
+    border: 2px solid $o-orange;
+}

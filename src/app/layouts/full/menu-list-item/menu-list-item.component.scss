@@ -1,0 +1,29 @@
+@import "./../../../shared/scss/colors";
+
+:host {
+    .mat-list-item.active {
+        background-color: #fff7e9;
+    }
+    &:hover,
+    &:focus {
+        > .mat-list-item:not(.expanded) {
+            background-color: #fff7e9;
+        }
+    }
+
+    .active {
+        background-color: $o-orange !important;
+        color: white;
+        font-weight: bold;
+        border-bottom: 1px dotted white;
+    }
+}
+
+.mat-list-item {
+    display: flex;
+    width: auto;
+
+    .routeIcon {
+        margin-right: 10px;
+    }
+}

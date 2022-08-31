@@ -1,0 +1,42 @@
+@import "../scss/colors";
+
+
+.barcode-label {
+    font-weight: bold;
+    font-size: medium;
+}
+
+
+.print-btn {
+  background-color: $o-orange;
+  border: 2px solid $o-orange;
+  border-radius: 50px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  height: 40px !important;
+}
+
+.print-btn:hover {
+  border: 2px solid $o-orange;
+  background-color: white;
+  color: $o-orange;
+}
+
+
+.close-btn {
+  background-color: $o-dark-gray;
+  border: 2px solid $o-dark-gray;
+  border-radius: 50px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  height: 40px !important;
+}
+
+.close-btn:hover {
+  border: 2px solid $o-dark-gray;
+  background-color: white;
+  color: $o-dark-gray;
+}
+

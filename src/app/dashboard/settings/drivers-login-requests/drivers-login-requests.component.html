@@ -1,0 +1,264 @@
+<section class="drivers ml-3 mb-3 pl-3 pr-3">
+  <mat-tab-group mat-stretch-tabs (selectedTabChange)="onChangeTab($event)">
+    <!-- Pending requests -->
+    <mat-tab label="{{'Pending' | translate}}">
+      <div class="row">
+        <mat-form-field class="full-width mt-4 col-md-6 col-sm-12" appearance="fill">
+          <mat-label class="dms-label-color">
+            <mat-icon matSuffix class="search-icon">search</mat-icon>
+            {{"Search Drivers" | translate}}
+          </mat-label>
+          <input matInput (keyup)="searchOnAllRequests($event,'pending')" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12 col-sm-12 mt-2 mat-elevation-z8 table-content p-0"
+        *ngIf="pendingdriverLoginRequestsLength > 0">
+        <table mat-table [dataSource]="pendingdriverLoginRequests" class="mat-elevation-z8 col-12"
+          *ngIf="pendingdriverLoginRequestsLength > 0" fxFlex="100%">
+          <ng-container matColumnDef="id" sticky>
+            <th mat-header-cell *matHeaderCellDef>{{'No' | translate}}.</th>
+            <td mat-cell *matCellDef="let element; let index = index">
+              {{ index + 1 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="driverName">
+            <th mat-header-cell *matHeaderCellDef>{{'Driver Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{ element.driverName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="teamName">
+            <th mat-header-cell *matHeaderCellDef>{{'Team Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{ element.teamName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="agentTypeName">
+            <th mat-header-cell *matHeaderCellDef>{{'Driver Type Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agentTypeName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>{{'Status' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getRequestStatusName(element.status) }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="LoginDate">
+            <th mat-header-cell *matHeaderCellDef>{{'Login Date' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdDate | dateToTimezone }}
+            </td>
+          </ng-container>
+          <!-- actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+            <td mat-cell *matCellDef="let element" class="actions">
+              <button *ngIf="!element.isExpired" mat-icon-button (click)="approveRequest(element)">
+                <mat-icon>done</mat-icon>
+              </button>
+
+              <button *ngIf="!element.isExpired" mat-icon-button (click)="cancelReasonTypeDialog(element)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="penddingDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: penddingDisplayedColumns"></tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="pageSizeOptions" [length]="pendingdriverLoginRequestsLength"
+        [pageSize]="pageSize" *ngIf="pendingdriverLoginRequestsLength > 0" (page)="onChangePage($event,'pending')"
+        class="col-12">
+      </mat-paginator>
+    </mat-tab>
+
+    <!-- All Requests -->
+    <mat-tab label="{{'All Requests' | translate}}">
+      <div class="row">
+        <mat-form-field class="full-width mt-4 col-md-4 col-sm-12" appearance="fill">
+          <mat-label class="dms-label-color">
+            <mat-icon matSuffix class="search-icon">search</mat-icon>
+            {{"Search Drivers" | translate}}
+          </mat-label>
+          <input matInput (keyup.enter)="searchOnAllRequests($event,'all')" />
+        </mat-form-field>
+
+        <div class="full-width mt-4 col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">
+            {{"Date & Time" | translate}}
+          </mat-label>
+          <ejs-datetimepicker id="dms-datetimepicker" (change)="onChangeDate($event)"></ejs-datetimepicker>
+        </div>
+
+        <mat-form-field class="full-width mt-4 col-md-4 col-sm-12" appearance="fill">
+          <mat-label>{{'Status' | translate}}</mat-label>
+          <select matNativeControl [(ngModel)]="statusFilter" (change)="loadAllDriverLoginRequest()">
+            <option value="0">{{'All Types' | translate}}</option>
+            <option value="2">{{'Approved' | translate}}</option>
+            <option value="3">{{'Rejected' | translate}}</option>
+            <option value="4">{{'Canceled' | translate}}</option>
+          </select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12 col-sm-12 mt-2 mat-elevation-z8 table-content p-0" *ngIf="allRequestslength > 0">
+
+        <table mat-table [dataSource]="alldriverLoginRequests">
+          <ng-container matColumnDef="id" sticky>
+            <th mat-header-cell *matHeaderCellDef>{{'No' | translate}}.</th>
+            <td mat-cell *matCellDef="let element; let index = index">
+              {{ index + 1 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="driverName">
+            <th mat-header-cell *matHeaderCellDef>{{'Driver Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{ element.driverName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="teamName">
+            <th mat-header-cell *matHeaderCellDef>{{'Team Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{ element.teamName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="agentTypeName">
+            <th mat-header-cell *matHeaderCellDef>{{'Driver Type Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agentTypeName }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="LoginDate">
+            <th mat-header-cell *matHeaderCellDef>{{'Login Date' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdDate | dateToTimezone }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>{{'Status' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getRequestStatusName(element.status) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="approvedOrRejectBy">
+            <th mat-header-cell *matHeaderCellDef>{{'Approved/RejectBy' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.approvedOrRejectBy }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="updatedDate">
+            <th mat-header-cell *matHeaderCellDef>{{'Updated on' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.updatedDate | dateToTimezone }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="reason">
+            <th mat-header-cell *matHeaderCellDef>{{'Reject Reason' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.reason }}
+            </td>
+          </ng-container>
+
+          <!-- actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{'Logout' | translate}}</th>
+            <td mat-cell *matCellDef="let element" (click)="forceLogout(element.driverId)">
+              <mat-icon *ngIf="element.status == 2" matTooltip="Logout">exit_to_app</mat-icon>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+      </div>
+
+      <mat-paginator *ngIf="allRequestslength > 0" [length]="allRequestslength" [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 100]" (page)="onChangePage($event)">
+      </mat-paginator>
+
+    </mat-tab>
+
+    <mat-tab label="{{'Logout actions' | translate}}">
+      <div class="row">
+        <mat-form-field class="full-width mt-4 col-md-5 col-sm-12" appearance="fill">
+          <mat-label class="dms-label-color">
+            <mat-icon matSuffix class="search-icon">search</mat-icon>
+            {{"Driver name" | translate}}
+          </mat-label>
+          <input matInput (keyup)="searchOnLogoutActions($event)" />
+        </mat-form-field>
+
+        <div class="full-width mt-4 col-md-5 col-sm-12">
+          <mat-label class="dms-label-color">
+            {{'Logout Date & Time' | translate}}
+          </mat-label>
+          <ejs-datetimepicker id="dms-datetimepicker" (change)="onChangeLogoutActionsDate($event)"></ejs-datetimepicker>
+        </div>
+
+        <div class="full-width mt-4 col-md-2 col-sm-12 pt-2">
+          <button mat-raised-button color="primary" (click)="exportloginTracking()"
+            class="export btn-gradient">{{'Export' | translate}}</button>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 mt-2 mat-elevation-z8 table-content p-0"
+        *ngIf="logoutActionsDataSource?.data?.length > 0">
+
+        <table mat-table [dataSource]="logoutActionsDataSource">
+          <ng-container matColumnDef="id" sticky>
+            <th mat-header-cell *matHeaderCellDef> {{'No' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="driverName">
+            <th mat-header-cell *matHeaderCellDef> {{'Driver Name' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.driverName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="loginDate">
+            <th mat-header-cell *matHeaderCellDef> {{'Login Date & Time' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.loginDate | dateToTimezone}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="loginLocation">
+            <th mat-header-cell *matHeaderCellDef> {{'Login Location' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.loginLatitude}},{{element.loginLongitude}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="logoutDate">
+            <th mat-header-cell *matHeaderCellDef> {{'Logout Date & Time' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.logoutDate!=null? (element.logoutDate | dateToTimezone ):''}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="logoutLocation">
+            <th mat-header-cell *matHeaderCellDef> {{'Logout Location' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.logoutLatitude}} {{element.logoutLongitude!=null? ',':''}}
+              {{element.logoutLongitude}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="logoutActionBy">
+            <th mat-header-cell *matHeaderCellDef> {{'Logout Action By' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.logoutActionBy}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="logoutActionsColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: logoutActionsColumns;"></tr>
+        </table>
+
+      </div>
+
+      <mat-paginator [length]="logoutActionsLength" [pageSize]="logoutPageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onChangeLogoutActionsPage($event)">
+      </mat-paginator>
+
+    </mat-tab>
+
+  </mat-tab-group>
+</section>

@@ -1,0 +1,33 @@
+<section class="notifications p-3">
+    <div class="row">
+        <h1 class="col-6 d-flex justify-content-start">
+            {{'Notifications' | translate}}
+        </h1>
+
+        <a class="col-6 d-flex justify-content-end">
+            <button mat-button color="primary" (click)="markThemAsRead()"> {{'Mark them as read' | translate}}</button>
+        </a>
+    </div>
+
+    <mat-selection-list (selectionChange)="onSelection($event)">
+        <mat-list-option *ngFor="let notification of notifications" [value]="notification" class="p-2 mt-2">
+            <span class="text-bold">
+                {{notification.title}}
+            </span>
+
+            <span class="mt-1">
+                {{notification.body}}
+            </span>
+
+            <span class="mt-1">
+                {{notification.createdDate | dateToTimezone}}
+            </span>
+        </mat-list-option>
+
+    </mat-selection-list>
+
+    <mat-paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onChangePage($event)">
+    </mat-paginator>
+
+</section>

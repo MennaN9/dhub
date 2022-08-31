@@ -1,0 +1,26 @@
+<form>
+    <p>
+        {{'We take security seriously and are proud to exceed the industry standards when it comes to protecting your personal information' | translate}}.
+    </p>
+    <mat-form-field appearance="outline">
+        <input matInput aria-label="State" [matAutocomplete]="auto" [formControl]="trackingPanelCtrl">
+        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+                <span>Select your rights</span>
+            </mat-option>
+            <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+                <span>{{state.name}}</span>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+        <mat-label>{{'Leave a comment' | translate}}</mat-label>
+        <textarea matInput placeholder="Reason"></textarea>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutAlign="end end">
+        <button mat-flat-button color="primary">{{'Submit' | translate}}</button>
+    </div>
+</form>

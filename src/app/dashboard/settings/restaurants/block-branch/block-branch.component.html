@@ -1,0 +1,23 @@
+<h1 mat-dialog-title dir="auto">{{'Are you sure you want to block this branch?' | translate}}</h1>
+
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-12">
+            <form class="block-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>{{'Block reason' | translate}}</mat-label>
+                    <textarea matInput formControlName="reason"></textarea>
+
+                    <mat-error *ngIf="!form.controls['reason'].valid">
+                        {{getError('reason')}}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button class="cancel-btn ml-1 mr-1" (click)="cancel()">{{'Cancel' | translate}}</button>
+    <button mat-button class="o-add-btn" (click)="onSubmit()">{{'Confirm' | translate}}</button>
+</div>

@@ -1,0 +1,358 @@
+@import "./../../../shared/scss/colors";
+
+$bg: #f9f9f9;
+
+.task-details {
+  .details-header {
+    h5 {
+      font-size: 16px;
+      padding-left: 15px;
+    }
+  }
+
+  .task-type {
+    background-color: $o-orange;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  .actions {
+    text-align: center;
+
+    .ico {
+      font-size: 40px;
+      background-color: $bg;
+    }
+  }
+
+  .file-input {
+    img {
+      height: 75px;
+      width: 75px;
+    }
+  }
+  .customer-title {
+    background-color: $bg;
+  }
+
+  #details {
+    .status {
+      color: $o-orange;
+    }
+
+    .title {
+      // line-height: 0px;
+      padding: 5px;
+      font-size: 16px;
+      color: black;
+      font-weight: 500;
+    }
+
+    td {
+      border-bottom: 1px solid $o-gray;
+      padding: 15px;
+    }
+
+    tr {
+      background-color: $bg;
+    }
+
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .history-tab {
+    background-color: $bg;
+
+    .mat-tab-body-content {
+      background-color: $bg !important;
+    }
+  }
+
+  .tab-custom-class {
+    background-color: white;
+    border-right: 1px solid $bg;
+  }
+
+  .history-title {
+    vertical-align: middle;
+    padding-left: 15px;
+  }
+
+  .image {
+    border-radius: 50px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .date-stepper {
+    padding-top: 15px;
+    padding-left: 15px;
+    background-color: $bg;
+
+    .date-list {
+      margin-bottom: 20%;
+      list-style: none;
+    }
+  }
+
+  // stepper
+  .wrapper {
+    background-color: $bg;
+    padding-top: 15px;
+
+    .StepProgress {
+      margin-top: 0px;
+      padding-top: 15px;
+      position: relative;
+      padding-left: 45px;
+      list-style: none;
+    }
+
+    .StepProgress::before {
+      display: inline-block;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15px;
+      width: 10px;
+      height: 120%;
+      border-left: 2px solid #ccc;
+    }
+
+    .StepProgress-item {
+      line-height: 30px;
+      position: relative;
+      counter-increment: list;
+      background-color: white;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+
+      .task-desc {
+        padding-top: 5px;
+      }
+    }
+
+    .StepProgress-item:not(:last-child) {
+      padding-bottom: 20px;
+    }
+
+    .StepProgress-item::before {
+      display: inline-block;
+      content: "";
+      position: absolute;
+      left: -5px;
+      padding: 5px;
+      height: 120%;
+      width: 10px;
+    }
+
+    .StepProgress-item::after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0px;
+      left: -16px;
+      width: 25px;
+      height: 25px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+
+    .StepProgress-item.is-done::before {
+      border-left: 2px solid #1393ff;
+    }
+
+    .StepProgress-item.is-done::after {
+      content: "\25CF";
+      font-size: 15px;
+      color: #fff;
+      text-align: center;
+      border: 2px solid #1393ff;
+      background-color: #1393ff;
+    }
+
+    .StepProgress-item.current::before {
+      border-left: 2px solid $o-orange;
+    }
+
+    .StepProgress-item.current::after {
+      content: "D";
+      padding-top: 1px;
+      width: 30px;
+      height: 30px;
+      top: -4px;
+      left: -40px;
+      font-size: 14px;
+      text-align: center;
+      color: $o-orange;
+      border: 2px solid $o-orange;
+      background-color: white;
+    }
+    .StepProgress strong {
+      display: block;
+    }
+  }
+}
+
+.mat-menu-item:hover {
+  border-left: 5px solid $o-orange;
+  background: none !important;
+  padding-left: 10px;
+}
+
+.every-row {
+  list-style: none;
+
+  .title-border {
+    color: $o-orange;
+    border: 2px solid $o-orange;
+    width: 150px;
+    border-radius: 5px;
+    padding: 3px;
+    margin-bottom: 5px;
+  }
+}
+
+.icon {
+  color: blue;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.font-14 {
+  font-size: 14px;
+}
+
+:host ::ng-deep {
+  .mat-tab-group.mat-primary .mat-ink-bar {
+    background: none;
+  }
+
+  .mat-tab-label-active {
+    border-bottom: 2px solid $o-orange;
+  }
+  .mat-tab-header {
+    background-color: white;
+  }
+
+  .mat-tab-label {
+    background-color: white;
+    margin: 1px !important;
+  }
+
+  .history-dir {
+    direction: ltr;
+  }
+}
+
+.UNASSIGNED-text {
+  color: #2f9e2c;
+  border: 2px solid #2f9e2c;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.ASSIGNED-text,
+.CREATED-text {
+  color: #9b9b9b;
+  border: 2px solid #9b9b9b;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.ACCEPTED-text {
+  color: #ba68c8;
+  border: 2px solid #ba68c8;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.STARTED-text {
+  color: #1393ff;
+  border: 2px solid #1393ff;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.SUCCESSFUL-text {
+  color: #2f9e2c;
+  border: 2px solid #2f9e2c;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.FAILED-text {
+  color: #d0021b;
+  border: 2px solid #d0021b;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.DECLINED-text {
+  color: #9b9b9b;
+  border: 2px solid #9b9b9b;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.CANCELLED-text {
+  color: #9b9b9b;
+  border: 2px solid #9b9b9b;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.INPROGRESS-text {
+  color: #244f8e;
+  border: 2px solid #244f8e;
+  width: 150px;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.map-location {
+  color: #1393ff;
+  padding: 0px;
+}
+
+.link-padding {
+  padding: 0px !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .time {
+    font-size: 12px;
+    padding: 20px;
+  }
+
+  #details {
+    td {
+      padding: 10px !important;
+    }
+  }
+}
+
+@media (min-device-width: 600px) and (max-device-width: 1100px) {
+  .time {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
+.rating {
+  width: 60%;
+  text-align: start;
+}

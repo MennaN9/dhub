@@ -1,0 +1,32 @@
+<section>
+  <div class="row p-3">
+
+    <h2 class="col-12">
+      {{"Terms And Conditions In English" | translate}}
+    </h2>
+
+    <div class="col-12 mb-2">
+      <ckeditor #editor [(data)]="termsAndConditions.termsAndConditionsInEnglish" id="termsAndConditionsInEnglish"
+        name="termsAndConditionsInEnglish" type="divarea">
+      </ckeditor>
+    </div>
+
+    <h2 class="col-12 mt-2">
+      {{"Terms And Conditions In Arabic" | translate}}
+    </h2>
+
+    <div class="col-12">
+      <ckeditor #editor2 [(data)]="termsAndConditions.termsAndConditionsInArabic" id="termsAndConditionsInEnglish"
+        name="termsAndConditionsInEnglish" type="divarea">
+      </ckeditor>
+    </div>
+
+    <div class="col-12">
+      <div class="text-right">
+        <button mat-flat-button color="primary" class="ml-3 mr-3 o-add-btn" type="button" (click)="save()">
+          {{"Save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

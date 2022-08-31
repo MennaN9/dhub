@@ -1,0 +1,18 @@
+<section class="row" dir="auto">
+    <h6 mat-dialog-title class="title col-12">
+        {{'You have another session for the same user, please logout it first.' | translate}}
+    </h6>
+
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions class="col-12 d-flex justify-content-end">
+        <button mat-flat-button color="basic" (click)="cancel()" class="cancel-btn ml-2 mr-2">
+            {{'Cancel' | translate}}
+        </button>
+
+        <button mat-flat-button color="primary" (click)="logoutUserSession()"
+            class="confirm-btn btn-gradient ml-2 mr-2">
+            {{'Yes' | translate}}
+        </button>
+    </div>
+</section>

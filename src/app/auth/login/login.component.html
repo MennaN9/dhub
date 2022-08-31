@@ -1,0 +1,58 @@
+<section class="container-fluid pt-5 pb-5">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit(form)"
+    class="col-md-6 col-sm-12 col-xs-12 mx-auto"
+  >
+    <div class="text-center">
+      <img src="assets/images/dm-orange-logo.png" alt="logo" />
+    </div>
+
+    <h2 class="pl-3 mb-5" setDir>{{ "Sign In" | translate }}</h2>
+
+    <mat-form-field appearance="fill" dir="auto" setDir>
+      <mat-label class="dms-label-color">{{ "Email" | translate }}</mat-label>
+      <input type="text" matInput formControlName="email" />
+      <mat-icon matSuffix class="icon">person</mat-icon>
+      <mat-error *ngIf="!form.controls['email'].valid">
+        {{ getError("email") }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" dir="auto" setDir>
+      <mat-label class="dms-label-color">{{
+        "Password" | translate
+      }}</mat-label>
+      <input type="{{ type }}" matInput formControlName="password" />
+      <mat-icon matSuffix class="icon" (click)="togglePassword()"
+        >remove_red_eye</mat-icon
+      >
+      <mat-error *ngIf="!form.controls['password'].valid">
+        {{ getError("password") }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="row">
+      <p class="col-12">
+        <button mat-button type="button">
+          <a [routerLink]="[forgotPassword]">{{
+            "Forgot Password?" | translate
+          }}</a>
+        </button>
+      </p>
+
+      <button mat-flat-button mat-button class="col-12 o-add-btn" type="submit">
+        {{ "Sign In" | translate }}
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <p class="mt-3" setDir>
+      {{ "Don't have account?" | translate }}
+      <a [routerLink]="['/auth/sing-up-register-types']" class="sign-up mt-3">{{
+        "Sign up as" | translate
+      }}</a>
+    </p>
+  </form>
+</section>

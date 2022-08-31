@@ -1,0 +1,339 @@
+<div class="row p-0 m-2">
+    <div class="col-md-9 col-sm-12 col-xs-12">
+        <p class="view-title pl-2 pr-2">View {{requestDetails?.name}} request</p>
+    </div>
+
+    <h3 class="col-md-3 col-sm-12 col-xs-12 d-flex justify-content-end">
+        <button mat-button color="primary" (click)="backToRequests()">Back to requests</button>
+    </h3>
+
+    <!-- actions -->
+    <div class="col-md-12 col-sm-12 col-xs-12 mt-3 d-flex justify-content-end"
+        *ngIf="requestDetails?.userRegistrationStatus == 'New' || requestDetails?.userRegistrationStatus == 'Pending'">
+        <button mat-flat-button type="button" class="reject-btn ml-1 mr-1" (click)="reject()">
+            {{'Reject' | translate}}
+        </button>
+
+        <button mat-flat-button type="button" class="approve-btn ml-1 mr-1" (click)="approve()">
+            {{'Approve' | translate}}
+        </button>
+
+        <button mat-flat-button type="button" class="save-btn ml-1 mr-1" (click)="save()">
+            {{'Save' | translate}}
+        </button>
+    </div>
+    <!-- end actions -->
+
+    <!-- status -->
+    <div class="col-md-12 col-sm-6 col-xs-12 row">
+        <ng-container *ngIf="requestDetails?.userRegistrationStatus == 'Rejected'">
+            <div class="col-md-6 col-sm-12 rejection-text">
+                <p><b>{{'Status' | translate}}</b>: <span class="text-danger">{{'Rejected' | translate}}</span></p>
+            </div>
+
+            <div class="col-md-6 col-sm-12 rejection-text">
+                <p><b>{{'Reasons' | translate}}</b>: <span>{{requestDetails?.rejectReason}}</span></p>
+            </div>
+        </ng-container>
+    </div>
+    <!-- end status -->
+
+    <!-- tabs -->
+    <div class="col-md-12 col-sm-12 mt-3">
+        <mat-tab-group mat-stretch-tabs>
+            <!-- Details -->
+            <mat-tab label="Details">
+                <mat-card class="m-2 p-2">
+                    <mat-card-header>
+                        <mat-card-title>{{'Busniss Info' | translate}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <form [formGroup]="businessform">
+                            <section class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <mat-label class="dms-label-color">{{'Business Name' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="name">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <mat-label class="dms-label-color">{{'Business Email' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="email">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="!isIndividual && !isHomeBusiness">
+                                    <mat-label class="dms-label-color">{{'Business CID' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="businessCID">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <mat-label>{{'Type of business' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-select formControlName="businessType"
+                                            [value]="requestDetails?.businessType"
+                                            (selectionChange)="onChangeType($event)">
+                                            <mat-option *ngFor="let type of types" [value]="type.id">
+                                                {{type.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="otherBusinessType">
+                                    <mat-label class="dms-label-color">{{'Other business type' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="otherBusinessType">
+                                    </mat-form-field>
+                                </div>
+
+                                <fieldset *ngIf="!isIndividual">
+                                    <legend>
+                                        {{'Business Address' | translate}}
+                                    </legend>
+                                    <app-address [isPACI]="true" [addressToReplace]="requestDetails?.businessAddress"
+                                        (addressChanges)="onAddressChanges($event,'business')"
+                                        [validateAddress]="validateBusinessAddress"
+                                        (validAddress)="onValidAddress($event,'business')"
+                                        [disableAddress]="disableAddress">
+                                    </app-address>
+                                </fieldset>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 pt-4 row">
+                                    <p>{{'Social links' | translate}}</p>
+                                    <div class="col-md-3 col-sm-12"
+                                        *ngFor="let link of requestDetails?.socialMediaAccounts">
+                                        <a mat-button color="primary" href="{{formatLink(link)}}"
+                                            target="_blank">{{link}}</a>
+                                    </div>
+                                </div>
+                            </section>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card class="mb-3">
+                    <mat-card-header>
+                        <mat-card-title>{{'Owner Info' | translate}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <form [formGroup]="ownerform">
+                            <section class="row">
+                                <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="!isIndividual">
+                                    <mat-label class="dms-label-color">{{'Owner Name' | translate}} </mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="ownerName">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="!isIndividual">
+                                    <mat-label class="dms-label-color">{{'Owner CID' | translate}}</mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="ownerCID">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <mat-label class="dms-label-color">{{'Phone number' | translate}} </mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput formControlName="ownerPhoneNumber">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="!isIndividual">
+                                    <fieldset>
+                                        <legend>
+                                            {{'Owner Address' | translate}}
+                                        </legend>
+                                        <app-address [isPACI]="true" [addressToReplace]="requestDetails?.ownerAddress"
+                                            (addressChanges)="onAddressChanges($event,'owner')"
+                                            [validateAddress]="validateOwnerAddress"
+                                            (validAddress)="onValidAddress($event,'owner')"
+                                            [disableAddress]="disableAddress">
+                                        </app-address>
+                                    </fieldset>
+                                </div>
+                            </section>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card class="mb-5" *ngIf="!isIndividual">
+                    <mat-card-header>
+                        <mat-card-title>{{'Delivery Info' | translate}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <section class="row">
+                            <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <span class="text-bold">{{'Has your own drivers' | translate}} : </span>
+                                <span class="text-danger">
+                                    {{requestDetails?.hasOwnDrivers ? 'Yes' : 'No'}}
+                                </span>
+                            </div>
+
+                            <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <span class="text-bold">
+                                    {{'How many orders the driver can carry per order' | translate}} :
+                                </span>
+
+                                <span>{{requestDetails?.numberOfOrdersByDriverPerOrder}} Per order</span>
+                            </div>
+
+                            <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <span class="text-bold">{{'Serving zone' | translate}} : </span>
+                                <span *ngIf="requestDetails?.isDeliverToAllZones;else radiusRound">
+                                    {{' No serving restrictions ( I serve everywhere )' | translate}}
+                                </span>
+
+                                <ng-template #radiusRound>
+                                    {{'Mention a radius around the central location of my branch' | translate}}
+                                </ng-template>
+                            </div>
+
+                            <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <ng-container *ngIf="!requestDetails?.isDeliverToAllZones">
+                                    <span class="text-bold">{{'Serving radius (KM)' | translate}} : </span>
+                                    <span>
+                                        {{requestDetails?.servingRadiusInKM}} KM
+                                    </span>
+                                </ng-container>
+                            </div>
+
+
+
+                            <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                              <span class="text-bold">{{'How Many driver' | translate}} : </span>
+                              <span  class="text-primary">
+                                {{requestDetails?.numberOfDrivers}}
+                            </span>
+
+                                                        <!-- <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <span class="text-bold">{{'Do you have multiple branches' | translate}} : </span>
+                                <span class="text-success">{{requestDetails?.hasMultiBranches ? 'Yes' : 'No'}}
+                                </span>
+                            </div> -->
+                              <!-- <span *ngIf="requestDetails?.driverCount > 5;else driverCount" class="text-primary">
+                                  {{'More than 5' | translate}}
+                              </span> -->
+
+                              <!-- <ng-template #driverCount>
+                                  {{requestDetails?.driverCount}}
+                              </ng-template> -->
+                                                          <!-- <div class="col-md-6 mb-4 col-sm-6 col-xs-12">
+                                <span class="text-bold">{{'How Many branches' | translate}} : </span>
+
+                                <span *ngIf="requestDetails?.branchCount > 5;else branchCount" class="text-primary">
+                                    {{'More than 5' | translate}}
+                                </span>
+
+                                <ng-template #branchCount>
+                                    {{requestDetails?.branchCount}}
+                                </ng-template>
+                            </div> -->
+                          </div>
+                          <div class="col-md-6 mb-4 col-sm-6 col-xs-12" *ngIf="isDeliveryCompany">
+                            <span class="text-bold">{{'How Many contracts ' | translate}} : </span>
+                            <span  class="text-primary">
+                              {{requestDetails?.contractRangeName}}
+                          </span>
+                        </div>
+                        </section>
+                    </mat-card-content>
+                </mat-card>
+
+                <section class="row p-0">
+                    <div class="col-md-12 col-sm-6 col-xs-12 m-3 mr-5">
+                        <span>
+                            {{'Attachments' | translate}}
+                        </span>
+
+                        <input type="file" id="upload" hidden (change)="onSelectAttachment($event)"
+                            [(ngModel)]="fileToUpload" />
+
+                        <label mat-flat-button class="choose-file-btn ml-1 mr-1" for="upload"
+                            *ngIf="requestDetails?.userRegistrationStatus == 'New' || requestDetails?.userRegistrationStatus == 'Pending'">
+                            {{'Choose file' | translate}}
+                        </label>
+
+                        <div class="mt-4" *ngFor="let attachment of attachments;let index = index">
+                            <a href="{{baseUrl}}/{{attachment.file}}" *ngIf="attachment.file else newFile" download
+                                target="_blank">{{attachment.file}}</a>
+                            <ng-template #newFile>{{attachment.formFile.name}}</ng-template>
+                            <mat-icon class="delete-icon" (click)="deleteFile(index)">delete</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-6 col-xs-12 m-3">
+                        <form [formGroup]="commentform">
+                            <p class="dms-label-color mb-1">{{'Comments' | translate}}</p>
+                            <textarea placeholder="{{'Type your comments' | translate}}" rows="4" id="comment"
+                                formControlName="comment"></textarea>
+                        </form>
+                    </div>
+                </section>
+            </mat-tab>
+            <!-- end Details tab -->
+
+            <!-- Account Settings tab -->
+            <mat-tab label="Account Setttings" *ngIf="requestDetails?.userRegistrationStatus == 'Approved'">
+                <form [formGroup]="accountSettingsForm" class="m-2 p-2">
+                    <div class="row">
+                        <div class="col-md-12 font-weight-bold mt-5 mb-5">
+                            {{'Status' | translate}}: <span class="status font-weight-bold">{{'Approved' |
+                                translate}}</span>
+                        </div>
+
+                        <div class="col-md-4 font-weight-bold">
+                            {{'D-hub Version' | translate}}
+                        </div>
+
+                        <div class="col-md-8">
+                            <mat-radio-group aria-label="Select an option" class="row" formControlName="isFullVersion"
+                                [disabled]="true">
+                                <mat-radio-button value="full" class="col-4">{{'Full Version' | translate}}
+                                </mat-radio-button>
+                                <mat-radio-button value="customized" class="col-8">{{'Customized' | translate}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <ng-container *ngIf="!requestDetails?.approveSettings?.isFullVersion">
+                            <div class="col-md-4 mt-5 font-weight-bold">
+                                {{'Auto allocation method' | translate}}
+                            </div>
+
+                            <div class="col-md-8 mt-5 p-0">
+                                <mat-form-field appearance="fill" class="col-md-6">
+                                    <input matInput formControlName="autoAllocationMethod" [readonly]="true"
+                                        placeholder="{{requestDetails?.approveSettings.autoAllocationMethod}}">
+                                    <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-4 font-weight-bold">
+                                {{'Allow Modules' | translate}}
+                            </div>
+
+                            <div class="col-md-4">
+                                <mat-selection-list formControlName="selectedModules" [disabled]="true">
+                                    <ng-container class="col-md-6 row">
+                                        <mat-list-option class="col-md-6" *ngFor="let module of modules"
+                                            [value]="module.id">
+                                            {{module.name}}
+                                        </mat-list-option>
+                                    </ng-container>
+                                </mat-selection-list>
+                            </div>
+
+                        </ng-container>
+                    </div>
+                </form>
+            </mat-tab>
+            <!-- end Account Settings tab -->
+        </mat-tab-group>
+    </div>
+    <!-- end tabs -->
+</div>

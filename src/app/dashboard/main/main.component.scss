@@ -1,0 +1,693 @@
+@import "./../../shared/scss/colors";
+
+:host ::ng-deep {
+  .page-wrapper .page-content {
+    padding: 0px;
+  }
+
+  .mat-tab-body-content {
+    max-height: 550px;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+  }
+
+  .mat-tab-body-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #807070;
+  }
+
+  .mat-tab-body-content::-webkit-scrollbar {
+    width: 7px;
+    background-color: #f5f5f5;
+  }
+
+  .mat-tab-body-content::-webkit-scrollbar-thumb {
+    background-color: $o-orange;
+    border-radius: 5px;
+  }
+
+  .mat-fab {
+    height: 45px;
+    width: 45px;
+  }
+
+  .mat-fab .mat-button-wrapper {
+    padding: 10px 0px;
+  }
+}
+
+.main-wrap {
+  * {
+    line-height: 1;
+  }
+
+  height: 650px;
+
+  .set-hight {
+    height: 650px;
+    width: 100%;
+  }
+
+  .full-width {
+    width: 100%;
+    height: 650px;
+  }
+}
+
+#left {
+  height: 100%;
+  width: 30%;
+  float: left;
+  // z-index: 1;
+}
+
+#create-task {
+  width: 50%;
+  float: left;
+  background-color: white;
+}
+
+#right {
+  height: 100%;
+  width: 30%;
+  float: right;
+  z-index: 1;
+}
+
+#drivers-filter-btn {
+  position: absolute;
+  bottom: 5%;
+  background-color: $o-dark-gray;
+  border-radius: 50px;
+  min-width: 250px;
+  z-index: 1;
+  left: 42%;
+}
+
+:host ::ng-deep .side {
+  background-color: $bg;
+  position: relative;
+  top: 5%;
+
+  #outside-task-icon {
+    cursor: pointer;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    border: 2px solid orange;
+    padding: 10px;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    background-color: white;
+    border-left: none;
+
+    img {
+      height: 32px;
+      width: 32px;
+    }
+  }
+
+  .title-bg {
+    color: white;
+    background-color: $o-orange;
+
+    .icon {
+      height: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  .title {
+    margin: 0px;
+    padding: 15px;
+    font-weight: bold;
+  }
+
+  .mat-tab-label,
+  .mat-tab-label-active {
+    min-width: 100px !important;
+    padding: 3px !important;
+    margin: 3px !important;
+    font-weight: bold;
+  }
+
+  .mat-tab-label-active {
+    color: $o-light-black;
+  }
+
+  .mat-drawer-inner-container {
+    background-color: white;
+    overflow-x: hidden;
+  }
+
+  .mat-tab-labels {
+    background-color: $o-light-gray;
+  }
+
+  #search-container {
+    position: relative;
+  }
+
+  #search {
+    border: none;
+    height: 40px;
+    width: 94%;
+    text-indent: 30px;
+  }
+
+  .search-img {
+    position: absolute;
+    left: 20px;
+    width: 24px;
+    height: 24px;
+    top: 15px;
+  }
+
+  .clear-img {
+    position: absolute;
+    right: 20px;
+    width: 14px;
+    height: 14px;
+    top: 20px;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  ::-webkit-input-placeholder {
+    color: rgb(224, 224, 224);
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  :-ms-input-placeholder {
+    color: rgb(224, 224, 224);
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  ::placeholder {
+    color: rgb(224, 224, 224);
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .assigned-tasks {
+    border-bottom: 2px solid $o-gray;
+    overflow-y: hidden;
+    direction: ltr;
+
+    // stepper
+    .wrapper {
+      background-color: white;
+      padding-top: 15px;
+
+      .StepProgress {
+        margin-top: 0px;
+        padding-top: 0px;
+        position: relative;
+        padding-left: 45px;
+        list-style: none;
+
+        .location {
+          color: $o-black;
+        }
+
+        .title-border {
+          color: $o-orange;
+          border: 2px solid $o-orange;
+          width: 100px;
+          border-radius: 10px;
+          padding: 3px;
+        }
+      }
+
+      .StepProgress::before {
+        display: inline-block;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 15px;
+        width: 10px;
+        height: 100%;
+        // border-left: 2px solid #ccc;
+      }
+
+      .StepProgress-item {
+        position: relative;
+        counter-increment: list;
+
+        .task-desc {
+          padding-top: 5px;
+        }
+      }
+
+      .StepProgress-item:not(:last-child) {
+        padding-bottom: 5px;
+      }
+
+      .StepProgress-item::before {
+        display: inline-block;
+        content: "";
+        position: absolute;
+        left: -30px;
+        height: 100%;
+        width: 10px;
+      }
+
+      .StepProgress-item::after {
+        content: "D";
+        padding: 5px;
+        color: orange;
+        display: inline-block;
+        position: absolute;
+        top: -10px;
+        left: -45px;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #fea400;
+        border-radius: 50%;
+        background-color: #fff;
+        font-weight: bold;
+      }
+
+      .StepProgress-item.is-done::before {
+        border-left: 2px solid $o-orange;
+      }
+
+      .StepProgress-item.is-done::after {
+        content: "D";
+        padding-top: 3px;
+        font-size: 15px;
+        color: #fff;
+        text-align: center;
+        border: 2px solid $o-orange;
+        background-color: $o-orange;
+      }
+
+      .StepProgress-item.current::before {
+        border-left: 2px solid $o-orange;
+      }
+
+      .StepProgress-item.current::after {
+        content: "P";
+        padding-top: 3px;
+        width: 30px;
+        height: 30px;
+        top: -3px;
+        left: -44px;
+        font-size: 20px;
+        text-align: center;
+        color: $o-orange;
+        border: 2px solid $o-orange;
+        background-color: white;
+        font-weight: bolder;
+      }
+
+      .StepProgress strong {
+        display: block;
+      }
+    }
+
+    .date-list {
+      text-align: center;
+      list-style: none;
+      padding-left: 0px;
+    }
+
+    .char {
+      padding: 15px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #4a90e2;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .add {
+      background-color: $o-orange;
+      margin-bottom: 15px;
+      box-shadow: none;
+    }
+
+    .show-on-map {
+      padding: 10px;
+      border: 1px solid gray;
+      border-radius: 5px;
+      float: right;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .unassigned-border {
+      border-radius: 5px;
+      border: solid 1px #9b9b9b;
+    }
+
+    .completed {
+      float: right;
+      color: #2f9e2c;
+      padding-right: 15px;
+      padding-top: 5px;
+      font-weight: 500;
+    }
+
+    .status {
+      float: left;
+      color: #1e87e4;
+      padding-right: 12px;
+      font-size: small;
+    }
+
+    .successful-bg {
+      float: right;
+      padding: 5px;
+      margin-right: 15px;
+      color: white;
+      background-color: #6cc74d;
+    }
+
+    .successful {
+      color: #6cc74d;
+    }
+
+    .unassigned {
+      color: gray;
+    }
+
+    .accepted {
+      color: purple;
+    }
+  }
+
+  .wrapper:hover {
+    cursor: pointer;
+  }
+}
+
+.tasks-scroll {
+  height: 700px;
+  overflow-y: auto;
+}
+
+::ng-deep .menu {
+  .mat-menu-content:not(:empty) {
+    padding: 0px !important;
+  }
+
+  .actions-menu {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.84);
+
+    .mat-pseudo-checkbox {
+      border-radius: 10px !important;
+      color: white;
+    }
+
+    .mat-list-text {
+      color: white;
+    }
+
+    .mat-list-option {
+      color: white;
+    }
+  }
+}
+
+.no-tasks {
+  margin-top: 10em;
+  height: 150px;
+}
+
+#btn-right {
+  position: absolute;
+  top: 12.5%;
+  right: 0;
+  border: 2px solid $o-orange;
+  padding: 20px;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+  background-color: white;
+  border-right: none;
+}
+
+#btn-left {
+  position: absolute;
+  top: 12.5%;
+  left: 0;
+  border: 2px solid $o-orange;
+  padding: 20px;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: white;
+  border-left: none;
+}
+
+.tasks-list {
+  max-height: 700px;
+  overflow-x: hidden !important;
+  overflow-y: auto;
+}
+
+.date-stepper {
+  background-color: white;
+}
+
+.leaflet-routing-container-hide {
+  width: 0px !important;
+  height: 0px !important;
+}
+
+#tracking-card {
+  position: absolute;
+  bottom: 15%;
+  border-radius: 50px;
+  min-width: 250px;
+  z-index: 1;
+  left: 30%;
+
+  .close-task-tracking {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+}
+
+.add-label {
+  font-size: 16px;
+  color: $o-orange !important;
+}
+
+.Unassigned {
+  background-color: #2f9e2c;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.Assigned {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Accepted {
+  color: white;
+  background-color: #ba68c8;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Started {
+  color: white;
+  background-color: #1393ff;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.Successful {
+  color: white;
+  background-color: #2f9e2c;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Failed {
+  color: white;
+  background-color: #d0021b;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.Declined {
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+  color: white;
+}
+
+.Cancelled {
+  color: white;
+  background-color: #9b9b9b;
+  border-radius: 5px;
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.Inprogress {
+  color: white;
+  background-color: #244f8e;
+  border-radius: 5px;
+  float: right;
+  padding: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.Unassigned-text {
+  color: #2f9e2c;
+}
+
+.Assigned-text {
+  color: #9b9b9b;
+}
+
+.Accepted-text {
+  color: #ba68c8;
+}
+
+.Started-text {
+  color: #1393ff;
+}
+
+.Successful-text {
+  color: #2f9e2c;
+}
+
+.Failed-text {
+  color: #d0021b;
+}
+
+.Declined-text {
+  color: #9b9b9b;
+}
+
+.Cancelled-text {
+  color: #9b9b9b;
+}
+
+.Inprogress-text {
+  color: #244f8e;
+}
+
+.blue-color {
+  padding-top: 10px;
+  background-color: $o-orange;
+  color: white;
+}
+
+.red-color {
+  padding-top: 10px;
+  background-color: red;
+  color: white;
+}
+
+:host ::ng-deep {
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: white;
+  }
+}
+
+.estimated-time {
+  color: #3f51b5;
+  background-color: #1e88e570;
+  padding: 2px;
+  border-radius: 5px;
+  min-width: 75px;
+}
+
+.arrow-icon {
+  height: 10px;
+  width: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+  #right,
+  #left {
+    width: 85%;
+  }
+
+  #create-task {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .create-task {
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #right,
+  #left {
+    width: 85%;
+  }
+
+  #create-task {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .create-task {
+    padding: 5px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+}
+
+@media (min-device-width: 600px) and (max-device-width: 1100px) {
+  #right,
+  #create-task,
+  #left {
+    width: 75%;
+  }
+}
+
+.table-content {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.delayed {
+  border: none;
+}

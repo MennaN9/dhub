@@ -1,0 +1,55 @@
+@import "./../../../../shared/scss/colors";
+
+.dialog-title {
+  line-height: 0px;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+mat-icon:hover {
+  color: $o-orange;
+}
+
+.avatar {
+  padding-top: 30px;
+  margin-left: -2em;
+
+  img {
+    height: 200px;
+    width: 200px;
+  }
+
+  .transport-type {
+    img {
+      padding: 15px;
+    }
+  }
+}
+
+.mat-hint {
+  color: #e91e63;
+}
+
+.warn {
+  color: #e91e63;
+}
+
+.image-to-upload-label {
+  display: inline-block;
+  padding: 0.5rem;
+  border: 1px solid $o-orange;
+  font-family: sans-serif;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin: 0 auto;
+}
+
+:host ::ng-deep {
+  .mat-form-field-label,
+  .mat-select-value-text {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}

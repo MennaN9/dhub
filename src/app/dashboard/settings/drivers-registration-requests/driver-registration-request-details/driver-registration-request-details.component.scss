@@ -1,0 +1,97 @@
+@import "./../../../../shared/scss/colors";
+
+.request-details {
+    .reject-btn {
+        background-color: $o-red;
+    }
+
+    .pdf {
+        color: $o-red;
+    }
+
+    .save-btn {
+        background-color: $o-green;
+    }
+
+    .approve-btn {
+        background-color: $o-primary;
+    }
+
+    .choose-file-btn {
+        color: white;
+        background-color: $o-primary;
+        width: 250px;
+        height: 35px;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 3px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    .reject-btn,
+    .save-btn,
+    .approve-btn {
+        width: 120px;
+        color: white;
+        font-weight: 600;
+    }
+
+    #comments {
+        background-color: white;
+        width: 100%;
+        border: none;
+    }
+
+    .displayed-img {
+        height: 150px;
+        width: 250px;
+    }
+
+    .delete-icon {
+        color: $o-red;
+        cursor: pointer;
+    }
+}
+
+:host ::ng-deep {
+    .mat-form-field-underline {
+        display: none;
+    }
+
+    .mat-tab-body-content {
+        overflow-x: hidden;
+    }
+
+    .mat-tab-labels {
+        border: 1px solid $o-orange;
+    }
+
+    .mat-tab-label {
+        background-color: transparent;
+        color: $o-black;
+    }
+
+    .mat-tab-label {
+        opacity: 1;
+        background-color: white !important;
+    }
+
+    .mat-tab-label.mat-tab-label-active {
+        color: white;
+        background-color: $o-orange !important;
+    }
+
+    .mat-ink-bar {
+        background-color: var(--primary-color, none) !important;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 5px;
+    }
+
+    mat-card {
+        padding: 0px;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+}

@@ -1,0 +1,90 @@
+<section>
+  <div class="restaurants">
+    <h2> {{"Restaurants" | translate}}</h2>
+    <p>
+      {{"Organize your Restaurants into Branches to efficiently manage your branches." | translate}}
+
+    </p>
+    <button mat-raised-button color="primary" *ngxPermissionsOnly="['AddRestaurant']"
+      (click)="openManageRestaurantDialog('create')" class="o-add-btn">
+      {{'Add Restaurant' | translate}}
+    </button>
+  </div>
+
+  <section *ngxPermissionsOnly="['ReadRestaurant']">
+    <table mat-table [dataSource]="dataSource" class="custom-table pl-3 pr-5 mt-5" matSort matSortDirection="asc"
+      matSortDisableClear *ngIf="restaurants?.length > 0">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let element; let index = index"> {{index+1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> {{'Name' | translate}} </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> {{'Active' | translate}} </th>
+        <td mat-cell *matCellDef="let element"> {{element?.status}}
+        </td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> {{'Actions' | translate}} </th>
+        <td mat-cell *matCellDef="let element">
+          <button *ngxPermissionsOnly="['UpdateRestaurant','DeleteRestaurant','BlockRestaurant','UnBlockRestaurant']"
+            (click)="setTSelectablRestaurant(element)" mat-icon-button [matMenuTriggerFor]="actions"
+            aria-label="Actions">
+            <mat-icon class="actions">more_horiz</mat-icon>
+          </button>
+          <button *ngxPermissionsOnly="['ReadBranch']" (click)="navigateToBranches(element)" mat-icon-button
+            [matMenuTriggerFor]="actions" aria-label="Actions">
+            <mat-icon>people</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="length" *ngIf="restaurants?.length > 0" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = getServerData($event)">
+    </mat-paginator>
+  </section>
+
+  <!-- actions menu -->
+  <mat-menu #actions="matMenu">
+
+    <span *ngxPermissionsOnly="['UpdateRestaurant']">
+
+      <button mat-menu-item (click)="openManageRestaurantDialog('edit')">
+        {{'Edit' | translate}}
+      </button>
+    </span>
+
+    <span *ngxPermissionsOnly="['DeleteRestaurant']">
+
+      <button mat-menu-item>
+        <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+      </button>
+    </span>
+    <span *ngxPermissionsOnly="['BlockRestaurant']">
+      <button mat-menu-item *ngIf="selectedRestaurant?.isActive" (click)="blockRestuarant()">
+        {{'Block' | translate}}
+      </button>
+    </span>
+
+    <span *ngxPermissionsOnly="['UnBlockRestaurant']">
+      <button mat-menu-item *ngIf="!selectedRestaurant?.isActive">
+        <app-confirm-deletion [dialogContent]="dialogUnblockContent" (confirm)="onUnBlock($event)">
+        </app-confirm-deletion>
+      </button>
+    </span>
+
+  </mat-menu>
+
+</section>

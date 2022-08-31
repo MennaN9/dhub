@@ -1,0 +1,9 @@
+<mat-form-field appearance="fill">
+    <mat-label class="dms-label-color">{{'Address' | translate}}</mat-label>
+    <input type="text" class="p-0" matInput [formControl]="searchControl" [matAutocomplete]="auto" [required]="isRequired">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let place of places" [value]="place.display_name" (click)="setPlace(place)">
+            {{place.display_name}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

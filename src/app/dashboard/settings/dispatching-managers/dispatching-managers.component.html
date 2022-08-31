@@ -1,0 +1,97 @@
+<section class="pl-3 pr-3">
+  <div class="restaurants">
+    <h2> {{"Dispatching Managers" | translate}}</h2>
+
+    <button mat-raised-button color="primary" (click)="openManageDispatchingManagersDialog('create')" class="o-add-btn"
+      *ngxPermissionsOnly="['AddManagerDispatching']">
+      {{'Add Dispatching Managers' | translate}}
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="custom-table mt-3" matSort matSortDirection="asc"
+    matSortDisableClear *ngxPermissionsOnly="['ReadManagerDispatching']">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef class="index-column"># </th>
+      <td mat-cell *matCellDef="let element; let index = index"> {{index + 1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="designationName">
+      <th mat-header-cell *matHeaderCellDef class="designation-column"> {{"Designation Name" | translate}} </th>
+      <td mat-cell *matCellDef="let element"> {{element.designationName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="managerName">
+      <th mat-header-cell *matHeaderCellDef class="manager-column">{{"Manager Name" | translate}} </th>
+      <td mat-cell *matCellDef="let element"> {{element.managerName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zones">
+      <th mat-header-cell *matHeaderCellDef class="zone-column"> {{"Zone" | translate}} </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.lkpZones && element.zones != 'All'">
+          <ng-container *ngFor="let zone of element.lkpZones; let index = index">
+            {{ zone.name }}
+            {{ index + 1 == element?.lkpZones?.length ? "" : "," }}
+          </ng-container>
+        </ng-container>
+        <span *ngIf="element.zones == 'All'">{{ element.zones }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="restaurants">
+      <th mat-header-cell *matHeaderCellDef class="restaurant-column"> {{"Restaurant" | translate}} </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.lkpRestaurants && element.restaurants != 'All'">
+          <ng-container *ngFor="let rest of element.lkpRestaurants; let index = index">
+            {{ rest.name }}
+            {{ index + 1 == element?.lkpRestaurants?.length ? "" : "," }}
+          </ng-container>
+        </ng-container>
+        <span *ngIf="element.restaurants == 'All'">{{
+          element.restaurants
+          }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="branches">
+      <th mat-header-cell *matHeaderCellDef class="branch-column">{{"Branch" | translate}} </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.lkpBranches && element.branches != 'All'">
+          <ng-container *ngFor="let branch of element.lkpBranches; let index = index">
+            {{ branch.name }}
+            {{ index + 1 == element?.lkpBranches?.length ? "" : "," }}
+          </ng-container>
+        </ng-container>
+        <span *ngIf="element.branches == 'All'">{{ element.branches }}</span>
+      </td>
+    </ng-container>
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="actions-column">{{"Actions" | translate}} </th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="setTSelectedDispatchingManagers(element)" mat-icon-button [matMenuTriggerFor]="actions"
+          aria-label="Actions">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [length]="length" *ngIf="dispatchingManagers?.length > 0" [pageSize]="pageSize"
+    [pageSizeOptions]="[10, 25, 50, 100]" (page)="pageEvent = getServerData($event)">
+  </mat-paginator>
+
+  <!-- actions menu -->
+  <mat-menu #actions="matMenu">
+    <button mat-menu-item (click)="openManageDispatchingManagersDialog('edit')"
+      *ngxPermissionsOnly="['UpdateManagerDispatching']">{{'Edit' | translate}}</button>
+    <button mat-menu-item *ngxPermissionsOnly="['DeleteManagerDispatching']">
+      <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+    <!--<button mat-menu-item>Block</button>-->
+  </mat-menu>
+</section>

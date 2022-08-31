@@ -1,0 +1,11 @@
+<section fxLayout="column" fxAlignLayout="end end">
+    <h6 mat-dialog-title fxFlex="100%" class="title">{{data.title}}</h6>
+
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions fxFlex="50%">
+        <button mat-flat-button color="basic" (click)="cancel()" class="cancel-btn">{{data.cancelBtn}}</button>
+        <button mat-flat-button color="primary" [mat-dialog-close]="true"
+            class="confirm-btn btn-gradient">{{data.okayBtn}}</button>
+    </div>
+</section>

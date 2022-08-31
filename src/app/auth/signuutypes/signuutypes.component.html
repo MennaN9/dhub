@@ -1,0 +1,40 @@
+<div class="auth">
+<div class="col-md-10 col-sm-10 mx-auto pt-4">
+  <div class="row cards-section mt-5 d-flex  justify-content-around align-items-center">
+    <div class="col-md-3 col-sm-12 p-1">
+      <div class="card flex-column d-flex  justify-content-center align-items-center">
+          <img src="assets/images/individual.png">
+          <h3>{{'Individual' | translate}}</h3>
+          <button mat-flat-button (click)="navigate('auth/individual-registration')">{{'Get Started' |
+              translate}}</button>
+      </div>
+  </div>
+      <div class="col-md-3 col-sm-12 p-1">
+          <div class="card flex-column d-flex  justify-content-center align-items-center">
+              <img src="assets/images/business.png">
+              <h3>{{'Home Business' | translate}}</h3>
+              <button mat-flat-button (click)="navigate('auth/home-business-registration')">
+                  {{'Get Started' | translate}}
+              </button>
+          </div>
+      </div>
+      <div class="col-md-3 col-sm-12 p-1">
+        <div class="card flex-column d-flex  justify-content-center align-items-center">
+            <img src="assets/images/download.png">
+            <h3>{{'Corporate Business' | translate}}</h3>
+            <button mat-flat-button (click)="navigate('auth/corporate-business-registration')">{{'Get Started' |
+                translate}}</button>
+        </div>
+    </div>
+      <div class="col-md-3 col-sm-12 p-1">
+        <div class="card flex-column d-flex  justify-content-center align-items-center">
+            <img src="assets/images/images.png">
+            <h3>{{'Delivery Company' | translate}}</h3>
+            <button mat-flat-button (click)="navigate('auth/delivery-business-registration')">
+                {{'Get Started' | translate}}
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,61 @@
+.o-add-btn {
+  cursor: pointer;
+  height: 40px;
+  border-radius: 25px;
+  width: 150px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(180deg, rgba(252, 197, 0, 1) 35%, rgba(224, 88, 51, 1) 100%);
+}
+
+.cancel-btn {
+  cursor: pointer;
+  height: 40px;
+  border-radius: 25px;
+  width: 150px;
+  font-weight: 700;
+}
+
+.cancel-btn {
+  color: black;
+  background-color: #d3d3d3;
+  border: 2px solid #d3d3d3;
+}
+
+.cancel-btn:hover {
+  background-color: white;
+  border: 2px solid #d3d3d3;
+}
+
+.confirm-btn {
+  cursor: pointer;
+  border-radius: 25px;
+  width: 150px;
+  font-weight: 700;
+  border: 2px solid orange;
+  color: white;
+  background: orange;
+  background: linear-gradient(180deg, rgba(252, 197, 0, 1) 35%, rgba(224, 88, 51, 1) 100%);
+}
+
+.confirm-btn:hover {
+  background-color: white;
+  color: white;
+  border: 2px solid orange;
+}
+
+:host ::ng-deep {
+  .mat-form-field-appearance-fill .mat-form-field-subscript-wrapper {
+    padding: 0px;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0px;
+    padding-left: 5px;
+    border-radius: 0px;
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+}

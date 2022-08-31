@@ -1,0 +1,140 @@
+@import "./../../../shared/scss/colors";
+
+.edit-task {
+    overflow-x: hidden;
+    padding-left: 15px;
+
+    .mat-icon {
+        cursor: pointer;
+    }
+
+    .task {
+        padding-right: 25px;
+
+        .add-new-point {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding-top: 15px;
+            padding-bottom: 10px;
+            background-color: white;
+            color: rgb(30, 168, 233);
+            font-weight: 500;
+            cursor: pointer;
+            padding-left: 15px;
+        }
+
+        .edit-task-btn {
+            background-color: $o-orange;
+            border: 2px solid $o-orange;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            height: 40px !important;
+        }
+
+        .edit-task-btn:hover {
+            border: 2px solid $o-orange;
+            background-color: white;
+            color: $o-orange;
+        }
+
+        .assign-btn {
+            border-radius: 50px;
+            border: 2px solid $o-orange;
+            background: none;
+            color: $o-orange;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        @-webkit-keyframes rotate {
+            0% {
+                -webkit-transform: rotate(-360deg);
+                transform: rotate(-360deg);
+                opacity: 0;
+            }
+            100% {
+                -webkit-transform: rotate(0);
+                transform: rotate(0);
+                opacity: 1;
+            }
+        }
+        @keyframes rotate {
+            0% {
+                -webkit-transform: rotate(-360deg);
+                transform: rotate(-360deg);
+                opacity: 0;
+            }
+            100% {
+                -webkit-transform: rotate(0);
+                transform: rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .image-upload > input {
+            display: none;
+        }
+
+        .image-upload img {
+            cursor: pointer;
+            height: 64px;
+            width: 64px;
+        }
+    }
+
+    .tags-list {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 50px;
+    }
+
+    .edit-task-btn {
+        background-color: $o-orange;
+        border: 2px solid $o-orange;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        height: 40px !important;
+    }
+
+    .edit-task-btn:hover {
+        border: 2px solid $o-orange;
+        background-color: white;
+        color: $o-orange;
+    }
+
+    .assign-btn {
+        border-radius: 50px;
+        border: 2px solid $o-orange;
+        background: none;
+        color: $o-orange;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .actions {
+        margin-bottom: 15px;
+        padding-right: 15px;
+    }
+}
+
+.date-label {
+    color: #949494;
+}
+
+:host {
+    .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+        opacity: 0.75;
+    }
+
+    .mat-radio-button.mat-accent .mat-radio-inner-circle {
+        background-color: $o-orange;
+    }
+
+    .cdk-overlay-pane {
+        background-color: white !important;
+    }
+}

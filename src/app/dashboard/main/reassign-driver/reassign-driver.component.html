@@ -1,0 +1,49 @@
+<section class="assign-driver">
+    <div class="row mb-1">
+        <div class="col-11">
+            <h2 *ngIf="!data.taskId">
+                {{'Re-assign Tasks' | translate}}
+            </h2>
+            <h4 class="dialog-title" *ngIf="data.taskId">
+                {{'Task ID' | translate}}: {{data['taskId']}}
+            </h4>
+        </div>
+        <div class="col-1" (click)="cancel()">
+            <mat-icon class="close">close</mat-icon>
+        </div>
+    </div>
+
+    <form class="row" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate dir="auto">
+        <mat-form-field appearance="fill" class="col-12">
+            <mat-label class="dms-label-color">{{'Re-Assign team' | translate}}</mat-label>
+            <mat-select #teamsSelectList>
+                <mat-option *ngFor="let team of teams" [value]="team.id">
+                    {{team.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-12">
+            <mat-label class="dms-label-color">{{'Re-Assign driver' | translate}}</mat-label>
+            <mat-select formControlName="newDriverId">
+                <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                    {{driver.firstName +' '+driver.lastName}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="col-12" *ngIf="connectedTasks">
+            {{'Assign connected tasks to same team and driver' | translate}}
+            <mat-slide-toggle [(ngModel)]="checked" (change)="onChangeTasks($event)"></mat-slide-toggle>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div mat-dialog-actions class="col-12">
+            <button type="button" mat-button color="primary" (click)="cancel()"
+                class="cancel-btn">{{'Cancel' | translate}}</button>
+            <button mat-flat-button color="primary" type="submit"
+                class="confirm-btn o-add-btn">{{'Submit' | translate}}</button>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,24 @@
+@import "./../../app/shared/scss/colors";
+
+mat-sidenav {
+  width: 300px;
+  padding-top: 0px;
+}
+
+#snav {
+  box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+  .mat-list-item a:hover {
+    background-color: #fff7e9;
+  }
+}
+
+.sidebar-closed #snav {
+  &.mat-sidenav ~ .mat-drawer-content {
+    margin-left: 0px !important;
+    overflow-x: hidden;
+  }
+}
+
+.mat-toolbar.mat-primary {
+  background-color: $o-primary;
+}

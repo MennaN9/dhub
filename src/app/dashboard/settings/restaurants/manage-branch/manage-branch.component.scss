@@ -1,0 +1,20 @@
+@import "./../../../../shared/scss/colors";
+
+form {
+    h2 {
+        color: $o-dark-orange;
+        font-size: 24px;
+    }
+
+    .error {
+        color: #e91e63;
+    }
+
+    .icon {
+        cursor: pointer;
+    }
+}
+
+.dialog-title {
+    line-height: 0px;
+}

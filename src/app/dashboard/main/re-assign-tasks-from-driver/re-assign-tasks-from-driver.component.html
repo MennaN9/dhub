@@ -1,0 +1,52 @@
+<section class="assign-driver">
+    <div class="row mb-1">
+        <div class="col-11">
+            <h2>
+                {{'Re-assign Tasks' | translate}}
+            </h2>
+        </div>
+
+        <div class="col-1" (click)="cancel()">
+            <mat-icon class="close">close</mat-icon>
+        </div>
+    </div>
+
+    <form class="row" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <mat-form-field appearance="fill" class="col-12" dir="auto">
+            <mat-label class="dms-label-color">{{'Task(s)' | translate}}</mat-label>
+            <mat-select formControlName="taskIds" multiple>
+                <mat-option *ngFor="let task of tasks" [value]="task.id">
+                    {{task.taskTypeName }} - {{task.id}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-12" dir="auto">
+            <mat-label class="dms-label-color">{{'Team' | translate}}</mat-label>
+            <mat-select #teamsSelectList>
+                <mat-option *ngFor="let team of teams" [value]="team.id">
+                    {{team.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-12"> dir="auto"
+            <mat-label class="dms-label-color">{{'Driver' | translate}}</mat-label>
+            <mat-select formControlName="newDriverId">
+                <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                    {{driver.firstName + ' ' + driver.lastName}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-divider></mat-divider>
+
+        <div mat-dialog-actions class="col-12">
+            <button type="button" mat-button color="primary" (click)="cancel()"
+                class="cancel-btn">{{'Cancel' | translate}}</button>
+            <button mat-flat-button color="primary" type="submit"
+                class="confirm-btn o-add-btn">{{'Submit' | translate}}</button>
+        </div>
+    </form>
+</section>

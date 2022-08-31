@@ -1,0 +1,46 @@
+@import "./../../../shared/scss/colors";
+
+.activity {
+  padding: 0px 15px;
+  p {
+    color: $o-dark-gray;
+  }
+
+  .custom-table {
+    margin-top: 1em;
+  }
+}
+
+table {
+  width: 100%;
+
+  th {
+    color: blue;
+  }
+}
+
+:host ::ng-deep {
+  .mat-paginator-container,
+  .mat-paginator-page-size .mat-select-trigger {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .e-keyboard,
+  .e-date-icon {
+    font-size: 16px !important;
+    color: black !important;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .e-fill,
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    border-radius: 0px;
+    max-height: 54px;
+  }
+}

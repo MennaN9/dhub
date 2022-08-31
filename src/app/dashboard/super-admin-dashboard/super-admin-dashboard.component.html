@@ -1,0 +1,185 @@
+<section class="row ml-2 m-1">
+    <div class="col-md-2 col-sm-12 ml-3 mr-3">
+        <h2 class="dms-page-title">{{'Dashboard' | translate}}</h2>
+    </div>
+
+    <div class="col-md-12 col-sm-12">
+        <mat-card class="dashboard-header">
+            <div class="row">
+                <form class="row col-md-12 col-sm-12" [formGroup]="form">
+                    <div class="mt-4 col-md-2 col-sm-12">
+                        <mat-label class="dms-label-color">{{'Account Name' | translate}}</mat-label>
+                        <mat-form-field appearance="fill">
+                            <mat-select formControlName="tenantIds" multiple class="pl-2 pr-2">
+                                <mat-option value="0">{{'All' | translate}}</mat-option>
+                                <mat-option *ngFor="let businessAccount of businessAccounts"
+                                    [value]="businessAccount.item1">
+                                    {{businessAccount.item2}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-4 col-md-2 col-sm-12">
+                        <mat-label class="dms-label-color">{{'Driver Name' | translate}}</mat-label>
+                        <mat-form-field appearance="fill">
+                            <mat-select formControlName="driversIds" multiple class="pl-2 pr-2">
+                                <mat-option value="0">{{'All' | translate}}</mat-option>
+                                <mat-option *ngFor="let driver of drivers" [value]="driver.id">{{driver.fullName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-4 col-md-2 col-sm-12">
+                        <mat-label class="dms-label-color">{{'Order Type' | translate}}</mat-label>
+                        <mat-form-field appearance="fill">
+                            <mat-select formControlName="taskTypeIds" multiple class="pl-2 pr-2">
+                                <mat-option value="0">{{'All' | translate}}</mat-option>
+                                <mat-option *ngFor="let taskType of taskTypes" [value]="taskType.id">{{taskType.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 pt-5">
+                        <ejs-daterangepicker (change)="onSelectDate($event)" [startDate]='startDate' [endDate]='endDate'
+                            format="dd/MM/yyyy">
+                        </ejs-daterangepicker>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 pt-5">
+                        <button mat-flat-button color="primary" class="o-add-btn filter ml-1 mr-1" (click)="filter()">
+                            {{'Filter' | translate}}
+                        </button>
+
+                        <button mat-flat-button color="primary" class="o-cancel-btn clear" (click)="reset()">
+                            {{'Clear' | translate}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-card>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <mat-card class="statics-card">
+            <div class="row pt-2">
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/pie-chart.png" alt="Pending Business Requests">
+                    <h4>{{'Pending Business Requests' | translate}}</h4>
+                    <h1>{{result?.totalRequests?.pendingBusinessRequests}}</h1>
+                </div>
+
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/driver.png" alt="Pending Driver Requests">
+                    <h4>{{'Pending Driver Requests' | translate}}</h4>
+                    <h1>{{result?.totalRequests?.pendingDriverRequests}}</h1>
+                </div>
+
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/login.png" alt="Pending Login Requests">
+                    <h4>{{'Pending Login Requests' | translate}}</h4>
+                    <h1>{{result?.totalRequests?.pendingDriverLoginRequests}}</h1>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <mat-card class="statics-card">
+            <div class="row pt-2">
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/remove.png" alt="Unassigned">
+                    <h4>{{'Unassigned' | translate}}</h4>
+                    <h1>{{result?.totalOrders?.unassignedOrders}}</h1>
+                </div>
+
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/assignment.png" alt="Assigned">
+                    <h4>{{'Assigned' | translate}}</h4>
+                    <h1>{{result?.totalOrders?.assignedOrders}}</h1>
+                </div>
+
+                <div class="col-md-4 col-sm-12 text-center">
+                    <img src="assets/images/icons/correct.png" alt="Completed">
+                    <h4>{{'Completed' | translate}}</h4>
+                    <h1>{{result?.totalOrders?.completedOrders}}</h1>
+                </div>
+            </div>
+        </mat-card>
+
+    </div>
+
+    <div class="col-md-12 col-sm-12">
+        <mat-card class="dashboard-header" *ngIf="result?.accountOrders?.result.length > 0">
+            <div class="row d-flex justify-content-between pl-4 pr-4 table-header">
+                <h1 class="dms-page-title pt-1">{{'Orders' | translate}}</h1>
+                <h3>{{'Total Tasks' | translate}}: {{result?.accountOrders?.totalCount}}</h3>
+            </div>
+
+            <div class="row pl-4 pr-4 table-container" *ngIf="result?.accountOrders?.result.length > 0">
+                <table mat-table [dataSource]="result?.accountOrders?.result" class="mat-elevation-z8">
+                    <ng-container matColumnDef="orderId" sticky>
+                        <th mat-header-cell *matHeaderCellDef> {{'Order Id' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.orderId}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="driverName">
+                        <th mat-header-cell *matHeaderCellDef> {{'Driver Name' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.driverName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="taskTypeName">
+                        <th mat-header-cell *matHeaderCellDef> {{'Task Type' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.taskTypeName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="companyName">
+                        <th mat-header-cell *matHeaderCellDef> {{'Company Name' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="orderDate">
+                        <th mat-header-cell *matHeaderCellDef> {{'Order Date & Time' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.orderDate | date:'MM/dd/yyyy, h:mm:ss a'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="taskStatusName">
+                        <th mat-header-cell *matHeaderCellDef> {{'Order Status' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.taskStatusName}} </td>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> Actions </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div *ngIf="selectedTask?.taskStatusId == 1 && selectedTask?.taskStatusId != 6">
+                                <button mat-button color="primary" (click)="openAssignDriverDialog(element,'Assign task')">
+                                    <mat-icon>autorenew</mat-icon> Assign
+                                </button>
+                            </div>
+
+                            <div *ngIf="selectedTask?.taskStatusId != 1 && selectedTask?.taskStatusId != 6">
+                                <button mat-button color="primary" (click)="openAssignDriverDialog(element,'Reassign task')">
+                                    <mat-icon>autorenew</mat-icon> Re-Assign
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+            <div class="row d-flex justify-content-end ml-2 mr-2">
+                <mat-paginator [length]="result?.accountOrders?.totalCount"
+                    *ngIf="result?.accountOrders?.result.length > 0" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 25, 100]" (page)="OnChangeOrdersPageDashboard($event)">
+                </mat-paginator>
+            </div>
+
+        </mat-card>
+    </div>
+</section>

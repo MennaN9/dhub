@@ -1,0 +1,21 @@
+.cancel-btn {
+    color: #d0021b;
+    border: none;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.o-add-btn {
+    border: none;
+    padding: 10px;
+    font-size: medium;
+    cursor: pointer;
+}
+
+ngx-dropzone-label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

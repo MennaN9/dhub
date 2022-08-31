@@ -1,0 +1,282 @@
+<div class="row p-0 m-2">
+  <!-- actions -->
+  <div class="col-md-12 col-sm-12 col-xs-12 mt-3 d-flex justify-content-end">
+    <button
+      mat-flat-button
+      type="button"
+      class="save-btn ml-1 mr-1"
+      (click)="submit()"
+    >
+      {{ "Save" | translate }}
+    </button>
+  </div>
+  <!-- end actions -->
+
+  <!-- tabs -->
+  <div class="col-md-12 col-sm-12 mt-3">
+    <mat-card class="m-2 p-2">
+      <mat-card-header>
+        <mat-card-title
+          >{{ "Delivery Company configuration For" | translate }}
+          {{ companyName }}</mat-card-title
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="deliveryform" (ngSubmit)="submit()">
+          <div class="row d-flex align-items-center">
+            <div class="col-md-4">
+              <mat-checkbox
+                formControlName="isSupportingAPIIntegration"
+                [value]="ischecked"
+                (change)="onChangeApi($event)"
+                >API Integration</mat-checkbox
+              >
+              <mat-error
+                *ngIf="
+                  !deliveryform.controls['isSupportingAPIIntegration'].valid
+                "
+              >
+                {{ "is Supporting APIIntegration required" | translate }}
+              </mat-error>
+            </div>
+            <div class="col-md-8 col-sm-12" *ngIf="ischecked == true">
+              <mat-form-field appearance="fill">
+                <input
+                  matInput
+                  formControlName="apiIntegrationURL"
+                  placeholder="Api URL"
+                />
+                <mat-error
+                  *ngIf="!deliveryform.controls['apiIntegrationURL'].valid"
+                >
+                  {{ "API URL is required" | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Delivery Areas</h3>
+            </div>
+            <div class="col-md-5 col-sm-12">
+              <h4>From</h4>
+              <mat-form-field appearance="fill">
+                <mat-select
+                  placeholder="From"
+                  formControlName="fromGeofences"
+                  multiple
+                >
+                  <app-dynamic-mat-checkbox
+                    [model]="deliveryform.get('fromGeofences')"
+                    [(values)]="geos"
+                  >
+                  </app-dynamic-mat-checkbox>
+                  <mat-option *ngFor="let geo of geos" [(value)]="geo.id">{{
+                    geo.name
+                  }}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="!deliveryform.controls['fromGeofences'].valid"
+                >
+                  {{ "From GeoFence is required" | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-5 offset-md-2 col-sm-12">
+              <h4>To</h4>
+              <mat-form-field appearance="fill">
+                <mat-select
+                  placeholder="To"
+                  formControlName="toGeofences"
+                  multiple
+                >
+                  <app-dynamic-mat-checkbox
+                    [model]="deliveryform.get('toGeofences')"
+                    [values]="geos"
+                  >
+                  </app-dynamic-mat-checkbox>
+                  <mat-option *ngFor="let geo of geos" [(value)]="geo.id">{{
+                    geo.name
+                  }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="!deliveryform.controls['toGeofences'].valid">
+                  {{ "To GeoFence is required" | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Delivery Charges</h3>
+            </div>
+            <div class="col-md-5 col-sm-12 col-xs-12">
+              <mat-radio-group
+                aria-label="Select an option"
+                [value]="distanceOption"
+                [(ngModel)]="distanceOption"
+                formControlName="feesCalculationType"
+              >
+                <mat-radio-button
+                  *ngFor="let type of types"
+                  [value]="type.id"
+                  (change)="onChangeRadioButton($event)"
+                  >{{ type.name }}
+                </mat-radio-button>
+                <!-- <mat-error
+                  *ngIf="!deliveryform.controls.feesCalculationType.valid"
+                >
+                  {{ "Fess Type is required" | translate }}
+                </mat-error> -->
+              </mat-radio-group>
+              <div class="row" *ngIf="distanceOption == 1">
+                <div formArrayName="distance">
+                  <div
+                    *ngFor="
+                      let distanceForm of distance.controls;
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <ng-container class="">
+                      <mat-form-field
+                        appearance="fill"
+                        class="col-md-3 col-sm-12 col-xs-12"
+                      >
+                        <mat-label>From</mat-label>
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="fromDistance"
+                        />
+                        <!-- <mat-error
+                          *ngIf="distanceForm.get('fromDistance').invalid"
+                        >
+                          {{ "Fess Type is required" | translate }}
+                        </mat-error> -->
+                      </mat-form-field>
+                      <mat-form-field
+                        appearance="fill"
+                        class="col-md-3 col-sm-12 col-xs-12"
+                      >
+                        <mat-label>To</mat-label>
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="toDistance"
+                          (input)="
+                            onChangePreviousValue($event.target.value, i)
+                          "
+                        />
+                      </mat-form-field>
+                      <mat-form-field
+                        appearance="fill"
+                        class="col-md-3 col-sm-12 col-xs-12"
+                      >
+                        <mat-label>D.Fee</mat-label>
+                        <input type="number" matInput formControlName="fees" />
+                      </mat-form-field>
+                      <mat-icon class="delete-btn" (click)="deleteDistance(i)">
+                        delete_forever</mat-icon
+                      >
+                      <mat-icon class="" (click)="addDistance()"> add</mat-icon>
+                    </ng-container>
+                  </div>
+                </div>
+                <!-- <mat-error  *ngIf="!deliveryform.controls['formControlName'].valid">
+                  {{'from Distance is required' | translate}}
+              </mat-error> -->
+              </div>
+            </div>
+            <div class="col-md-5 offset-md-2 col-sm-12">
+              <mat-form-field
+                appearance="fill"
+                dir="auto"
+                setDir
+                *ngIf="distanceOption == 3"
+              >
+                <mat-label class="dms-label-color">{{
+                  "Fixed rate" | translate
+                }}</mat-label>
+                <input matInput formControlName="fixedFees" type="number" />
+              </mat-form-field>
+              <div class="margin-input">
+                <mat-form-field
+                  appearance="fill"
+                  dir="auto"
+                  setDir
+                  *ngIf="distanceOption == 2"
+                >
+                  <mat-label class="dms-label-color">{{
+                    "Fils/KM" | translate
+                  }}</mat-label>
+                  <input
+                    matInput
+                    formControlName="externalFees"
+                    type="number"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div
+          class="col-md-12 col-sm-12 col-xs-12 mt-3 d-flex justify-content-end"
+        >
+          <button
+            mat-flat-button
+            type="button"
+            class="save-btn ml-1 mr-1"
+            (click)="addToTable()"
+          >
+            {{ "Add" | translate }}
+          </button>
+        </div>
+        <mat-card>
+          <table class="table shadow mt-2 text-center" *ngIf="showTable">
+            <thead class="">
+              <tr>
+                <!-- <th>Id</th> -->
+                <th>From</th>
+                <th>To</th>
+                <th>fees Type</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dataTable; let i = index">
+                <td>
+                  <span>
+                    {{ row?.fromGeofences }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ row?.toGeofences }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ row?.feesCalculationType }}
+                  </span>
+                </td>
+                <td>
+                  <!-- <mat-icon
+                    class="view"
+                    (click)="editRow(row?.deliveryDetails, i)"
+                  >
+                    edit
+                  </mat-icon> -->
+                  <mat-icon class="view" (click)="deleteRow(i)">
+                    delete
+                  </mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+
+    <p>{{ deliveryform.value | json }}</p>
+  </div>
+</div>

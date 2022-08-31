@@ -1,0 +1,29 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+  <div class="row mb-1" dir="auto">
+    <div class="col-11">
+      <h4 class="dialog-title">
+        {{formTitle}} {{"Restaurant" | translate}}
+      </h4>
+    </div>
+    <div class="col-1 cancel" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-form-field appearance="fill" class="mt-2">
+    <mat-label> {{"Restaurant name" | translate}}</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="!form.controls['name'].valid">
+      {{getError('name')}}
+    </mat-error>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button type="button" mat-flat-button (click)="cancel()" class="cancel-btn"> {{"Cancel" | translate}} </button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="isSubmitted"
+      class="confirm-btn o-add-btn">{{formAction}}</button>
+  </div>
+
+</form>

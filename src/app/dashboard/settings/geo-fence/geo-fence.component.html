@@ -1,0 +1,61 @@
+<section class="geo-fence" fxLayout="row wrap">
+    <h2 fxFlex="100%" class="dms-page-title">{{'Add Geo fence' | translate}}</h2>
+    <p fxFlex="100%">
+        {{'Enable this option to automatically assign Task to your Agent. You can select the assignment logic that best
+        suits your business needs' | translate}}.
+    </p>
+
+    <div fxFlex="100%">
+        <button mat-raised-button color="primary" (click)="createGeoFence()" class="o-add-btn"
+            *ngxPermissionsOnly="['AddGeofence']">{{"Add Geo Fence" | translate}}</button>
+
+        <button mat-raised-button color="primary" *ngxPermissionsOnly="['ExportGeoFence']" (click)="exportGeoFence()"
+            class="o-add-btn ml-2 mr-2">{{'Export Geo Fence' | translate}}
+        </button>
+    </div>
+
+    <div fxFlex="40%" *ngxPermissionsOnly="['ReadGeofence']">
+        <br>
+        <div class="geo-fences scroll mr-3" *ngIf="fences?.length > 0">
+            <mat-card *ngFor="let fence of fences;let index = index" (click)="setTSelectableFenceFocus(fence)"
+                class="mb-3">
+                <mat-card-title class="pl-2 pr-2">
+                    <b class="mt-2">{{fence.name}}</b>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="setTSelectableFence(fence,index)"
+                        [ngStyle]="{'float':locale != 'ar' ? 'right' : 'left' }">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                </mat-card-title>
+
+                <mat-card-subtitle class="mt-2" *ngIf="fence.description">
+                    <b>{{'Description' | translate}}</b> {{fence.description}}
+                </mat-card-subtitle>
+
+                <mat-card-content>
+                    <div fxFlex="100%">
+                        <p fxFlex="70%">
+                            {{'Last updated' | translate}}: {{fence.updatedDate | dateToTimezone}}
+                        </p>
+                        <p fxFlex="30%">
+                            {{'Driver' | translate}}: {{fence?.drivers?.length}}
+                        </p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+    <div fxFlex="60%">
+        <div id="map">
+        </div>
+    </div>
+
+</section>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editGeoFence()" *ngxPermissionsOnly="['UpdateGeofence']">{{'Edit' |
+        translate}}</button>
+    <button mat-menu-item *ngxPermissionsOnly="['DeleteGeofence']">
+        <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+</mat-menu>

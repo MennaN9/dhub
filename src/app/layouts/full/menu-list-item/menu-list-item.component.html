@@ -1,0 +1,7 @@
+<a mat-list-item (click)="onItemSelected(item)" [disableRipple]="true"
+    [ngClass]="{'active':(item.route == '/' || item.route == activeRoute)}" class="menu-list-item"
+    routerLinkActive="{{(item.route == '/' || item.route == activeRoute) ? 'selected':''}}"
+    *ngxPermissionsOnly="item.permissions" routerLink="{{item.route}}">
+    <mat-icon class="routeIcon">{{item.icon}}</mat-icon>
+    {{item.name | translate}}
+</a>

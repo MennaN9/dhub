@@ -1,0 +1,34 @@
+@import "./../../../../shared/scss/colors";
+
+h3,
+h5 {
+    margin: 0px;
+    line-height: normal;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.close-btn {
+    color: $o-orange;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: $o-red;
+}
+
+.save-btn {
+    background-color: $o-orange;
+}
+
+.cancel-btn,
+.save-btn {
+    color: white;
+    border-radius: 50px;
+}
+
+.title {
+    border-bottom: 2px solid #d8d8d8;
+}

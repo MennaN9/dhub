@@ -1,0 +1,214 @@
+<section class="edit-task scroll">
+    <div class="row mb-1">
+        <div class="col-11">
+            <h4 class="dialog-title mt-5">
+                {{'Edit' | translate}} {{task.taskTypeName | translate }} {{'Task' | translate}} - {{taskID}}
+            </h4>
+        </div>
+        <div class="col-1" (click)="closeEditTask()">
+            <mat-icon class="close mt-3">close</mat-icon>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <form class="task scroll" [formGroup]="form">
+        <div class="row pl-3 mt-3">
+            <div class="col-6">
+                <span class="title">
+                    <p class="crop">
+                        <span [ngClass]="submitted && !form.valid ? 'not-valid':''">
+                            {{task.taskTypeName | translate}}
+                        </span>
+                        <span>
+                            {{form.controls.date.value | date:'medium'}}
+                        </span>
+                        {{form.controls.address.value?.formatted_address || form.controls.address.value}}
+                    </p>
+                </span>
+            </div>
+
+            <mat-form-field appearance="fill" class="col-6">
+                <select matNativeControl required (change)="changeTaskData(taskId.value)" #taskId>
+                    <option [value]="task.id" *ngFor="let task of data?.task?.tasks" [selected]="task.id === taskID">
+                        {{task.taskTypeName + "-"+ task.id}}</option>
+                </select>
+            </mat-form-field>
+
+            <!--<mat-form-field appearance="fill" class="col-4">
+                <mat-label></mat-label>
+                 <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of taskStatus" [value]="status">
+                        {{status.name}}
+                    </mat-option>
+                </mat-select> 
+                <select matNativeControl   >
+                  <option [value]="status.id" *ngFor="let status of taskStatus"
+                  [selected]="status.id === task.taskStatusId">
+                      {{status.name}}</option>
+              </select>
+            </mat-form-field>-->
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="flex-end" fxLayoutGap="5px">
+            <mat-form-field fxFlex="47.5%" appearance="fill">
+                <mat-label class="dms-label-color">{{'Name' | translate}} <span class="warn">*</span></mat-label>
+                <input matInput type="text" formControlName="customerName">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="!form.controls['customerName'].valid">
+                    {{getError('customerName')}}
+                </mat-error>
+            </mat-form-field>
+            <!--
+  <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="branchMode">
+      <mat-label class="dms-label-color">{{'Branch' | translate}} <span class="warn">*</span></mat-label>
+      <input matInput [matAutocomplete]="pickupBranches" formControlName="branchId"
+          (keyup)="onSearchBranches($event)">
+      <mat-autocomplete #pickupBranches="matAutocomplete" [displayWith]="displayBranchFn"
+          (optionSelected)="branchSelected($event,index,'pickup')">
+          <mat-option *ngFor="let branch of branches" [value]="branch">
+              <span>{{branch.name}}</span>
+          </mat-option>
+          <hr>
+      </mat-autocomplete>
+      <mat-icon matSuffix>person</mat-icon>
+      <mat-error *ngIf="!pickup.controls['branchId'].valid">
+          {{getPickupError('branchId',index)}}
+      </mat-error>
+  </mat-form-field> -->
+
+            <!-- <div fxFlex="47.5%">
+            <app-country-codes (country)="onChangeCountry($event)" fxFlex="25%"
+                               [previousCountryId]="previousCountryId">
+            </app-country-codes>
+            <mat-form-field fxFlex="75%" appearance="fill">
+              <mat-label class="dms-label-color">{{'Phone' | translate}} <span class="warn">*</span></mat-label>
+              <input matInput type="number" formControlName="phone" [readonly]='true'>
+              <mat-error *ngIf="numberPhoneMessage.length > 0">
+                *{{numberPhoneMessage}}
+              </mat-error>
+              <mat-error *ngIf="!form.controls['phone'].valid">
+                {{getError('phone')}}
+              </mat-error>
+              <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+            </mat-form-field> -->
+
+            <!--
+            <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="branchMode">
+                <mat-label class="dms-label-color">{{'Branch' | translate}} <span class="warn">*</span></mat-label>
+                <input matInput [matAutocomplete]="pickupBranches" formControlName="branchId"
+                    (keyup)="onSearchBranches($event)">
+                <mat-autocomplete #pickupBranches="matAutocomplete" [displayWith]="displayBranchFn"
+                    (optionSelected)="branchSelected($event,index,'pickup')">
+                    <mat-option *ngFor="let branch of branches" [value]="branch">
+                        <span>{{branch.name}}</span>
+                    </mat-option>
+                    <hr>
+                </mat-autocomplete>
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="!pickup.controls['branchId'].valid">
+                    {{getPickupError('branchId',index)}}
+                </mat-error>
+            </mat-form-field> -->
+
+            <div fxFlex="47.5%">
+                <app-country-codes (country)="onChangeCountry($event)" fxFlex="25%"
+                    [previousCountryId]="previousCountryId">
+                </app-country-codes>
+                <mat-form-field fxFlex="75%" appearance="fill">
+                    <mat-label class="dms-label-color">{{'Phone' | translate}} <span class="warn">*</span></mat-label>
+                    <input matInput type="number" formControlName="phone" [readonly]='true'>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field fxFlex="47.5%" appearance="fill">
+                <mat-label class="dms-label-color">{{'Email' | translate}} <span [hidden]="!branchMode"
+                        class="warn">*</span></mat-label>
+                <input matInput type="email" formControlName="email" [readonly]='true'>
+                <mat-icon matSuffix>email</mat-icon>
+                <mat-error *ngIf="!form.controls['email'].valid">
+                    {{getError('email')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="47.5%" appearance="fill">
+                <mat-label class="dms-label-color">{{'Order ID' | translate}} <span [hidden]="!branchMode"
+                        class="warn">*</span></mat-label>
+                <input matInput type="text" formControlName="orderId">
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill" fxFlex="96%">
+                <mat-label class="dms-label-color">
+                    {{task.taskTypeName | translate}} {{'Address' | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput formControlName="address" (blur)="checkAddress()" matGoogleMapsAutocomplete
+                    (onLocationSelected)="addressClicked($event)"
+                    [value]="form.controls.address.value?.formatted_address || form.controls.address.value">
+            </mat-form-field> -->
+
+            <app-search-place fxFlex="96%" (onPlace)="onPlace($event)" [previousAddress]="previousAddress">
+            </app-search-place>
+
+            <mat-form-field fxFlex="47.5%" *ngIf="isManaualLocation" appearance="fill">
+                <mat-label class="dms-label-color">{{'Latitude' | translate}}</mat-label>
+                <input matInput type="text" formControlName="latitude">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="47.5%" *ngIf="isManaualLocation" appearance="fill">
+                <mat-label class="dms-label-color">{{'Longitude' | translate}}</mat-label>
+                <input matInput type="text" formControlName="longitude">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="96%" appearance="fill">
+                <mat-label class="dms-label-color">
+                    {{task.taskTypeName | translate}} {{'date' | translate}} <span class="warn">*</span>
+                </mat-label>
+                <input matInput class="datetimepicker" formControlName="date" autocomplete="off">
+                <mat-error *ngIf="!form.controls['date'].valid">
+                    {{getError('date')}}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="96.25%" appearance="fill">
+                <mat-label class="dms-label-color">{{'Description' | translate}}</mat-label>
+                <input matInput type="text" formControlName="description">
+                <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+
+            <div fxFlex="97%">
+                <div fxLayout="row wrap" fxLayoutAlign="flex-start">
+                    <div class="image-upload" fxFlex="20%">
+                        <label for="file-input">
+                            <img [src]="image">
+                        </label>
+                        <input id="file-input" type="file" (change)="onSelectImage($event)" accept="image/*" />
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- </div> -->
+        </div>
+    </form>
+
+    <!-- actions -->
+    <div class="row actions">
+        <!-- tags -->
+        <div class="col-3"></div>
+
+        <div class="col-5 mb-3">
+            <button mat-flat-button color="primary" type="button" class="assign-btn" (click)="assignDialog()">
+                <img src="assets/images/icons/assign.png" style="height: 36px">
+                {{'Assign Drivers' | translate}}
+                {{count}}
+                <mat-icon>
+                    keyboard_arrow_up
+                </mat-icon>
+            </button>
+        </div>
+
+        <button class="col-4 edit-task-btn" mat-flat-button color="accent" type="button" (click)="updateTask()">
+            {{"Update Task" | translate}}
+        </button>
+    </div>
+</section>

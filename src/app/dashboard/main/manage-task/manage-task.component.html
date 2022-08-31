@@ -1,0 +1,498 @@
+<section class="create-task scroll">
+  <div fxLayout="row wrap" fxLayoutAlign="center cenetr">
+    <h4 fxFlex="90%">
+      {{"Create Task" | translate}}
+    </h4>
+
+
+    <span fxFlex="5%" class="close" (click)="closeManageTask()">
+      <mat-icon class="icon">close</mat-icon>
+    </span>
+
+    <div fxFlex="95%">
+      <input matNativeControl type="text" value="{{'Pickup & Delivery' | translate}}" [disabled]="true"
+        class="task-main-type">
+    </div>
+
+    <!-- <mat-form-field appearance="fill" fxFlex="90%">
+        <select matNativeControl name="type" [value]="1">
+            <option *ngFor="let type of mainTaskTypes" [value]="type.id" [selected]="type.id == 1">
+                {{type.name | translate}}
+            </option>
+        </select>
+    </mat-form-field> -->
+  </div>
+
+
+  <form class="task" [formGroup]="form" setDir>
+    <mat-accordion class="tasks-list">
+      <mat-expansion-panel formArrayName="pickups" *ngFor="let pickup of pickupsForm?.controls; let index = index;"
+        [expanded]="step === index" (opened)="setStep(index,'pickup')">
+        <mat-expansion-panel-header>
+          <mat-panel-title fxLayout="row wrap">
+            <div fxFlex="97.5%">
+              <span class="title">
+                <p class="crop">
+                  <span [ngClass]="submitted && !pickup.valid ? 'not-valid':''">
+                    {{"Pickup" | translate}} <span *ngIf="submitted && !pickup.valid" class="not-valid"> - {{"Invalid" |
+                      translate}}</span>
+                  </span>
+                  <span>
+                    {{pickup.controls.pickupDate.value | date:'medium'}}
+                  </span>
+                  {{
+                  pickup.controls.address.value?.formatted_address ||
+                  pickup.controls.address.value
+                  }}
+                </p>
+              </span>
+            </div>
+            <div fxFlex="2.5%" (click)="removeLocation(index,'pickup')"
+              *ngIf="deliveriesForm.length >= 1 || pickupsForm.length > 1">
+              <p matTooltip="Delete task">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </p>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-radio-group class="row ml-2 mb-3" (change)="toggleBranchAndCustomer($event,index)">
+          <mat-radio-button value="customer" class="col-6" [checked]="!branchMode">
+            {{'Trip' | translate}}
+          </mat-radio-button>
+
+          <mat-radio-button value="branch" class="col-6" [checked]="branchMode" *ngxPermissionsOnly="['ReadBranch']">
+            {{'Branch' | translate}}
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <div [formGroupName]="index" fxLayout="row wrap" fxLayoutAlign="flex-end" fxLayoutGap="5px">
+          <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="!branchMode">
+            <mat-label class="dms-label-color">
+              {{'Name' | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput [matAutocomplete]="pickupCustomers" formControlName="customerId"
+              (keyup)="onSearchCustomers($event)" autocomplete="off" name="pickupName">
+            <mat-autocomplete #pickupCustomers="matAutocomplete" [displayWith]="displayFn"
+              (optionSelected)="customerSelected($event,index,'pickup')">
+              <mat-option *ngFor="let customer of customers" [value]="customer">
+                <span>{{customer.name}}</span>
+              </mat-option>
+              <hr>
+            </mat-autocomplete>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="!pickup.controls['customerId'].valid">
+              {{getPickupError('customerId',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="branchMode">
+            <mat-label class="dms-label-color">
+              {{'Branch' | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput [matAutocomplete]="pickupBranches" formControlName="branchId"
+              (keyup)="onSearchBranches($event,index)" (blur)="checkBranchExistsInList(index)" autocomplete="off"
+              name="branchName">
+            <mat-autocomplete #pickupBranches="matAutocomplete" [displayWith]="displayBranchFn"
+              (optionSelected)="branchSelected($event,index,'pickup')">
+              <mat-option *ngFor="let branch of branches" [value]="branch">
+                <span>{{branch.name}}</span>
+              </mat-option>
+              <hr>
+            </mat-autocomplete>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="!pickup.controls['branchId'].valid">
+              {{getPickupError('branchId',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <div fxFlex="47.5%" *ngIf="!branchMode">
+            <app-country-codes (country)="onChangeCountry($event,index,'pickup')" fxFlex="25%"
+              [previousCountryId]="previousPickupCountryIds[index]">
+            </app-country-codes>
+            <mat-form-field appearance="fill" fxFlex="75%">
+              <mat-label class="dms-label-color">
+                {{"Phone" | translate}} <span class="warn">*</span>
+              </mat-label>
+              <input matInput type="number" [matAutocomplete]="pickupCustomersPhone"
+                (keyup)="onSearchCustomersByPhone($event)" formControlName="phone" autocomplete="off">
+
+              <mat-autocomplete #pickupCustomersPhone="matAutocomplete" [displayWith]="displayPhoneFn"
+                (optionSelected)="customerSelectedPhone($event,index,'pickup')">
+                <mat-option *ngFor="let customer of customers" [value]="customer">
+                  <span> {{customer.name}}/{{customer.phone}}</span>
+                </mat-option>
+                <hr>
+              </mat-autocomplete>
+
+              <mat-error *ngIf="pickupNumberPhoneMessages.length > 0">
+                *{{pickupNumberPhoneMessages[index]}}
+              </mat-error>
+              <mat-error *ngIf="!pickup.controls['phone'].valid">
+                {{getPickupError('phone',index)}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="!branchMode">
+            <mat-label class="dms-label-color">
+              {{'Email' | translate}}
+              <!--<span class="warn">*</span>-->
+            </mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="!pickup.controls['email'].valid">
+              {{getPickupError('email',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="!branchMode">
+            <mat-label class="dms-label-color">
+              {{'CID' | translate}}
+            </mat-label>
+            <input matInput type="text" formControlName="cid">
+            <mat-error *ngIf="!pickup.controls['cid'].valid">
+              {{getPickupError('cid',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">
+              {{"Order ID" | translate}}<span class="warn" *ngIf="branchMode">*</span>
+            </mat-label>
+            <input matInput type="text" formControlName="orderId">
+          </mat-form-field>
+
+          <div *ngIf="!branchMode" fxFlex="47.5%"></div>
+
+          <div class="row p-2 ml-1" *ngIf="!branchMode">
+            <app-address class="col-11 p-1" (addressChanges)="findLocation($event,index,'pickup')"
+              [addressToReplace]="pickupsAddresses[index]" [isPACI]="true">
+            </app-address>
+            <mat-icon matSuffix (click)="toggleAddressMap(index,'pickup')" class="col-1 place-icon">
+              place
+            </mat-icon>
+          </div>
+
+          <app-search-place class="col-md-12" (onPlace)="onPlace($event,'pickup',index)"
+            (onMarker)="onMarker($event,'pickup',index)">
+          </app-search-place>
+
+          <!-- <mat-form-field appearance="fill" fxFlex="96%" *ngIf="pickupsAddresses[index].opened">
+            <mat-label class="dms-label-color">
+              {{'Pickup Address' | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput formControlName="address" (blur)="checkAddress('pickup',index)" matGoogleMapsAutocomplete
+              (onLocationSelected)="addressClicked($event,'pickup',index,pickup.controls.address.value?.formatted_address )"
+              [value]="pickup.controls.address.value?.formatted_address || pickup.controls.address.value">
+
+            <mat-error *ngIf="!pickup.controls['address'].valid">
+              {{getPickupError('address',index)}}
+            </mat-error>
+          </mat-form-field> -->
+
+          <mat-form-field fxFlex="96%" appearance="fill">
+            <mat-label class="dms-label-color">
+              {{"Pickup Before" | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput id="pickup_{{index}}" class="datetimepicker" formControlName="pickupDate" autocomplete="off"
+              data-type="pickup">
+            <mat-error *ngIf="!pickup.controls['pickupDate'].valid && submitted">
+              {{getPickupError('pickupDate',index)}}
+            </mat-error>
+
+            <mat-error *ngIf="compareDate(pickup.controls['pickupDate'].value,today) != 1 &&
+                        pickup.controls['pickupDate'].touched">
+              {{"Pickup date must be greater than today date." | translate}}
+            </mat-error>
+
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="96.25%">
+            <mat-label class="dms-label-color">{{"Description" | translate}}</mat-label>
+            <input matInput type="text" formControlName="description">
+            <mat-icon matSuffix>edit</mat-icon>
+          </mat-form-field>
+
+          <div fxFlex="97%">
+            <div fxLayout="row wrap" fxLayoutAlign="flex-start">
+              <div class="image-upload" fxFlex="15">
+                <label for="file-input{{'pickup'+index}}">
+                  <img
+                    src="{{pickupImages[index]?.src == null ? dispalyImage: 'data:image/png;base64,' + pickupImages[index]?.src}}">
+                </label>
+                <input id="file-input{{'pickup'+index}}" type="file" (change)="onSelectImage($event,index,'pickup')"
+                  accept="image/*" />
+
+                <span class="remove-img-icon" (click)="removeImage('pickup',index)" *ngIf="pickupImages[index]?.src"
+                  matTooltip="{{'Remove Image' | translate}}">&times;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel formArrayName="deliveries"
+        *ngFor="let delivery of deliveriesForm?.controls; let index = index;" [expanded]="step === index"
+        (opened)="setStep(index,'delivery')">
+        <mat-expansion-panel-header>
+          <mat-panel-title fxLayout="row wrap">
+            <div fxFlex="97.5%">
+              <span class="title">
+                <p class="crop">
+                  <span [ngClass]="submitted && (!delivery.valid) ? 'not-valid':''">
+                    {{"Delivery" | translate}} <span *ngIf="submitted && !delivery.valid" class="not-valid">
+                      - {{"Invalid" | translate}}
+                    </span>
+                  </span>
+                  <span>
+                    {{delivery.controls.deliveryDate.value | date:'medium'}}
+                  </span>
+                  {{
+                  delivery.controls.address.value?.formatted_address ||
+                  delivery.controls.address.value
+                  }}
+                </p>
+              </span>
+            </div>
+            <div fxFlex="2.5%" (click)="removeLocation(index,'delivery')"
+              *ngIf="deliveriesForm.length > 1 || pickupsForm.length >= 1">
+              <p matTooltip="Delete task">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </p>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div [formGroupName]="index" fxLayout="row wrap" fxLayoutAlign="flex-end" fxLayoutGap="5px">
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">
+              {{"Name" | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput [matAutocomplete]="deliveryCustomers" formControlName="customerId"
+              (keyup)="onSearchCustomers($event)" autocomplete="off" name="deliveryName">
+            <mat-autocomplete #deliveryCustomers="matAutocomplete" [displayWith]="displayFn"
+              (optionSelected)="customerSelected($event,index,'delivery')">
+              <mat-option *ngFor="let customer of customers" [value]="customer">
+                <span>{{customer.name}}</span>
+              </mat-option>
+              <hr>
+            </mat-autocomplete>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="!delivery.controls['customerId'].valid">
+              {{getDeliveryError('customerId',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <div fxFlex="47.5%">
+            <app-country-codes (country)="onChangeCountry($event,index,'delivery')" fxFlex="25%"
+              [previousCountryId]="previousDeliveryCountryIds[index]">
+            </app-country-codes>
+            <mat-form-field appearance="fill" fxFlex="75%">
+              <mat-label class="dms-label-color">
+                {{"Phone" | translate}} <span class="warn">*</span>
+              </mat-label>
+              <input matInput [matAutocomplete]="deliveryCustomersPhone" type="number" formControlName="phone"
+                (keyup)="onSearchCustomersByPhone($event)" autocomplete="off">
+
+              <mat-autocomplete #deliveryCustomersPhone="matAutocomplete" [displayWith]="displayPhoneFn"
+                (optionSelected)="customerSelectedPhone($event,index,'delivery')">
+                <mat-option *ngFor="let customer of customers" [value]="customer">
+                  <span> {{customer.name}}/{{customer.phone}}</span>
+                </mat-option>
+                <hr>
+              </mat-autocomplete>
+
+              <mat-error *ngIf="deliveryNumberPhoneMessages.length > 0">
+                *{{deliveryNumberPhoneMessages[index]}}
+              </mat-error>
+              <mat-error *ngIf="!delivery.controls['phone'].valid">
+                {{getDeliveryError('phone',index)}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">
+              {{"Email" | translate}}
+              <!--<span class="warn">*</span>-->
+            </mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="!delivery.controls['email'].valid">
+              {{getDeliveryError('delivery',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">
+              {{"CID" | translate}}
+            </mat-label>
+            <input matInput type="text" formControlName="cid">
+            <mat-error *ngIf="!delivery.controls['cid'].valid">
+              {{getDeliveryError('cid',index)}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">{{'Shipment type' | translate}}</mat-label>
+            <select matNativeControl formControlName="shippmentType">
+              <option value="PIN">PIN</option>
+              <option value="Card">Card</option>
+            </select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%">
+            <mat-label class="dms-label-color">
+              {{"Order ID" | translate}}
+            </mat-label>
+            <input matInput type="text" formControlName="orderId">
+          </mat-form-field>
+
+          <div class="row p-1 ml-1">
+            <app-address class="col-11 p-1" (addressChanges)="findLocation($event,index,'delivery')"
+              [addressToReplace]="deliveriesAddresses[index]" [isPACI]="true">
+            </app-address>
+            <mat-icon matSuffix (click)="toggleAddressMap(index,'delivery')" class="col-1 place-icon">
+              place
+            </mat-icon>
+          </div>
+
+          <app-search-place class="col-12" (onPlace)="onPlace($event,'delivery',index)"
+            (onMarker)="onMarker($event,'delivery',index)">
+          </app-search-place>
+
+          <!-- <mat-form-field appearance="fill" fxFlex="96%" *ngIf="deliveriesAddresses[index].opened">
+            <mat-label class="dms-label-color">
+              {{'Delivery Address' | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput formControlName="address" (blur)="checkAddress('delivery',index)" matGoogleMapsAutocomplete
+              (onLocationSelected)="addressClicked($event,'delivery',index,delivery.controls.address.value?.formatted_address)"
+              [value]="delivery.controls.address.value?.formatted_address || delivery.controls.address.value"> -->
+
+          <!-- <mat-icon matSuffix (click)="toggleAddressMap(index,'delivery')" class="place-icon"
+                matTooltip="Show coordinates">place</mat-icon> -->
+          <!-- <mat-error *ngIf="!delivery.controls['address'].valid">
+              {{getDeliveryError('address',index)}}
+            </mat-error>
+          </mat-form-field> -->
+
+          <!-- <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="isDeliveryManaualLocation">
+              <mat-label class="dms-label-color"> {{"Latitude" | translate}}</mat-label>
+              <input matInput type="number" formControlName="latitude">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="47.5%" *ngIf="isDeliveryManaualLocation">
+              <mat-label class="dms-label-color">{{"Longitude" | translate}}</mat-label>
+              <input matInput type="number" formControlName="longitude">
+          </mat-form-field> -->
+
+          <mat-form-field fxFlex="96.25%" appearance="fill">
+            <mat-label class="dms-label-color">
+              {{"Delivery Before" | translate}} <span class="warn">*</span>
+            </mat-label>
+            <input matInput type="text" class="datetimepicker" formControlName="deliveryDate" autocomplete="off"
+              id="delivery_{{index}}" data-type="delivery">
+
+            <mat-error *ngIf="!delivery.controls['deliveryDate'].valid && submitted">
+              {{getDeliveryError('deliveryDate',index)}}
+            </mat-error>
+
+            <mat-error
+              *ngIf="compareDate(delivery.controls['deliveryDate'].value,today) != 1 && delivery.controls['deliveryDate'].touched">
+              {{"Delivery date must be greater than today date." | translate}}
+            </mat-error>
+            <mat-icon matSuffix>date_range</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" fxFlex="96.25%">
+            <mat-label class="dms-label-color"> {{"Description" | translate}} </mat-label>
+            <input matInput type="text" formControlName="description">
+            <mat-icon matSuffix>edit</mat-icon>
+          </mat-form-field>
+
+          <div fxFlex="97%">
+            <div fxLayout="row wrap" fxLayoutAlign="flex-start">
+              <div class="image-upload" fxFlex="15">
+                <label for="file-input{{'delivery'+index}}">
+                  <img
+                    src="{{deliveryImages[index]?.src == null ? dispalyImage: 'data:image/png;base64,' + deliveryImages[index]?.src}}">
+                </label>
+                <input id="file-input{{'delivery'+index}}" type="file" (change)="onSelectImage($event,index,'delivery')"
+                  accept="image/*" />
+
+                <span class="remove-img-icon" (click)="removeImage('delivery',index)" *ngIf="deliveryImages[index]?.src"
+                  matTooltip="{{'Remove Image' | translate}}">&times;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- add pickup location -->
+      <!-- <div fxLayout="row wrap" fxLayoutGap="15px" class="add-new-point">
+        <div fxFlex="5%">
+          <mat-icon class="add">add</mat-icon>
+        </div>
+
+        <div fxFlex="90%">
+          <a (click)="newPickup()" style="cursor: pointer;color: orange">
+            {{
+"Add another pickup point" |
+                        translate
+            }}
+          </a>
+        </div>
+      </div> -->
+
+      <!-- add delivery location -->
+      <div fxLayout="row wrap" fxLayoutGap="15px" class="add-new-point">
+        <div fxFlex="5%">
+          <mat-icon class="add">add</mat-icon>
+        </div>
+
+        <div fxFlex="90%">
+          <a (click)="newDelivery()" style="cursor: pointer;color: orange">
+            {{
+            "Add another delivery point" |
+            translate
+            }}
+          </a>
+        </div>
+      </div>
+    </mat-accordion>
+
+  </form>
+</section>
+
+<div class="row actions m-0">
+  <ng-container>
+    <div class="col-2 mb-3" *ngIf="tags.length > 0">
+      <mat-chip-list class="tags-list" *ngIf="tags.length > 0">
+        <mat-chip *ngFor="let tag of tags" [removable]="removable" (removed)="removeTag(tag)">
+          {{tag}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </ng-container>
+
+  <div class="col-7 mb-3 p-2 mx-md-auto">
+    <button mat-flat-button color="primary" type="button" class="assign-btn" (click)="assignDialog()">
+      <img src="assets/images/icons/assign.png" alt="" height="36">
+      {{'Assign Drivers' | translate}}
+      {{count}}
+      <mat-icon>
+        keyboard_arrow_up
+      </mat-icon>
+    </button>
+  </div>
+  <!-- [disabled]="submitted || !form.valid" -->
+
+  <div class="col-3 mb-3 p-2 mx-md-auto">
+    <button mat-flat-button color="accent" [disabled]="submitted || !form.valid" type="button" class="create-task-btn"
+      (click)="createTask()">
+      {{'Create Task' | translate}}
+    </button>
+  </div>
+</div>

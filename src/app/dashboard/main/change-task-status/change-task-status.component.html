@@ -1,0 +1,41 @@
+<section class="assign-driver">
+  <h3>
+    {{"Change task status" | translate}}
+  </h3>
+
+  <form class="row" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <mat-form-field class="col-md-12 col-sm-12 full-width" appearance="fill">
+      <mat-select formControlName="statusId" (selectionChange)="checkReason($event)">
+        <mat-option *ngFor="let status of statusList" [value]="status.id">
+          {{status.name | translate}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12 col-sm-12 mt-2 mb-2 full-width" *ngIf="isShowReason" appearance="fill">
+      <mat-label>{{"reason" | translate}}</mat-label>
+      <textarea matInput formControlName="reason" rows="3"></textarea>
+      <mat-error *ngIf="!form.controls['reason'].valid">
+        {{getError('reason')}}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="col-md-12 col-sm-12 full-width mt-2 mt-4 ml-1 mr-1">
+      <mat-checkbox formControlName="isChangeConnectedTasks" dir="auto">
+        {{"Apply to connected tasks" | translate}}
+      </mat-checkbox>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions class="col-md-12 col-sm-12 mt-2 float-right">
+      <button type="button" mat-button color="primary" (click)="cancel()" class="cancel-btn">
+        {{"Cancel" | translate}}
+      </button>
+      <button mat-flat-button color="primary" class="confirm-btn o-add-btn">
+        {{"Submit" | translate}}
+      </button>
+    </div>
+
+  </form>
+</section>

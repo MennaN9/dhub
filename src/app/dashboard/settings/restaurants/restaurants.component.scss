@@ -1,0 +1,30 @@
+@import "./../../../shared/scss/colors";
+
+section {
+    table {
+        width: 100%;
+    }
+
+    .actions {
+        font-size: 35px;
+        color: $o-orange;
+    }
+
+    .restaurants {
+        padding: 15px;
+
+        h2 {
+            color: $o-orange;
+        }
+
+        p {
+            color: $grey;
+        }
+    }
+
+    .mat-menu-item:hover {
+        border-left: 3px solid $o-orange;
+        background: none !important;
+        padding-left: 13px;
+    }
+}

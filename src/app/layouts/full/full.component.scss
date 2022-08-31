@@ -1,0 +1,130 @@
+@import "./../../shared/scss/colors";
+
+.mat-icon {
+  color: white;
+}
+
+.header-select {
+  border: 1px solid white;
+  border-radius: 0px;
+  background: none;
+  color: white;
+  width: 100%;
+  font-size: 14px;
+  padding: 0px;
+
+  option {
+    padding: 10px;
+    font-size: 16px;
+    color: black;
+  }
+}
+
+.mat-button-toggle {
+  border: 1px solid $o-orange;
+  a {
+    color: $o-orange;
+  }
+}
+
+.mat-button-toggle-checked {
+  background-color: $o-orange;
+  a {
+    color: white;
+  }
+}
+
+.create-task-group {
+  margin-right: 1em;
+
+  .btn-create-task {
+    color: white;
+    border-radius: 50px;
+    font-weight: bold;
+    min-width: 125px;
+  }
+
+  .bulk-btn {
+    background-color: $o-dark-orange;
+    color: white;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    font-weight: bold;
+    border: 2px solid $o-dark-orange;
+    border-left: 1px solid $o-gray;
+
+    .mat-icon {
+      color: white;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-menu-panel {
+    max-width: none !important;
+  }
+
+  .mat-badge-medium .mat-badge-content {
+    width: auto;
+    display: grid;
+    min-width: 32px;
+    min-height: 28px;
+    text-align: center;
+    align-items: center;
+    padding: 5px 3px;
+    top: -20px;
+    right: -22px;
+  }
+
+  .e-keyboard,
+  .e-date-icon {
+    color: white !important;
+    font-size: 16px !important;
+  }
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    padding: 2px;
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border: none;
+  }
+}
+
+.notifications {
+  h3 {
+    font-size: 16px;
+  }
+
+  h5 {
+    font-weight: 14px;
+  }
+}
+
+.note-ico {
+  width: 64px;
+  height: 64px;
+}
+
+.menu-icon {
+  font-size: 30px;
+}
+
+.reset {
+  text-decoration: underline;
+}
+
+.mobile-bg {
+  padding: 5px;
+  padding-right: 30px;
+  padding-left: 15px;
+  border: 1px solid $o-primary;
+  background-color: $o-primary;
+}
+
+@media only screen and (max-width: 600px) {
+  .light-logo {
+    height: 50px;
+    padding-left: 20px;
+  }
+}

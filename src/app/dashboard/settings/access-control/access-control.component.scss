@@ -1,0 +1,63 @@
+@import "./../../../shared/scss/colors";
+
+.mat-card {
+  padding: 15px !important;
+  border-radius: 15px;
+}
+
+.access-control {
+  padding: 15px;
+
+  p {
+    color: $o-dark-gray;
+  }
+
+  .roles-table {
+    margin-top: 1em;
+  }
+}
+
+.mat-menu-item:hover {
+  border-left: 3px solid $o-dark-orange;
+  background: none !important;
+  padding-left: 13px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 10% !important;
+  flex: 0 0 10% !important;
+}
+
+.mat-column-id {
+  width: 10% !important;
+  flex: 0 0 10% !important;
+}
+
+.mat-column-roleName {
+  width: 40% !important;
+  flex: 0 0 40% !important;
+}
+
+.mat-column-creationDate {
+  width: 40% !important;
+  flex: 0 0 40% !important;
+}
+
+.mat-column-actions,
+.mat-column-roleName,
+.mat-column-creationDate,
+.mat-column-id {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}

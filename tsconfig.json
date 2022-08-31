@@ -1,0 +1,61 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "module": "esnext",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "types": [
+      "googlemaps"
+    ],
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@dms/app/*": [
+        "app/*"
+      ],
+      "@dms/services/*": [
+        "app/services/*"
+      ],
+      "@dms/models/*": [
+        "app/models/*"
+      ],
+      "@dms/components/*": [
+        "app/dashboard/*"
+      ],
+      "@dms/environments/*": [
+        "environments/*"
+      ],
+      "@dms/pipes/*": [
+        "app/pipes/*"
+      ],
+      "@dms/utilities/*": [
+        "app/utilities/*"
+      ],
+      "@dms/shared/*": [
+        "app/shared/*"
+      ],
+      "@dms/constants/*": [
+        "app/constants/*"
+      ],
+      "@dms/guards/*": [
+        "app/guards/*"
+      ],
+      "@dms/config/*": [
+        "app/config/*"
+      ],
+    },
+    "skipLibCheck": true
+  },
+}

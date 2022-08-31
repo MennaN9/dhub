@@ -1,0 +1,44 @@
+@import "./../../../shared/scss/colors";
+
+section {
+  .mat-card {
+    padding: 15px !important;
+  }
+
+  .mat-icon {
+    font-size: 35px;
+    color: $o-orange;
+  }
+
+  .teams {
+    padding: 15px;
+
+    p {
+      color: $grey;
+    }
+  }
+
+  .images-block {
+    .driver-img {
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      padding: 5px;
+      cursor: pointer;
+    }
+  }
+
+  .mat-menu-item:hover {
+    border-left: 3px solid $o-dark-orange;
+    background: none !important;
+    padding-left: 13px;
+  }
+}
+
+:host ::ng-deep {
+  .mat-paginator-container,
+  .mat-paginator-page-size .mat-select-trigger {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}

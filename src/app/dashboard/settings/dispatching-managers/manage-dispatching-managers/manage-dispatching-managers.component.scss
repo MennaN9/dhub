@@ -1,0 +1,17 @@
+::ng-deep .mat-dialog-container {
+  border-radius: 30px;
+}
+
+form {
+  .close {
+    cursor: pointer;
+  }
+
+  h4 {
+    color: gray;
+    font-size: 16px;
+  }
+  .error {
+    color: red;
+  }
+}

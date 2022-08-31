@@ -1,0 +1,108 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9 col-sm-12 mt-3">
+            <div class="pr-3 mb-2">
+                <input matInput [(ngModel)]="keywords" (keyup.enter)="seachInManagers()"
+                    placeholder='{{"Search Manager" | translate}}' class="search-input">
+                <img src="assets/images/icons/search.png" id="search" (click)="seachInManagers()">
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-12 mt-3 mb-3">
+            <button mat-raised-button color="primary" class="circle-btn" (click)="seachInManagers()"
+                class="o-add-btn ml-1 mr-1">{{'Search' | translate}}</button>
+
+            <button mat-raised-button color="primary" class="circle-btn" (click)="clear()"
+                class="o-add-btn ml-1 mr-1">{{'Clear' | translate}}</button>
+
+            <button mat-raised-button color="primary" class="circle-btn" (click)="manageManagerDialog('add')"
+                class="o-add-btn" *ngxPermissionsOnly="['AddManager']">{{"Add manager" | translate}}</button>
+        </div>
+
+        <section *ngxPermissionsOnly="['ReadAllManagers','ReadTeamManager']" class="col-md-12 table-content p-0">
+            <table mat-table [dataSource]="sortedData" matSort (matSortChange)="sortData($event)" matSortDirection="asc"
+                matSortDisableClear>
+
+                <ng-container matColumnDef="id" sticky>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="id" class="bg-white"> # </th>
+                    <td mat-cell *matCellDef="let element; let index = index"> {{index + 1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="name">{{"Name" | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="email">{{"Email" | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="phone">{{"Phone" | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> +{{element.country?.code}} {{element.phoneNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="team">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="team"> {{"Teams" | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.teams}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="roles">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header="roles">{{"Role Name" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.roleNames | slice:0:1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>{{"Actions" | translate}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions"
+                            (click)="selectManager(element)"
+                            *ngxPermissionsOnly="['Tenant','UpdateAllManager','UpdateTeamManager','ChangeManagerPassword']">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [length]="length" *ngIf="managers?.length > 0" [pageSize]="pageSize"
+                [pageSizeOptions]="[10, 25, 50 ,100]" (page)="onChangePage($event)">
+            </mat-paginator>
+
+            <div *ngIf="managers.length == 0 && !searchMode" class="mt-5">
+                <div class="text-center mt-5">
+                    <img src="assets/images/icons/manager.png">
+                    <h1>{{"No Manager" | translate}}</h1>
+                    <div *ngIf="managers.length == 0">
+                        <button mat-raised-button color="primary" (click)="manageManagerDialog('add')" class="o-add-btn"
+                            *ngxPermissionsOnly="['AddManager']">{{"Add manager" | translate}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="manageManagerDialog('Edit')" *ngIf="isUpdateAllteamManager">
+            {{'Edit' | translate}}
+        </button>
+
+        <button mat-menu-item (click)="manageManagerDialog('Edit')"
+            *ngIf="!isUpdateAllteamManager && isMyteamManager && user.userName == selectedManager?.createdBy_Id">
+            {{'Edit' | translate}}
+        </button>
+
+        <button mat-menu-item *ngxPermissionsOnly="['ChangeManagerPassword']">
+            <app-change-password [userId]="selectedManager?.userId"></app-change-password>
+        </button>
+
+        <button mat-menu-item *ngxPermissionsOnly="['Tenant','UpdateTeamManager']">
+            <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+        </button>
+    </mat-menu>
+</div>

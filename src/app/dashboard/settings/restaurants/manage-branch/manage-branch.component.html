@@ -1,0 +1,102 @@
+<form [formGroup]="form" novalidate>
+  <div class="row mb-1 p-0" dir="auto">
+    <div class="col-6 d-flex justify-content-start">
+      <h4 class="dialog-title">
+        {{formTitle}} {{"Branch" | translate}}
+      </h4>
+    </div>
+
+    <div class="col-6 d-flex justify-content-end" (click)="cancel()">
+      <mat-icon class="icon">close</mat-icon>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-form-field appearance="fill" class="mt-2">
+    <mat-label class="dms-label-color">{{'Branch Name' | translate}} <small class="error">*</small></mat-label>
+    <input matInput placeholder="Branch Name" formControlName="name">
+    <mat-error *ngIf="!form.controls['name'].valid">
+      {{getError('name')}}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="row">
+    <app-country-codes (country)="onChangeCountry($event)" class="col-3" [previousCountryId]="previousCountryId">
+    </app-country-codes>
+
+    <mat-form-field class="col-9" appearance="fill">
+      <mat-label class="dms-label-color">{{"Phone" | translate}} <small class="error">*</small></mat-label>
+      <input matInput type="number" formControlName="phone" (keyup)="validatePhone()" (change)="validatePhone()">
+      <mat-error *ngIf="!form.controls['phone'].valid">
+        {{getError('phone')}}
+      </mat-error>
+      <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="fill" dir="auto">
+    <mat-label class="dms-label-color">{{'Geo Fence' | translate}} <small class="error">*</small></mat-label>
+    <mat-select formControlName="geoFenceId">
+      <mat-option *ngFor="let groFence of geoFences" [value]="groFence.id">{{groFence.name}}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="!form.controls['geoFenceId'].valid">
+      {{getError('geoFenceId')}}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="row ml-1 mr-1 p-0" dir="auto">
+    <div class="col-11">
+      <app-address (addressChanges)="findLocation($event)" [addressToReplace]="location" [isPACI]="true">
+      </app-address>
+    </div>
+
+    <div class="col-1">
+      <mat-icon class="icon" matSuffix (click)="toggleAddress()">
+        place
+      </mat-icon>
+    </div>
+  </div>
+
+  <app-search-place *ngIf="showAddress" (onPlace)="onPlace($event)" [previousAddress]="previousAddress"></app-search-place>
+
+<!-- 
+  <mat-form-field appearance="fill" *ngIf="showAddress">
+    <mat-label class="dms-label-color">{{'Address' | translate}} <small class="error">*</small></mat-label>
+    <input matInput placeholder="{{'Address' | translate}}" formControlName="address" matGoogleMapsAutocomplete
+      (onLocationSelected)="onLocationSelected($event)" [value]="prevAddress">
+
+    <mat-icon class="icon" matSuffix (click)="toggleManaulLocation()">location_on</mat-icon>
+
+    <mat-error *ngIf="!form.controls['address'].valid">
+      {{getError('address')}}
+    </mat-error>
+  </mat-form-field> -->
+
+  <div class="row" *ngIf="showAddress">
+    <mat-form-field appearance="fill" class="col-6">
+      <mat-label class="dms-label-color">{{'Latitude' | translate}} <small class="error">*</small></mat-label>
+      <input matInput placeholder="{{'Latitude' | translate}}" formControlName="latitude">
+      <mat-error *ngIf="!form.controls['latitude'].valid">
+        {{getError('latitude')}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-6">
+      <mat-label class="dms-label-color">{{'Longitude' | translate}} <small class="error">*</small></mat-label>
+      <input matInput placeholder="{{'Longitude' | translate}}" formControlName="longitude">
+      <mat-error *ngIf="!form.controls['longitude'].valid">
+        {{getError('longitude')}}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button type="button" mat-flat-button (click)="cancel()" class="cancel-btn">{{"Cancel" | translate}}</button>
+    <button type="button" (click)="onSubmit()" [disabled]="isSubmitted" mat-flat-button color="primary"
+      class="confirm-btn o-add-btn">
+      {{formAction}}
+    </button>
+  </div>
+
+</form>

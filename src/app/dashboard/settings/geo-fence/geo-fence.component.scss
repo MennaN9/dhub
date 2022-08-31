@@ -1,0 +1,65 @@
+@import "./../../../shared/scss/colors";
+@import "~leaflet/dist/leaflet.css";
+
+.geo-fence {
+  padding: 0px 15px;
+  color: rgb(15, 15, 15);
+
+  p {
+    line-height: normal;
+  }
+
+  .progress {
+    width: 97.5%;
+  }
+
+  .mat-card {
+    padding-left: 5px;
+    margin: 0px 15px 0px 0px;
+    box-shadow: none;
+    border-radius: 0px;
+    border-bottom: 1px solid $o-gray;
+    background-color: #fbfdff;
+
+    .mat-card-title,
+    .mat-card-subtitle {
+      padding-left: 5px;
+      margin-bottom: 0px;
+    }
+  }
+
+  p {
+    color: black;
+    line-height: 0px;
+  }
+
+  form {
+    padding: 5px;
+    background-color: white;
+  }
+
+  #map {
+    width: 100%;
+    height: 600px;
+  }
+  .geo-fences {
+    padding: 25px;
+    background-color: white;
+    border-radius: 25px;
+    height: 600px;
+    overflow-y: auto;
+  }
+
+  .mat-card .mat-card-content {
+    padding: 5px;
+  }
+
+  .mat-card:hover {
+    background-color: $o-gray;
+    cursor: pointer;
+  }
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  background-color: lightgray;
+}

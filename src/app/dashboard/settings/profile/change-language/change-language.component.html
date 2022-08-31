@@ -1,0 +1,22 @@
+<mat-divider></mat-divider>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+    <mat-form-field appearance="fill" class="col-md-6 col-sm-12 mt-3">
+        <mat-label class="dms-label-color">{{'Select dashboard language' | translate}}</mat-label>
+        <input matInput aria-label="lang" [matAutocomplete]="dashoardAutocomplete" formControlName="DashBoardLanguage">
+        <mat-icon matSuffix>arrow_drop_down</mat-icon>
+        <mat-autocomplete #dashoardAutocomplete="matAutocomplete">
+            <mat-option *ngFor="let lang of languages  " [value]="lang.name">
+                <span>{{lang.name}}</span>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+
+    <div class="col-12 align-right-button">
+        <button mat-raised-button color="primary" type="submit" class="confirm-btn o-add-btn">{{'Update' |
+            translate}}</button>
+    </div>
+
+</form>

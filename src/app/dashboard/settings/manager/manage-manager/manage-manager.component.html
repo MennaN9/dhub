@@ -1,0 +1,94 @@
+<section class="p-1">
+    <div class="row mb-1" dir="auto">
+        <div class="col-9">
+            <h4 class="dialog-title">
+                {{titleLabel}} {{"Manager" | translate}}
+            </h4>
+        </div>
+        <div class="col-3 d-flex justify-content-end close" (click)="cancel()">
+            <mat-icon>close</mat-icon>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <form class="row mt-4" [formGroup]="form" (ngSubmit)="onSubmit()" dir="auto">
+        <mat-form-field class="col-md-6 col-sm-12 mt-3" appearance="fill">
+            <mat-label class="dms-label-color">{{"Full name" | translate}} <small class="error">*</small></mat-label>
+            <input matInput formControlName="firstName">
+            <mat-error *ngIf="!form.controls['firstName'].valid">
+                {{getError('firstName')}}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="col-md-6 col-sm-12 mt-3">
+            <app-country-codes (country)="onChangeCountry($event)" fxFlex="25%" [previousCountryId]="previousCountryId">
+            </app-country-codes>
+
+            <mat-form-field fxFlex="75%" appearance="fill">
+                <mat-label class="dms-label-color">{{"Phone" | translate}} <small class="error">*</small></mat-label>
+                <input matInput type="number" formControlName="phoneNumber" (keyup)="validatePhone()">
+                <mat-error *ngIf="!form.controls['phoneNumber'].valid">
+                    {{getError('phoneNumber')}}
+                </mat-error>
+                <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field class="col-md-6 col-sm-12 mt-3" appearance="fill">
+            <mat-label class="dms-label-color">{{"Email" | translate}} <small class="error">*</small></mat-label>
+            <input matInput formControlName="email" [readonly]='isEditMode'>
+            <mat-error *ngIf="!form.controls['email'].valid">
+                {{getError('email')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6 col-sm-12 mt-3" appearance="fill" *ngIf="!isEditMode" dir="auto">
+            <mat-label class="dms-label-color">{{"Password" | translate}} <small class="error">*</small></mat-label>
+            <input matInput type="{{type}}" formControlName="password">
+            <mat-icon matSuffix (click)="togglePassword()">remove_red_eye</mat-icon>
+            <mat-error *ngIf="!form.controls['password'].valid">
+                {{getError('password')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6 col-sm-12 mt-3" appearance="fill">
+            <mat-label class="dms-label-color">{{"Assign Role" | translate}} <small class="error">*</small></mat-label>
+            <mat-select formControlName="roleNames">
+                <mat-option *ngFor="let role of roles" [(value)]="role">
+                    {{role}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.controls['roleNames'].valid">
+                {{getError('roleNames')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6 col-sm-12 mt-3" appearance="fill">
+            <mat-label class="dms-label-color">{{"Assign Team" | translate}} <small class="error">*</small></mat-label>
+            <mat-select formControlName="teamManagers" multiple>
+                <mat-option *ngFor="let team of teams" [(value)]="team">
+                    {{team.teamName}}
+                </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.controls['teamManagers'].valid">
+                {{getError('teamManagers')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-divider></mat-divider>
+
+        <div mat-dialog-actions class="col-12 justify-content-end">
+            <button mat-button color="primary" type="button" (click)="cancel()" class="cancel-btn">
+                {{"Cancel" | translate}}
+            </button>
+
+            <button mat-flat-button color="primary" cdkFocusInitial type="submit" [disabled]="isSubmitted"
+                class="confirm-btn o-add-btn">
+                {{actionLabel}}
+            </button>
+        </div>
+
+    </form>
+</section>

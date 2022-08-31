@@ -1,0 +1,62 @@
+<section class="row p-1 m-1">
+    <h1 class="col-12">
+        {{'General Settings' | translate}}
+    </h1>
+
+    <h3 class="col-12">
+        {{'Set reached distance restrictions' | translate}}
+    </h3>
+
+    <h5 class="col-12">
+        {{'This setting allow the driver to mark the task “Set Reached “ only when they are within a certain distance
+        from stoplocation.' | translate}}
+    </h5>
+
+    <mat-form-field appearance="fill" class="col-4">
+        <input matInput type="number" [(ngModel)]="settingsForm.ReachedDistanceRestriction">
+    </mat-form-field><b class="pt-3">{{'In meters' | translate}}</b>
+
+    <h3 class="col-12">
+        {{'Driver login request Expiration' | translate}}
+    </h3>
+
+    <h5 class="col-12">
+        {{'This setting enable you to set expiration for driver login requests on the system. after the expiration is
+        finished the request is no longer will be excit.' | translate}}
+    </h5>
+
+    <mat-form-field appearance="fill" class="col-4">
+        <input matInput type="number" [(ngModel)]="settingsForm.DriverLoginRequestExpiration">
+    </mat-form-field><b class="pt-3">{{'In Hours' | translate}}</b>
+
+    <h3 class="col-12">
+        {{'Default Admin View' | translate}}
+    </h3>
+
+    <mat-form-field appearance="fill" class="col-4">
+        <mat-select [(ngModel)]="settingsForm.TenantFirstBrowsingPage" [compareWith]="compareOptions">
+            <mat-option *ngFor="let value of firstBrowsingPage" [value]="value.id">
+                {{value.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <h3 class="col-12">
+        {{'Default Manager View' | translate}}
+    </h3>
+
+    <mat-form-field appearance="fill" class="col-4">
+        <mat-select [(ngModel)]="settingsForm.ManagerFirstBrowsingPage" [compareWith]="compareOptions">
+            <mat-option *ngFor="let value of firstBrowsingPage" [value]="value.id">
+                {{value.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="col-12">
+        <div class="text-right">
+            <button mat-stroked-button color="primary" class="ml-3 mr-3 o-add-btn" type="button"
+                (click)="updateSettings()">{{'Save' | translate}}</button>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,200 @@
+<mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+    <mat-tab label="{{'Details' | translate}}">
+        <!-- driver details section -->
+        <section class="driver-details">
+            <!-- driver header -->
+            <div class="driver-header" *ngxPermissionsOnly="['ReadAgent']">
+                <div class="row">
+                    <div class="col-5">
+                        <!--<p class="off-duty">
+                            {{"On Duty" | translate}}
+                        </p>-->
+                    </div>
+                    <div class="col-5 driver-toggle-btn">
+                        <!--<mat-slide-toggle [(checked)]="isAvaillable" (change)="onDutyChange($event)">
+                            {{"Not updated" | translate}}
+                        </mat-slide-toggle>-->
+                    </div>
+
+                    <!-- start actions -->
+                    <div class="col-1 pt-2">
+                        <div class="menu-icon">
+                            <mat-icon [matMenuTriggerFor]="menu">
+                                more_vert
+                            </mat-icon>
+                        </div>
+                    </div>
+                    <!-- end actions -->
+                </div>
+            </div>
+            <!-- end driver header -->
+
+            <!-- start driver contact info -->
+            <div class="row driver-info-list">
+
+                <div class="col-6">
+                    {{"Name" | translate}}
+                </div>
+                <div class="col-6 driver-info">
+                    {{driver?.firstName +' '+ driver?.lastName}}
+                </div>
+
+                <div class="col-6">
+                    {{"Contact" | translate}}
+                </div>
+                <div class="col-6 driver-info">
+                    {{driver?.countryCode}}-{{driver?.phoneNumber}}
+                </div>
+
+                <div class="col-6 mt-2">
+                    {{"Last location" | translate}}
+                </div>
+
+                <div class="col-6 driver-info">
+                    <a (click)="showLocationMap(driver)" mat-button class="map-location">{{'Location on map' |
+                        translate}}</a>
+                </div>
+
+                <!-- <div class="col-6">
+                    Battery
+                </div> -->
+                <!-- <div class="col-6 driver-info">
+                    50%
+                </div> -->
+                <ng-container *ngxPermissionsOnly="['ReadAgent']">
+                    <div class="col-6">
+                        {{"Device" | translate}}
+                    </div>
+                    <div class="col-6 driver-info">
+                        {{driver?.deviceType || "--"}}
+                    </div>
+
+                    <div class="col-6">
+                        {{"Version" | translate}}
+                    </div>
+                    <div class="col-6 driver-info">
+                        {{driver?.version || "--"}}
+                    </div>
+                    <div class="col-6">
+                        {{"Rating" | translate}}
+                    </div>
+                    <div class="col-6 driver-info">
+                        {{driver.driverAvgRate?.toFixed(2) }}
+                    </div>
+                    <div class="col-6">
+                        {{"Tags" | translate}}
+                    </div>
+                    <div class="col-6 driver-info">
+                        {{driver?.tags || "--"}}
+                    </div>
+                </ng-container>
+
+            </div>
+
+            <div class="row" *ngxPermissionsOnly="['ReadAgent']">
+                <div id="search-container" class="col-12">
+                    <input (keyup.enter)="onSearchSubmit($event)" class="search p-2 m-2"
+                        placeholder="{{'Search Task' | translate}}" id="search" autofocus>
+                    <img src="assets/images/icons/search.png" id="search-img" (click)="onSearchSubmit($event)">
+                </div>
+
+                <div class="col-12" *ngIf="lengthTasks == 0">
+                    <p class="text-center">
+                        {{"No tasks available for the day" | translate}}
+                    </p>
+                </div>
+
+                <div class="wrapper" fxFlex="75%" *ngFor="let Maintask of driverTasks;">
+                    <div fxFlex="20%"></div>
+                    <ul class="StepProgress">
+                        <li class="StepProgress-item" *ngFor="let task of Maintask?.tasks;let index = index"
+                            [class.is-done]="task.taskTypeId==2" [class.current]="task.taskTypeId==1">
+                            <span *ngIf="task.taskTypeId==1">{{task.pickupDate | date:'shortTime'}}</span>
+                            <span *ngIf="task.taskTypeId==2">{{task.deliveryDate | date:'shortTime'}}</span>
+
+                            <br> <a class="stateName">
+                                {{task.taskStatusName | translate}}
+                            </a>
+
+                            <h6 class="location">{{task.customer.address}}</h6>
+                            <p>
+                                <a class="status">
+                                    {{task.taskStatusName | translate }}
+                                </a>
+
+                            </p>
+                            <br>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <!-- end driver contact info -->
+        </section>
+        <!-- end driver details section -->
+    </mat-tab>
+
+    <mat-tab label="{{'Timeline' | translate}}" class="tab-custom-class" *ngxPermissionsOnly="['ReadAgent']">
+        <div class="wrapper" *ngIf="driverTimeLines.length > 0">
+            <ul class="row m-2 pl-2 pr-2 every-row" *ngFor="let item of driverTimeLines">
+                <li class="col-4 time">{{item?.createdDate | dateToTimezone}}</li>
+                <li class="StepProgress-item is-done col-8 font-14"
+                    *ngIf="item?.actionName.trim() == 'STARTED' || item?.actionName.trim() == 'CREATED' || item?.actionName.trim() == 'ASSIGNED' || item?.actionName.trim() == 'SUCCESSFUL' || item?.actionName.trim() == 'IN PROGRESS' || item?.actionName.trim() == 'UPDATED' || 'MARKED AS CANCELLED'">
+                    <ng-container>
+                        <strong *ngIf='item.actionName!=null' [ngClass]="item?.actionName.trim() + '-text'">
+                            {{item?.actionName.trim() | translate}}
+                        </strong>
+
+                        <div class="mt-3">
+                            {{'By' | translate}}{{' '}}{{item?.createdBy}}
+                        </div>
+
+                        <p>
+                            <a (click)="showLocationMap(item)" mat-button class="map-location">{{'Location on map' |
+                                translate}}
+                            </a>
+                        </p>
+
+                        <h5 class="task-desc" *ngIf="item?.description">{{item?.description}}</h5>
+
+                        <p *ngIf="item?.actionName.trim() == 'MARKED AS FAILED'" class="mt-2">
+                            {{'Reason' | translate}}: <span>{{item.reason}}</span>
+                        </p>
+
+                        <p *ngIf="item?.actionName.trim() == 'ADDED THIS NOTE'"
+                            [ngClass]="item?.actionName.trim() + '-text'">
+                            {{'Note' | translate}}: {{item?.description}}
+                        </p>
+
+                        <p *ngIf="item?.actionName.trim() == 'ADDED A SIGNATURE'"
+                            (click)="openImageLightBox(item.description)" [ngClass]="item?.actionName.trim() + '-text'">
+                            <mat-icon class="icon">attach_file</mat-icon> {{'Attachment' | translate}}
+                        </p>
+
+                        <p *ngIf="item?.actionName.trim() == 'ADDED THIS IMAGE'"
+                            (click)="openImageLightBox(item.description)" [ngClass]="item?.actionName.trim() + '-text'">
+                            <mat-icon class="icon">attach_file</mat-icon> {{'Attachment' | translate}}
+                        </p>
+                    </ng-container>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-12" *ngIf="driverTimeLines.length == 0">
+            {{'No Activities' | translate}}
+        </div>
+
+    </mat-tab>
+
+</mat-tab-group>
+
+<!-- start menu actions -->
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editDriverDialog()"> {{"Edit" | translate}} </button>
+    <button mat-menu-item>
+        <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+    <button mat-menu-item (click)="blockDriver()" *ngIf="!isBlocked">{{'Block' |translate}}</button>
+    <button mat-menu-item (click)="openReassignDriverDialog()">{{'Reassign' | translate}}</button>
+</mat-menu>
+<!-- end menu actions -->

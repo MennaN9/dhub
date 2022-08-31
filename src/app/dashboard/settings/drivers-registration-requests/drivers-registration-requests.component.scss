@@ -1,0 +1,68 @@
+@import "./../../../shared/scss/colors";
+$red: #d0021b;
+$blue: #393085;
+
+.business-registration-requests {
+    .search-btn {
+        color: white;
+        background-color: $o-orange;
+    }
+
+    .clear-btn {
+        color: $red;
+        background: none;
+        border: 1px solid $red;
+    }
+
+    .clear-btn,
+    .search-btn {
+        width: 94px;
+        height: 35px;
+        font-weight: 600;
+    }
+
+    .view {
+        color: $blue;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+    }
+}
+
+:host ::ng-deep {
+    .mat-elevation-z8 {
+        box-shadow: none;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background: none;
+        padding: 0px;
+    }
+
+    th.mat-header-cell {
+        color: black;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+        color: black;
+    }
+
+    .mat-tab-label {
+        font-weight: bold;
+        background-color: white;
+        color: black;
+    }
+
+    .mat-tab-group.mat-primary .mat-ink-bar,
+    .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+        background: $o-orange;
+    }
+
+    .mat-calendar-body-selected {
+        background: $o-orange;
+    }
+}

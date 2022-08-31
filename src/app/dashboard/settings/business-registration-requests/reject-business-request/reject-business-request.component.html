@@ -1,0 +1,23 @@
+<div class="row title">
+    <h3 class="col-10">
+        {{'Rejection Request' | translate}}
+    </h3>
+    <mat-icon class="col-2 close-btn d-flex justify-content-end" mat-dialog-close>close</mat-icon>
+</div>
+
+<form class="row" [formGroup]="form">
+    <h5 class="col-12 mt-3">{{'Reason' | translate}}</h5>
+
+    <mat-form-field class="full-width col-12" appearance="fill">
+        <textarea matInput rows="3" formControlName="reason"></textarea>
+        <input matInput formControlName="reason">
+        <mat-error *ngIf="!form.controls['reason'].valid">
+            {{"Request reason required" | translate}}
+        </mat-error>
+    </mat-form-field>
+</form>
+
+<mat-dialog-actions align="end" class="mt-3">
+    <button mat-button mat-dialog-close class="cancel-btn">{{'Cancel' | translate}}</button>
+    <button mat-button class="save-btn" (click)="save()">{{'Save' | translate}}</button>
+</mat-dialog-actions>

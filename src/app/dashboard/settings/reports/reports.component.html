@@ -1,0 +1,248 @@
+<section class="pl-5 pr-5 mb-5 pb-3">
+  <h2>
+      {{'Order Reports' | translate}}
+  </h2>
+
+  <!-- filters -->
+  <div class="row filter pt-3 mb-3">
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order date from' | translate}}
+          </mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="reportParam.FromDate" name="FromDate"
+              #startDate="ngModel" required [max]="reportParam.ToDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-hint *ngIf="!startDate.valid && startDate.touched" style="color: rgb(219, 47, 76);">
+              {{'Start date is required' | translate}}!
+          </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order date to' | translate}}
+          </mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="reportParam.ToDate" name="ToDate"
+              #endDate="ngModel" required [min]="reportParam.FromDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-hint *ngIf="!endDate.valid && endDate.touched" style="color: rgb(219, 47, 76);">
+              {{'End date is required' | translate}}!
+          </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Restaurant' | translate}}</mat-label>
+          <mat-select [(ngModel)]="reportParam.RestaurantIds" name="RestaurantIds" multiple="true">
+              <mat-option *ngFor="let restaurant of restaurants" [value]="restaurant.id">
+                  {{restaurant.name}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Branch' | translate}}</mat-label>
+          <mat-select [(ngModel)]="reportParam.BranchIds" name="BranchIds" multiple="true">
+              <mat-option *ngFor="let branch of branches" [value]="branch.id">
+                  {{branch.name}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order status' | translate}}</mat-label>
+          <mat-select [(ngModel)]="reportParam.StatusIds" name="StatusIds" multiple="true">
+              <mat-option *ngFor="let status of statusList" [value]="status.id">
+                  {{status.name | translate}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Driver name' | translate }}</mat-label>
+          <mat-select [(ngModel)]="reportParam.DriversIds" name="DriversIds" multiple="true">
+
+              <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                  {{driver.firstName +" " +driver.lastName}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order type' | translate}}</mat-label>
+          <mat-select [(ngModel)]="reportParam.TaskTypeIds" name="TaskTypeIds" multiple="true">
+              <mat-option value="1">
+                  {{'Pickup' | translate}}
+              </mat-option>
+
+              <mat-option value="2">
+                  {{'Delivery' | translate}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order address' | translate}}</mat-label>
+          <input matInput placeholder="" [(ngModel)]="reportParam.Address" name="Address">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Zone name' | translate}}</mat-label>
+          <mat-select [(ngModel)]="reportParam.ZonesIds" name="ZonesIds" multiple="true">
+              <mat-option *ngFor="let zone of zones" [value]="zone.id">
+                  {{zone.name}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="col-md-4 col-sm-12">
+          <mat-label class="dms-label-color">{{'Order ID' | translate}}</mat-label>
+          <input matInput placeholder="" [(ngModel)]="reportParam.OrderId" name="OrderId">
+      </mat-form-field>
+
+      <div class="col-4">
+        <mat-form-field appearance="fill">
+          <mat-label class="dms-label-color">{{'CID' | translate}}</mat-label>
+          <input matInput placeholder="" [(ngModel)]="reportParam.cid" name="OrderId">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 col-sm-12 mt-3">
+          <mat-checkbox [(ngModel)]="reportParam.isOrderProgress"> {{'Include Order Progress' | translate}}
+          </mat-checkbox>
+      </div>
+
+      <div class="col-md-4 col-sm-12 mt-3">
+          <button mat-button color="warn" (click)="Clear()" class="clear mr-2">{{'Clear' | translate}}</button>
+          <button mat-flat-button color="primary" (click)="getReports()" class="o-add-btn ml-1 mr-1">{{'Search' |
+              translate}}</button>
+      </div>
+  </div>
+
+  <!-- export -->
+  <div class="row mb-3 mt-3" *ngIf="dataSource?.data?.length > 0">
+      <div class="col-4">
+          <div class="text-left">
+              <b>{{'Total Tasks' | translate}}: {{length }}</b>
+          </div>
+      </div>
+
+      <div class="col-8">
+          <div class="text-right">
+              <button mat-flat-button *ngxPermissionsOnly="['ExportReport']" color="primary" class="o-add-btn"
+                  (click)="export()">{{'Export' | translate}}</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- orders -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0">
+      <ng-container matColumnDef="orderId">
+          <th mat-header-cell *matHeaderCellDef> {{'Order ID' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.orderId}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="driverName">
+          <th mat-header-cell *matHeaderCellDef> {{'Driver Name' | translate}} </th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element?.driverName}}">
+              {{element?.driverName | truncateText:[15]}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="taskTypeName">
+          <th mat-header-cell *matHeaderCellDef> {{'Order Type' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.taskTypeName | translate}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+              {{'Name' | translate}} </th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{element?.customer?.name}}">
+              {{element?.customer?.name | truncateText:[15] ||"--"}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> {{'Order Date & Time' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.taskTypeId==1"> {{element.pickupDate | date:'d-M-yyyy h:mm a' }}</span>
+              <span *ngIf="element.taskTypeId==2"> {{element.deliveryDate | date:'d-M-yyyy h:mm a' }}</span>
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cid">
+        <th mat-header-cell *matHeaderCellDef> {{'CID' | translate}} </th>
+        <td mat-cell *matCellDef="let element"> {{element?.customer?.cid}} </td>
+      </ng-container>
+  
+
+      <ng-container matColumnDef="waitingTime">
+          <th mat-header-cell *matHeaderCellDef>{{'Waiting Time' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              <div *ngIf="element?.totalWaitingTime">
+                  {{element?.totalWaitingTime.day>0 ? element?.totalWaitingTime.day +' day ':'' }}
+                  {{element?.totalWaitingTime.hour>0 ? element?.totalWaitingTime.hour +' hour ':'' }}
+                  {{element?.totalWaitingTime.minute>0 ? element?.totalWaitingTime.minute +' min ':'' }}
+                  {{element?.totalWaitingTime.second>0 ? element?.totalWaitingTime.second +' sec':'' }}
+              </div>
+              <div *ngIf="!element?.totalWaitingTime">
+                  --
+              </div>
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="eta">
+          <th mat-header-cell *matHeaderCellDef>{{'ETA' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              {{element?.totalEstimationTime?.day>0 ? element?.totalEstimationTime.day +' day ' : '' }}
+              {{element?.totalEstimationTime?.hour>0 ? element?.totalEstimationTime.hour +' hour ' : '' }}
+              {{element?.totalEstimationTime?.minute>0 ? element?.totalEstimationTime.minute +' min ' : '' }}
+              {{element?.totalEstimationTime?.second>0 ? element?.totalEstimationTime.second +' sec' : '' }}
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef> {{'Address' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              <p class="cut-address" matTooltip=" {{element.address}}">
+                  {{element.address}}
+              </p>
+          </td>
+      </ng-container>
+
+      <!-- comments -->
+      <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef> {{'Comments' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              {{(element.driverRates && element.driverRates.length > 0) ? element.driverRates[0].note : "--"}}
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+          <th mat-header-cell *matHeaderCellDef> {{'Rating' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+              {{(element.driverRates && element.driverRates.length > 0) ? element.driverRates[0].rate : "--"}}
+          </td>
+      </ng-container>
+
+      <ng-container matColumnDef="taskStatusName">
+          <th mat-header-cell *matHeaderCellDef> {{'Order Status' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.taskStatusName | translate}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef> {{'View' | translate}} </th>
+          <td mat-cell *matCellDef="let element" (click)="openDialog(element)">
+              <mat-icon>remove_red_eye</mat-icon>
+          </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+      </tr>
+  </table>
+
+  <mat-paginator [length]="length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+      *ngIf="dataSource?.data?.length > 0" (page)="onChangePage($event)">
+  </mat-paginator>
+
+  <div *ngIf="dataSource?.data?.length === 0">
+      {{'No Records Found' | translate}}!
+  </div>
+</section>

@@ -1,0 +1,33 @@
+<section class="container-fluid">
+    <form *ngIf="!done" [formGroup]="form" class="row text-center rate" (ngSubmit)="onSubmit()">
+        <h1 class="col-12">
+            {{'Rate your experience' | translate}}
+        </h1>
+
+        <div class="driver-icon col-12">
+            <img src="{{user}}" class="text-center">
+        </div>
+
+        <h3 class="col-12">
+            {{params?.name}}
+        </h3>
+
+        <div class="col-12">
+            <app-star-rating [rating]="rating" [starCount]="starCount" (ratingUpdated)="onRatingChanged($event)">
+            </app-star-rating>
+        </div>
+
+        <textarea rows="6" class="mx-auto col-6 comment mt-5 pt-2" placeholder="{{'Leave your comment' | translate}}"
+            formControlName="note">
+        </textarea>
+
+        <div class="col-12 mt-5">
+            <button type="submit" mat-flat-button color="primary" class="custom-btn">{{'Submit' | translate}}</button>
+        </div>
+    </form>
+
+    <p *ngIf="done">
+        {{message}}
+
+    </p>
+</section>

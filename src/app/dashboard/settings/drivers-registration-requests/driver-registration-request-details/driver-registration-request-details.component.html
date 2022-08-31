@@ -1,0 +1,300 @@
+<section class="row request-details p-2 m-0">
+  <div class="col-md-9 col-sm-12 col-xs-12">
+    <h2>
+      {{'View' | translate}} <strong>{{requestDetails?.fullName}}</strong> {{'Request' | translate}}
+    </h2>
+  </div>
+
+  <h3 class="col-md-3 col-sm-12 col-xs-12 d-flex justify-content-end">
+    <button mat-button color="primary" (click)="backToRequests()">Back to requests</button>
+  </h3>
+
+  <!-- actions -->
+  <div class="col-md-12 col-sm-12 col-xs-12 p-0 mb-3 mt-3 d-flex justify-content-end"
+    *ngIf="requestDetails?.userRegistrationStatus == 'New' || requestDetails?.userRegistrationStatus == 'Pending'">
+    <button mat-flat-button class="reject-btn ml-1 mr-1" (click)="rejectRequest()">{{'Reject' | translate}}</button>
+    <button mat-flat-button class="approve-btn ml-1 mr-1" (click)="completeProfile()">{{'Approve' |
+      translate}}</button>
+    <button mat-flat-button class="save-btn ml-1 mr-1" (click)="save()">{{'Save' | translate}}</button>
+  </div>
+  <!-- end actions -->
+
+  <!-- status -->
+  <div class="col-md-12 col-sm-6 col-xs-12 row d-flex justify-content-end">
+    <ng-container *ngIf="requestDetails?.userRegistrationStatus == 'Rejected'">
+      <div class="col-md-6 col-sm-12 rejection-text p-0">
+        <p class="view-title font-weight-bold"><b>{{'Status' | translate}}</b>: <span class="text-danger">{{'Rejected' |
+            translate}}</span></p>
+      </div>
+
+      <div class="col-md-6 col-sm-12 rejection-text p-0">
+        <p class="view-title font-weight-bold"><b>{{'Reasons' | translate}}</b>: <span
+            class="font-weight-normal">{{requestDetails?.rejectReason}}</span></p>
+      </div>
+    </ng-container>
+  </div>
+  <!-- end status -->
+
+  <form [formGroup]="form">
+    <!-- tabs -->
+    <mat-tab-group mat-stretch-tabs>
+
+      <!-- personal info tab -->
+      <mat-tab label="{{'Personal Info' | translate}}">
+        <div class="row">
+          <div class="col-md-12 col-sm-6 p-0">
+            <mat-card>
+              <h2 class="pl-2">{{'Personal Info' | translate}}</h2>
+              <div class="row pb-5">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Full Name' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="fullName">
+                    <mat-error *ngIf="!form.controls['fullName'].valid" matTooltip=" {{getError('fullName')}}">
+                      {{getError('fullName')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'User Name' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="userName">
+                    <mat-error *ngIf="!form.controls['userName'].valid" matTooltip=" {{getError('userName')}}">
+                      {{getError('userName')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Phone' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="phoneNumber">
+                    <mat-error *ngIf="!form.controls['phoneNumber'].valid" matTooltip=" {{getError('phoneNumber')}}">
+                      {{getError('phoneNumber')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Area' | translate}}</mat-label>
+                  <mat-form-field appearance="fill" dir="auto">
+                    <mat-select formControlName="areaId" [value]="requestDetails?.areaId">
+                      <mat-option>
+                        <ngx-mat-select-search [(ngModel)]="filterArea" placeholderLabel="{{'Select area' | translate}}"
+                          noEntriesFoundLabel="{{'No matching area found' | translate}}" [clearSearchInput]="true"
+                          [ngModelOptions]="{standalone: true}">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let area of areas | filter:filterArea" [value]="area.id"
+                        matTooltip="{{area.name}}">
+                        {{area.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Email' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="email">
+                    <mat-error *ngIf="!form.controls['email'].valid" matTooltip=" {{getError('email')}}">
+                      {{getError('email')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Job title' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="jobStatusName">
+                    <mat-error *ngIf="!form.controls['jobStatusName'].valid"
+                      matTooltip=" {{getError('jobStatusName')}}">
+                      {{getError('jobStatusName')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- 
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <a href="{{termsAndConditionsSrc}}" download>
+                                        {{'Signed off terms & conditions' | translate}}
+                                    </a>
+
+                                    <mat-icon class="pdf">picture_as_pdf</mat-icon>
+                                </div> -->
+              </div>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 p-0" *ngIf="personalPhotoSrc">
+            <mat-card>
+              <h2 class="p-3">{{'Personal Photo' | translate}}</h2>
+              <img (click)="openTaskSignaturesLightBox(personalPhotoSrc)" class="displayed-img"
+                src="{{personalPhotoSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 p-0" *ngIf="nationalIdSrc">
+            <mat-card>
+              <h2 class="p-3">{{'National ID' | translate}}</h2>
+              <img (click)="openTaskSignaturesLightBox(nationalIdSrc)" class="displayed-img" src="{{nationalIdSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 p-0" *ngIf="drivingLicenseSrc">
+            <mat-card>
+              <h2 class="p-3">{{'Driving license' | translate}}</h2>
+              <img (click)="openTaskSignaturesLightBox(drivingLicenseSrc)" class="displayed-img"
+                src="{{drivingLicenseSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-12 col-sm-12 p-0">
+            <mat-card>
+              <!-- <h2 class="pl-3 m-0">{{'Training rate' | translate}}</h2>
+                            <div class="text-center">
+                                <app-star-rating [disableActions]="true" [rating]="requestDetails?.trainingRate"
+                                    [starCount]="5">
+                                </app-star-rating>
+                            </div> -->
+
+              <div class="pl-3" *ngIf="requestDetails?.trainingComments">
+                <h4>
+                  {{'Driver’s Comments' | translate}}
+                </h4>
+                <p class="p-3">
+                  {{requestDetails?.trainingComments}}
+                </p>
+              </div>
+            </mat-card>
+          </div>
+
+          <!-- <div class="col-md-12 col-sm-6 col-xs-12 m-3 mr-5">
+                        {{'Attachments' | translate}}
+                        <input type="file" id="upload" hidden (change)="onSelectAttachment($event)" />
+                        <label mat-flat-button class="choose-file-btn ml-1 mr-1" for="upload">{{'Choose file'
+                            |translate}}</label>
+
+                        <div class="mt-4" *ngFor="let driverAttachment of driverAttachments;let index = index">
+                            <a [href]="driverAttachment.path">{{driverAttachment.path}}</a>
+                            <mat-icon class="delete-icon" (click)="deleteFile(index)">delete</mat-icon>
+                        </div>
+                    </div> -->
+          <div class="col-md-12 col-sm-6 col-xs-12 m-3 mr-5">
+            {{'Attachments' | translate}}
+            <input type="file" id="upload" hidden (change)="onSelectAttachment($event)" />
+
+            <label mat-flat-button class="choose-file-btn ml-1 mr-1" for="upload">
+              {{'Choose file' | translate}}
+            </label>
+
+            <div class="mt-4" *ngFor="let attachment of driverAttachments; let index = index">
+              <a href="{{baseUrl}}/{{attachment.file}}" *ngIf="attachment.file else newFile" download
+                target="_blank">{{attachment.file}}</a>
+              <ng-template #newFile>{{attachment.formFile.name}}</ng-template>
+              <mat-icon class="delete-icon" (click)="deleteFile(index)">delete</mat-icon>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-6 col-xs-12 m-3 mr-5">
+            <p class="dms-label-color mb-1">{{'Comments' | translate}}</p>
+            <textarea placeholder="{{'Type your comments' | translate}}" rows="4" formControlName="comment"
+              id="comments">
+            </textarea>
+          </div>
+        </div>
+      </mat-tab>
+      <!-- end personal info tab -->
+
+      <!-- vehicle info tab -->
+      <mat-tab label="{{'Vehicle Info' | translate}}">
+        <div class="row">
+          <div class="col-md-12 col-sm-6">
+            <mat-card>
+              <h2 class="pl-2">{{'Vehicle Info' | translate}}</h2>
+              <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Vehicle type' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <mat-select formControlName="transportTypeId" [value]="requestDetails?.transportTypeId">
+                      <mat-option *ngFor="let transportType of transportTypes" [value]="transportType.id">
+                        {{transportType.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Year / Model' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="transportYearAndModel">
+                    <mat-error *ngIf="!form.controls['transportYearAndModel'].valid"
+                      matTooltip=" {{getError('transportYearAndModel')}}">
+                      {{getError('transportYearAndModel')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'license plate' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="licensePlate">
+                    <mat-error *ngIf="!form.controls['licensePlate'].valid" matTooltip=" {{getError('licensePlate')}}">
+                      {{getError('licensePlate')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <mat-label class="dms-label-color">{{'Color' | translate}}</mat-label>
+                  <mat-form-field appearance="fill">
+                    <input matInput formControlName="transportColor">
+                    <mat-error *ngIf="!form.controls['transportColor'].valid"
+                      matTooltip=" {{getError('transportColor')}}">
+                      {{getError('transportColor')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4">
+            <mat-card *ngIf="carApplicationSrc">
+              <h2 class="pl-2">{{'Car application' | translate}}</h2>
+              <img (click)="openTaskSignaturesLightBox(carApplicationSrc)" class="displayed-img mx-auto"
+                src="{{carApplicationSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-4" *ngIf="carInsuranceSrc">
+            <mat-card>
+              <h2 class="pl-2">{{'Car insuranc' | translate}}e</h2>
+              <img (click)="openTaskSignaturesLightBox(carInsuranceSrc)" class="displayed-img mx-auto"
+                src="{{carInsuranceSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-4" *ngIf="carReferralDocumentSrc">
+            <mat-card>
+              <h2 class="pl-2">{{'Referrel document' | translate}}</h2>
+              <img (click)="openTaskSignaturesLightBox(carReferralDocumentSrc)" class="displayed-img mx-auto"
+                src="{{carReferralDocumentSrc}}">
+            </mat-card>
+          </div>
+
+          <div class="col-md-12 col-sm-12">
+            <mat-card *ngIf="vehiclePhotos">
+              <h2 class="pl-2">{{'Vehicle Photos' | translate}}</h2>
+              <img *ngFor="let vehiclePhoto of vehiclePhotos" class="displayed-img m-2 mx -auto" src="{{vehiclePhoto}}"
+                (click)="openTaskSignaturesLightBox(vehiclePhoto)">
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+      <!-- end vehicle info tab -->
+
+    </mat-tab-group>
+  </form>
+
+</section>

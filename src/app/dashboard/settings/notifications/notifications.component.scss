@@ -1,0 +1,21 @@
+:host ::ng-deep .notifications {
+    .mat-list-item {
+        height: auto;
+        min-height: 120px;
+        background-color: white;
+        margin-bottom: 5px;
+    }
+
+    .mat-pseudo-checkbox {
+        border-radius: 10px;
+    }
+
+    .mat-pseudo-checkbox-checked,
+    .mat-slide-toggle-thumb {
+        background-color: #4a90e2 !important;
+    }
+
+    .mat-pseudo-checkbox-checked::after {
+        opacity: 0;
+    }
+}

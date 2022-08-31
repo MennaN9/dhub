@@ -1,0 +1,42 @@
+input {
+    padding: 10px;
+    font-size: 1em;
+    width: calc(100% - 20px);
+    border: var(--border);
+    border-radius: 3px;
+}
+
+input[list]:focus {
+    outline: none;
+}
+
+input[list] + div[list] {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 164px;
+    overflow-y: auto;
+    max-width: 330px;
+    background: #fff;
+    border: var(--border);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 3px 3px -3px #333;
+    z-index: 100;
+}
+
+input[list] + div[list] span {
+    display: block;
+    padding: 7px 5px 7px 20px;
+    color: #069;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+input[list] + div[list] span:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+input[list] + div[list] span:hover {
+    background: rgba(100, 120, 140, 0.2);
+}

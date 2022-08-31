@@ -1,0 +1,13 @@
+@import "./../../../../shared/scss/colors";
+
+.team {
+  form {
+    h4 {
+      color: gray;
+      font-size: 16px;
+    }
+  }
+  .close {
+    cursor: pointer;
+  }
+}

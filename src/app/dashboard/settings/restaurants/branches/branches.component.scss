@@ -1,0 +1,23 @@
+@import "./../../../../shared/scss/colors";
+
+section {
+    table {
+        width: 100%;
+    }
+
+    h2 {
+        color: $o-orange;
+    }
+    .actions {
+        font-size: 35px;
+        color: $o-orange;
+    }
+
+    .branches {
+        padding: 15px;
+
+        p {
+            color: $grey;
+        }
+    }
+}

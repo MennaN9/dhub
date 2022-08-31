@@ -1,0 +1,155 @@
+<section>
+    <div class="title-bg">
+        <div class="title row">
+            <mat-icon class="col-1" (click)="closeDriverDetails(true)" *ngIf="driverDetails" style="cursor: pointer">
+                {{locale != 'ar' ? 'navigate_before':'navigate_next'}}</mat-icon>
+            <span class="col-11 pt-1">
+                {{'Drivers' | translate}}
+            </span>
+        </div>
+    </div>
+
+    <mat-tab-group mat-stretch-tabs *ngIf="!driverDetails">
+        <mat-tab label="{{freeDriversTotalCount}} {{'FREE' | translate}}">
+            <div class="container scroll max-height search-results" infiniteScroll [infiniteScrollDistance]="5"
+                [infiniteScrollThrottle]="50" (scrolled)="onScroll('free')" [scrollWindow]="false">
+                <div class="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event,'free')" class="search p-2 m-2"
+                        placeholder="{{'Search Driver' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="freeSearchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch('free')"
+                        *ngIf="freeSearchBy.length > 0">
+                </div>
+
+                <div class="row driver" *ngFor="let driver of freeDrivers" (click)="showDriverDetails(driver)">
+                    <div class="col-3">
+                        <div class="image_outer_container">
+                            <div class="available icon"></div>
+                            <div class="image_inner_container">
+                                <img src="{{driver.imageUrl ? ImageURL + driver.imageUrl : image}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-7 driver-info">
+                        <p class="name" matTooltip="{{driver.fullName}}">{{driver.fullName | truncateText:[20]}}</p>
+                        <h6 class="phone">{{driver?.countryCode}}-{{driver?.phoneNumber}}</h6>
+                    </div>
+
+                    <!-- <div class="col-2 driver-info">
+                        <div class="count">
+                            <p class="number">0</p>
+                        </div>
+                        <h6 class="task">Task</h6>
+                    </div> -->
+                    <div class="col-1 driver-info">
+                        <p class="arrow">
+                            <mat-icon>{{locale != 'ar' ? 'navigate_next':'navigate_before'}}</mat-icon>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-5 text-center" *ngIf="freeDrivers?.length == 0">
+                    <img src="assets/images/icons/no-drivers.png" class="no-drivers">
+                    <br>
+                    <div>
+                        {{'No driver available' | translate}} <a mat-button (click)="addDriverDialog()">{{'Add driver' |
+                            translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="{{busyDriversTotalCount}} {{'BUSY' | translate}}">
+            <div class="container scroll max-height search-results" infiniteScroll [infiniteScrollDistance]="5"
+                [infiniteScrollThrottle]="50" (scrolled)="onScroll('busy')" [scrollWindow]="false">
+
+                <div class="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event,'busy')" class="search p-2 m-2"
+                        placeholder="{{'Search Driver' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="busySearchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch('busy')"
+                        *ngIf="busySearchBy.length > 0">
+                </div>
+
+                <div class="row driver" *ngFor="let driver of busyDrivers" (click)="showDriverDetails(driver)">
+                    <div class="col-3">
+                        <div class="image_outer_container">
+                            <div class="busy icon"></div>
+                            <div class="image_inner_container">
+                                <img src="{{driver.imageUrl ? ImageURL + driver.imageUrl : image}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-7 driver-info">
+                        <p class="name" matTooltip="{{driver.fullName}}">{{driver.fullName | truncateText:[20]}}</p>
+                        <h6 class="phone">{{driver?.countryCode}}-{{driver?.phoneNumber}}</h6>
+                    </div>
+
+                    <!-- <div class="col-2 driver-info pt-1">
+                        <div class="count">
+                            <p class="number">0</p>
+                        </div>
+                        <h6 class="task">Task</h6>
+                    </div> -->
+
+                    <div class="col-1 driver-info">
+                        <p class="arrow">
+                            <mat-icon>{{locale != 'ar' ? 'navigate_next':'navigate_before'}}</mat-icon>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="{{inactiveDriversTotalCount}} {{'OFFLINE' | translate}}">
+            <div class="container scroll max-height search-results" infiniteScroll [infiniteScrollDistance]="5"
+                [infiniteScrollThrottle]="50" (scrolled)="onScroll('inactive')" [scrollWindow]="false">
+
+                <div class="search-container">
+                    <input (keyup.enter)="onSearchSubmit($event,'inactive')" class="search p-2 m-2"
+                        placeholder="{{'Search Driver' | translate}}" id="search" autofocus type="text"
+                        [(ngModel)]="inactiveSearchBy">
+                    <img src="assets/images/icons/search.png" class="search-img">
+                    <img src="assets/images/icons/clear.png" class="clear-img pointer" (click)="clearSearch('inactive')"
+                        *ngIf="inactiveSearchBy.length > 0">
+                </div>
+                <div class="row driver" *ngFor="let driver of inactiveDrivers" (click)="showDriverDetails(driver)">
+                    <div class="col-3">
+                        <div class="image_outer_container">
+                            <div class="offline icon"></div>
+                            <div class="image_inner_container">
+                                <img src="{{driver.imageUrl ? ImageURL + driver.imageUrl : image}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-7 driver-info">
+                        <p class="name" matTooltip="{{driver.fullName}}">{{driver.fullName | truncateText:[20]}}</p>
+                        <h6 class="phone">{{driver?.countryCode}}-{{driver?.phoneNumber}}</h6>
+                    </div>
+
+                    <div class="col-1 driver-info">
+                        <p class="arrow">
+                            <mat-icon>{{locale != 'ar' ? 'navigate_next':'navigate_before'}}</mat-icon>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+    <!-- end drivers list -->
+
+    <div class="container driver-details" *ngIf="driverDetails">
+        <app-driver-details [driver]="selectedDriver" (onCloseDriverDetails)="closeDriverDetails($event)">
+        </app-driver-details>
+    </div>
+
+    <div id="outside-icon" (click)="onClose()">
+        <img src="assets/images/icons/open-drivers.png">
+    </div>
+</section>

@@ -1,0 +1,100 @@
+<form class="row" #form="ngForm">
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-6" *ngIf="isPACI">
+        <mat-label class="dms-label-color p-1">{{'PACI' | translate}}</mat-label>
+        <input class="p-1" matInput type="number" [(ngModel)]="address.paci" name="paci"
+            (blur)="onChangePACI($event.target.value)" [disabled]="disableAddress">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" setDir class="col-md-4 col-sm-6" *ngIf="isPACI">
+        <mat-label class="dms-label-color p-1">{{'Governorate' | translate}}</mat-label>
+        <mat-select (selectionChange)="onSelectOption($event,'governorate')" [(ngModel)]="address.governorate"
+            name="governorate" [disabled]="disableAddress">
+            <mat-option>
+                <ngx-mat-select-search [(ngModel)]="address.filterGovernorate" name="filterGovernorateCtrl"
+                    placeholderLabel="{{'Select governorate' | translate}}"
+                    noEntriesFoundLabel="{{'No matching governorate found' | translate}}" [clearSearchInput]="true">
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let governorate of governorates | filter:address.filterGovernorate"
+                [value]="governorate.id" matTooltip="{{governorate.name}}">
+                {{governorate.name}}
+            </mat-option>
+        </mat-select>
+
+        <mat-hint class="hint" *ngIf="validateAddress && !address.governorate">*{{'Governorate required' | translate}}
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4 col-sm-6" appearance="fill" setDir>
+        <mat-label class="dms-label-color p-1">{{'Area' | translate}}</mat-label>
+        <mat-select (selectionChange)="onSelectOption($event,'area')" #area [(ngModel)]="address.area" name="area"
+            [disabled]="disableAddress">
+            <mat-option>
+                <ngx-mat-select-search [(ngModel)]="address.filterArea" name="filterAreaCtrl"
+                    placeholderLabel="{{'Select area' | translate}}"
+                    noEntriesFoundLabel="{{'No matching area found' | translate}}" [clearSearchInput]="true">
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let area of areas | filter:address.filterArea" [value]="area.id"
+                matTooltip="{{area.name}}">
+                {{area.name}}
+            </mat-option>
+        </mat-select>
+
+        <mat-hint class="hint" *ngIf="validateAddress && !address.area">*{{'Area required' | translate}}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" setDir class="col-md-4 col-sm-6">
+        <mat-label class="dms-label-color p-1">{{'Block No' | translate}}</mat-label>
+        <mat-select (selectionChange)="onSelectOption($event,'block')" [(ngModel)]="address.block" name="block"
+            [disabled]="disableAddress">
+            <mat-option>
+                <ngx-mat-select-search [(ngModel)]="address.filterBlock" name="filterBlockCtrl"
+                    placeholderLabel="{{'Select block' | translate}}"
+                    noEntriesFoundLabel="{{'No matching block found' | translate}}" [clearSearchInput]="true">
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let block of blocks | filter:address.filterBlock" [value]="block.id"
+                matTooltip="{{block.name}}">
+                {{block.name}}
+            </mat-option>
+        </mat-select>
+        <mat-hint class="hint" *ngIf="validateAddress && !address.block">*{{'Block required' | translate}}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" setDir class="col-md-4 col-sm-6">
+        <mat-label class="dms-label-color p-1">{{'Street No' | translate}}</mat-label>
+        <mat-select (selectionChange)="onSelectOption($event,'street')" [(ngModel)]="address.street" name="street"
+            [disabled]="disableAddress">
+            <mat-option>
+                <ngx-mat-select-search [(ngModel)]="address.filterStreet" name="filterStreetCtrl"
+                    placeholderLabel="{{'Select street' | translate}}" noEntriesFoundLabel="No matching street found"
+                    [clearSearchInput]="true">
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let street of streets | filter:address.filterStreet" [value]="street.id"
+                matTooltip="{{street.name}}">
+                {{street.name}}
+            </mat-option>
+        </mat-select>
+        <mat-hint class="hint" *ngIf="validateAddress && !address.street">*{{'Street required' | translate}}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-6">
+        <mat-label class="dms-label-color p-1">{{'Building' | translate}}</mat-label>
+        <input class="p-1" matInput type="text" [(ngModel)]="address.building" name="building" #building
+            [disabled]="disableAddress">
+        <mat-hint class="hint" *ngIf="validateAddress && !address.building">*{{'Building required' | translate}}
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-6">
+        <mat-label class="dms-label-color p-1">{{'Floor' | translate}}</mat-label>
+        <input class="p-1" matInput type="text" [(ngModel)]="address.floor" name="floor" [disabled]="disableAddress">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4 col-sm-6">
+        <mat-label class="dms-label-color p-1">{{'Flat' | translate}}</mat-label>
+        <input class="p-1" matInput type="text" [(ngModel)]="address.flat" name="flat" [disabled]="disableAddress">
+    </mat-form-field>
+</form>

@@ -1,0 +1,14 @@
+<form fxLayout="row wrap" fxLayoutGap="32px" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <mat-form-field fxFlex="95%">
+        <mat-label>{{"Assign Driver Type" | translate}}</mat-label>
+        <mat-select #teamsSelectList formControlName="agentTypeId">
+          <mat-option *ngFor="let agentType of agentTypes" [value]="agentType.id">
+            {{agentType.name   | translate}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div mat-dialog-actions fxFlex="90%" fxLayoutAlign="flex-end">
+        <button type="button" mat-button color="primary" (click)="cancel()" class="cancel-btn">{{"Cancel" | translate}}</button>
+        <button mat-flat-button color="primary" class="confirm-btn o-add-btn">{{"Submit" | translate}}</button>
+    </div>
+</form>

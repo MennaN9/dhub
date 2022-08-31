@@ -1,0 +1,298 @@
+<section fxLayout="row wrap" fxLayoutAlign="flex-start" class="task-details">
+  <div fxFlex="100%" class="details-header">
+    <h5 fxFlex="20%">
+      {{"Task" | translate}} /
+    </h5>
+
+    <mat-form-field fxFlex="30%">
+      <select matNativeControl required (change)="changeTaskData(taskId.value)" #taskId>
+        <option [value]="task.id" *ngFor="let task of mainTaskData.tasks">
+          {{task.taskTypeName + "-"+ task.id}}</option>
+      </select>
+    </mat-form-field>
+
+    <div fxFlex="30%"></div>
+
+    <div fxFlex="10%" class="actions" matTooltip="open actions menu">
+      <button mat-icon-button [matMenuTriggerFor]="actions">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+
+    <div fxFlex="10%" class="actions" matTooltip="close task details">
+      <button mat-icon-button (click)="close(false)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-tab-group mat-stretch-tabs fxFlex="100%">
+    <mat-tab label="{{'Details' | translate}}" class="tab-custom-class">
+      <table id="details" dir="auto">
+        <tr>
+          <td>{{"Status" | translate}}</td>
+          <td class="status">{{taskData?.taskStatusName | translate}}</td>
+        </tr>
+        <tr *ngIf="taskData?.totalEstimationTime!=null">
+          <td>{{"Estimated Time" | translate}}</td>
+          <td class="status">
+            <!--{{taskData?.estimatedTime}}-->
+
+            {{taskData?.totalEstimationTime.day>0 ? taskData?.totalEstimationTime.day +' day ':'' }}
+            {{taskData?.totalEstimationTime.hour>0 ? taskData?.totalEstimationTime.hour +' hour ':'' }}
+            {{taskData?.totalEstimationTime.minute>0 ? taskData?.totalEstimationTime.minute +' min ':'' }}
+            {{taskData?.totalEstimationTime.second>0 ? taskData?.totalEstimationTime.second +' sec':'' }}
+
+          </td>
+        </tr>
+        <tr *ngIf="taskData?.delayTime">
+          <td>Delayed By:</td>
+          <td>{{timeConversion(taskData?.delayTime)}}</td>
+        </tr>
+        <tr>
+          <td>{{"Task Description" | translate}}</td>
+          <td matTooltip="{{taskData?.description}}">{{taskData?.description | truncateText:[20] || "--"}}</td>
+        </tr>
+
+        <tr>
+          <td>{{"Start before" | translate}}</td>
+          <td *ngIf="taskData?.taskTypeId==2">--</td>
+          <td *ngIf="taskData?.taskTypeId==1">
+            {{taskData?.pickupDate | date:'d-M-yyyy h:mm a' || "--"}}
+          </td>
+        </tr>
+
+        <tr>
+          <td>{{"Complete before" | translate}}</td>
+          <td *ngIf="taskData?.taskTypeId==2">
+            {{taskData?.deliveryDate | date:'d-M-yyyy h:mm a' ||"--"}}
+          </td>
+          <td *ngIf="taskData?.taskTypeId == 1">--</td>
+        </tr>
+
+        <tr *ngIf="taskData?.taskStatusId !== 1">
+          <td>{{'Tracking link (unseen)' | translate}}</td>
+          <td class="link-padding">
+            <a mat-button color="primary" (click)="drawRoute()">{{'Click here to track' | translate}}</a>
+          </td>
+        </tr>
+
+        <ng-container *ngIf="mainTaskData.isCompleted">
+
+          <tr>
+            <td>{{'Rate driver' | translate}}</td>
+            <td class="link-padding">
+              <a mat-button color="primary" (click)="rate()">{{'Click here to rate' | translate}}</a>
+            </td>
+          </tr>
+
+          <tr>
+            <td>{{'Customer comment' | translate}}</td>
+            <td *ngIf="taskData?.driverRates?.length > 0"
+              matTooltip="{{taskData?.driverRates[taskData?.driverRates?.length -1]?.note}}">
+              {{taskData?.driverRates[taskData?.driverRates?.length -1]?.note | truncateText:[60]}}
+            </td>
+          </tr>
+
+          <tr>
+            <td>{{'Customer rate' | translate}}</td>
+            <td class="rating">
+              <app-star-rating [disableActions]="true" *ngIf="taskData?.driverRates?.length > 0"
+                [rating]="taskData?.driverRates[taskData?.driverRates?.length -1]?.rate" [starCount]="5">
+              </app-star-rating>
+            </td>
+          </tr>
+
+        </ng-container>
+
+        <tr>
+          <td>{{"Team" | translate}}</td>
+          <td matTooltip="{{taskData?.teamName}}">{{taskData?.teamName | truncateText:[20] || "--"}}</td>
+        </tr>
+        <tr>
+          <td>{{"Driver" | translate}}</td>
+          <td class="link-padding"><a mat-button color="primary"
+              matTooltip="{{taskData?.driverName}}">{{taskData?.driverName | truncateText:[20] || "--"}}</a></td>
+        </tr>
+        <tr>
+          <td>{{"Order ID" | translate}}</td>
+          <td>{{taskData?.orderId || "--"}}</td>
+        </tr>
+        <tr *ngIf="taskData?.totalWaitingTime!=null">
+          <td> {{'Driver Waiting Time' | translate}} :</td>
+          <td>
+            {{taskData?.totalWaitingTime.day>0 ? taskData?.totalWaitingTime.day +' day ':'' }}
+            {{taskData?.totalWaitingTime.hour>0 ? taskData?.totalWaitingTime.hour +' hour ':'' }}
+            {{taskData?.totalWaitingTime.minute>0 ? taskData?.totalWaitingTime.minute +' min ':'' }}
+            {{taskData?.totalWaitingTime.second>0 ? taskData?.totalWaitingTime.second +' sec':'' }}
+          </td>
+        </tr>
+
+        <tr *ngIf="taskData?.taskStatusId == taskStatus.Successful">
+          <td>{{'Total Time Taken' | translate}} :</td>
+          <td> {{taskData?.totalTime/60 | number:'1.0-2'}} mins .</td>
+
+        </tr>
+        <tr *ngIf="taskData?.taskStatusId == taskStatus.Successful">
+          <td>{{'Distance Traveled' | translate}} :</td>
+          <td>{{taskData?.totalDistance | number:'1.0-2'}} KM</td>
+        </tr>
+        <tr>
+          <td>{{"Reference Image" | translate}}</td>
+          <td>
+            <img src="{{taskData?.image ? taskImagesUrl + taskData?.image : user}}" class="image">
+          </td>
+        </tr>
+      </table>
+    </mat-tab>
+
+    <mat-tab label="{{'Customer' | translate}}" class="tab-custom-class">
+      <table id="details" dir="auto">
+        <tr>
+          <td>
+            <h5 class="title">
+              {{'Name' | translate}}:
+            </h5>
+          </td>
+          <td matTooltip="{{taskData?.customer?.name}}">{{taskData?.customer?.name | truncateText:[20] || "--"}}</td>
+        </tr>
+        <tr>
+          <td>
+            <h5 class="title">
+              {{'Phone' | translate}}:
+            </h5>
+          </td>
+          <td>{{taskData?.customer?.phone ||"--"}}</td>
+        </tr>
+        <tr>
+          <td>
+            <h5 class="title">
+              {{'Email' | translate}}:
+            </h5>
+          </td>
+          <td matTooltip="{{taskData?.customer?.email}}">{{taskData?.customer?.email | truncateText:[20] ||"--"}}</td>
+        </tr>
+        <tr>
+          <td>
+            <h5 class="title">
+              {{'CID' | translate}}:
+            </h5>
+          </td>
+          <td matTooltip="{{taskData?.customer?.cid}}">{{taskData?.customer?.cid | truncateText:[20] ||"--"}}</td>
+        </tr>
+        <tr>
+          <td>
+            <h5 class="title">
+              {{'Address' | translate}}:
+            </h5>
+          </td>
+          <td matTooltip="{{taskData?.customer?.address}}">
+            {{taskData?.customer?.address | truncateText:[20] ||"--"}}
+          </td>
+        </tr>
+      </table>
+    </mat-tab>
+
+    <mat-tab label="{{'History' | translate}}" class="tab-custom-class">
+
+      <div class="history-tab row">
+        <div class="col-12">
+          <h3 class="history-title text-center" matTooltip="{{taskData?.driverName}}">
+            {{taskData?.driverName | truncateText:[20]}}
+          </h3>
+
+          <span style="font-size: small;"
+            *ngIf="taskData?.totalTaskTime && taskData.taskStatusId == taskStatus.Successful">
+            {{taskData?.totalDistance | number:'1.0-2'}} KM {{taskData?.totalTime/60 | number:'1.0-2'}} mins
+          </span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="wrapper" dir="ltr">
+        <ul class="row m-2 pl-2 pr-2 every-row" *ngFor="let item of taskData?.taskHistories">
+          <li class="col-3 time">{{item?.createdDate | dateToTimezone}}</li>
+          <li class="StepProgress-item is-done col-9 font-14"
+            *ngIf="item?.actionName.trim() == 'STARTED' || item?.actionName.trim() == 'CREATED' || item?.actionName.trim() == 'ASSIGNED' || item?.actionName.trim() == 'SUCCESSFUL' || item?.actionName.trim() == 'IN PROGRESS' || item?.actionName.trim() == 'UPDATED' || 'MARKED AS CANCELLED'">
+
+            <strong *ngIf='item.actionName!=null' [ngClass]="item?.actionName.trim() + '-text'">
+              {{item?.actionName.trim() | translate}}
+            </strong>
+
+            <div class="mt-2">
+              {{'By ' + item?.createdBy}}
+            </div>
+
+            <a (click)="showLocationMap(item)" mat-button class="map-location"
+              *ngIf="item.latitude && item.longitude">Location on map</a>
+            <h5 class="task-desc" *ngIf="item?.description">{{item?.description}}</h5>
+
+            <h5 *ngIf="item?.actionName.trim() == 'MARKED AS FAILED' || item?.actionName.trim() == 'CANCELLED'"
+              class="mt-2">
+              {{'Reason' | translate}}: <span matTooltip="{{item?.reason}}">{{item?.reason | truncateText:[20] ||
+                '--'}}</span>
+            </h5>
+
+            <span *ngIf="item?.actionName.trim() == 'ADDED A SIGNATURE'"
+              (click)="openTaskSignaturesLightBox(taskData?.signatureURL)"
+              [ngClass]="item?.actionName.trim() + '-text'">
+              <mat-icon class="icon">attach_file</mat-icon> {{'Attachment' | translate}}
+            </span>
+
+            <span *ngIf="item?.actionName.trim() == 'ADDED THIS NOTE'" [ngClass]="item?.actionName.trim() + '-text'">
+              {{'Note' | translate}}: {{item?.description | truncateText:[20]}}
+            </span>
+
+            <span *ngIf="item?.actionName.trim() == 'ADDED THIS IMAGE'"
+              (click)="openTasksGalleryLightBox(taskData?.taskGallaries)" [ngClass]="item?.actionName.trim() + '-text'">
+              <mat-icon class="icon">attach_file</mat-icon>{{taskData?.taskGallaries?.length}} Attachment
+            </span>
+          </li>
+        </ul>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>
+
+<mat-menu #actions="matMenu">
+  <span *ngxPermissionsOnly="['UpdateTask']">
+    <button mat-menu-item (click)="openEditTaskDialog(taskData)"
+      *ngIf="taskData?.taskStatusId != taskStatus?.Successful">{{'Edit stop' | translate}}</button>
+  </span>
+
+  <button mat-menu-item (click)="export()"
+    *ngIf="taskData?.taskStatusId == taskStatus?.Successful || taskData?.taskStatusId == taskStatus?.Failed">{{'Export
+    task' | translate}}</button>
+
+  <span *ngIf="taskData?.taskStatusId != taskStatus?.Successful">
+    <button mat-menu-item *ngxPermissionsOnly="['DeleteTask']">
+      <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+  </span>
+
+  <button mat-menu-item *ngIf="taskData?.taskStatusId == taskStatus?.Unassigned" (click)="openAssignDriverDialog(taskData)">
+    {{'Assign Driver' | translate}}</button>
+
+  <button mat-menu-item
+    *ngIf="!(taskData?.taskStatusId == taskStatus?.Unassigned || taskData?.taskStatusId == taskStatus?.Successful)"
+    (click)="openAssignDriverDialog(taskData)">
+    {{'Resssign Driver' | translate}}
+  </button>
+
+  <span *ngxPermissionsOnly="['ChangeTaskStatus']">
+    <button mat-menu-item *ngIf="taskData?.taskStatusId != taskStatus?.Successful"
+      (click)="openStopStatusDialog(taskData)">{{'Change task status' | translate}}</button>
+  </span>
+
+</mat-menu>
+
+<!-- <mat-menu #export="matMenu">
+    <button mat-menu-item>Export as CSV</button>
+    <button mat-menu-item>Export as PDF</button>
+</mat-menu>
+
+<mat-menu #barcode="matMenu">
+    <button mat-menu-item>Export current stop</button>
+    <button mat-menu-item>Export all stops</button>
+</mat-menu> -->

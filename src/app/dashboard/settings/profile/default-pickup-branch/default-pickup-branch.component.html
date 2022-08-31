@@ -1,0 +1,22 @@
+<mat-divider></mat-divider>
+
+<form (ngSubmit)="onSubmit()" novalidate>
+
+  <mat-form-field appearance="fill" class="col-md-6 col-sm-12 mt-3">
+    <mat-label>{{'Select default pickup branch' | translate}}</mat-label>
+    <mat-select [(ngModel)]="selectedBranch" name="branch" [disabled]="isManager">
+      <mat-option [value]="undefined">
+        None
+      </mat-option>
+      <mat-option *ngFor="let branch of branchs" [value]="branch.id">
+        {{branch.restaurant.name}} / {{branch.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="col-12 align-right-button">
+    <button mat-raised-button color="primary" type="submit" class="confirm-btn o-add-btn">{{'Update' |
+      translate}}</button>
+  </div>
+
+</form>

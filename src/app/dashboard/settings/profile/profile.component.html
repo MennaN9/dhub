@@ -1,0 +1,66 @@
+<section class="p-5">
+  <mat-accordion>
+    <!-- basic info -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{'Profile' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-basic-user-info [basicData]='currentUser'></app-basic-user-info>
+    </mat-expansion-panel>
+
+    <!-- language section-->
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{'Change language' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-change-language [myLanguages]="userLanguages"></app-change-language>
+    </mat-expansion-panel>
+
+    <!-- password section -->
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{'Change password' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-chanage-password></app-chanage-password>
+    </mat-expansion-panel>
+
+    <!-- default pickup branch section -->
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{'Default pickup branch' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-default-pickup-branch [myBranch]="currentUser.branchId" [isManager]="currentUser.isManager">
+      </app-default-pickup-branch>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{'Integration Settings' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-integration-settings >
+      </app-integration-settings>
+    </mat-expansion-panel>
+
+    <!-- delete section -->
+    <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="isTenant">
+      <mat-expansion-panel-header>
+          <mat-panel-title> {{'Delete account' | translate}} </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-delete-account></app-delete-account>
+  </mat-expansion-panel> -->
+    <!-- expand your rights -->
+    <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+          <mat-panel-title> Execise your rights </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-exercise-your-rights></app-exercise-your-rights>
+  </mat-expansion-panel> -->
+
+
+  </mat-accordion>
+</section>

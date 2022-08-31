@@ -1,0 +1,80 @@
+@import "./../../../../shared/scss/colors";
+
+.drivers-registration-requests {
+    .search-btn {
+        color: white;
+        background-color: $o-orange;
+    }
+
+    .clear-btn {
+        color: $o-red;
+        background: none;
+        border: 1px solid $o-red;
+    }
+
+    .clear-btn,
+    .search-btn {
+        width: 94px;
+        height: 35px;
+        font-weight: 600;
+    }
+
+    .view {
+        color: $o-blue;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+
+        th,
+        td {
+            padding: 10px;
+        }
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .table-content {
+        max-width: 100%;
+        overflow: auto;
+    }
+}
+
+:host ::ng-deep {
+    .mat-elevation-z8 {
+        box-shadow: none;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: white;
+        border: solid 2px rgba(0, 0, 0, 0.07);
+        border-radius: 0px;
+        max-height: 54px;
+        color: black;
+    }
+
+    th.mat-header-cell {
+        color: black;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .e-input-group {
+        height: 50px;
+        color: black;
+
+        .e-keyboard,
+        .e-date-icon .e-icons {
+            color: black !important;
+            font-weight: bold;
+        }
+
+        .e-input-group-icon.e-range-icon::before,
+        .e-control-wrapper .e-input-group-icon.e-range-icon::before {
+            color: black;
+        }
+    }
+}

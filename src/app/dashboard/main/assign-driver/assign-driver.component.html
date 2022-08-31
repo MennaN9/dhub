@@ -1,0 +1,66 @@
+<section class="assign-driver">
+  <div class="row mb-1" *ngIf="data?.taskId" dir="auto">
+    <div class="col-10">
+      <h4 class="dialog-title">
+        {{label}}
+      </h4>
+    </div>
+    <div class="col-2 d-flex justify-content-end" (click)="cancel()">
+      <mat-icon class="close">close</mat-icon>
+    </div>
+  </div>
+
+  <hr>
+
+  <p dir="auto">
+    {{'Task ID' | translate}}: {{data['taskId']}}
+  </p>
+
+  <form class="row" [formGroup]="form">
+    <mat-form-field class="col-12" appearance="fill" setDir>
+      <mat-label>{{'Assign team' | translate}}</mat-label>
+      <mat-select #teamsSelectList formControlName="teamId">
+        <mat-option *ngFor="let team of teams" [value]="team.id">
+          {{team.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!--
+    <div fxFlex="45%" class="geo-btn">
+        <mat-slide-toggle (change)="onChangeToggle($event)" [checked]="checked" disableToggleValue="true">
+        </mat-slide-toggle>
+        Geo-fence
+    </div> -->
+
+    <mat-form-field class="col-12" appearance="fill" setDir>
+      <mat-label>{{'Assign driver' | translate}}</mat-label>
+      <mat-select multiple formControlName="driverIds">
+        <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+          {{driver.firstName +' '+driver.lastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!--<mat-form-field fxFlex="90%">
+        <mat-label>Task status</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let status of statusList" [value]="status">
+                {{status}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>-->
+    <!--<mat-checkbox>Assign connected tasks to same team and agent</mat-checkbox>-->
+
+    <mat-divider></mat-divider>
+  </form>
+
+  <div mat-dialog-actions class="row d-flex justify-content-end pl-3 pr-3" setDir>
+    <button type="button" mat-button color="primary" (click)="cancel()" class="cancel-btn">
+      {{'Cancel' | translate}}
+    </button>
+
+    <button type="button" mat-flat-button color="primary" (click)="onSubmit()" class="confirm-btn o-add-btn">
+      {{'Submit' | translate}}
+    </button>
+  </div>
+</section>

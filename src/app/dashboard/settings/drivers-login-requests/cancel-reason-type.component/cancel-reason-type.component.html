@@ -1,0 +1,17 @@
+<h3 mat-dialog-title dir="auto">{{'Are you sure you want to reject this login request?' | translate}}</h3>
+<div mat-dialog-content dir="auto">
+  <form class="block-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="full-width" appearance="fill" dir="auto">
+      <mat-label>{{'Reject reason' | translate}}</mat-label>
+      <textarea matInput formControlName="rejectReason" rows="5"></textarea>
+      <mat-error *ngIf="!form.controls['rejectReason'].valid">
+        {{getError('rejectReason')}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="row d-flex justify-content-end mt-3" dir="auto">
+  <button type="button" mat-button class="cancel-btn ml-1 mr-1" (click)="cancel()">{{'Cancel' | translate}} </button>
+  <button type="button" mat-button class="confirm-btn" (click)="onSubmit()">{{'Confirm' | translate}}</button>
+</div>

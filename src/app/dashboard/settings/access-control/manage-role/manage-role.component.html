@@ -1,0 +1,48 @@
+<section class="access-control container">
+
+  <h4 mat-dialog-title setDir>{{label}} {{'role' | translate}}</h4>
+
+  <hr>
+
+  <mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" novalidate>
+      <mat-form-field appearance="fill">
+        <mat-label>{{'Role name' | translate}} </mat-label>
+        <input required matInput type="text" formControlName="roleName" [readonly]="isEditMode">
+      </mat-form-field>
+      <mat-accordion *ngFor="let permission of permissions; let Index = index">
+
+        <!-- Task permissions -->
+        <mat-expansion-panel [expanded]="step === Index" (opened)="setStep(Index)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{permission.name}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item *ngFor="let permissionValue of permission.permissions; let i = index" class="row">
+              <div class="col-11">
+                {{permissionValue.name}}
+              </div>
+              <div class="col-1">
+                <mat-slide-toggle (change)="setValue(permissionValue ,$event)"
+                  [checked]="checkPermission(permissionValue.value)">
+                </mat-slide-toggle>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <br>
+      <div fxLayout="row wrap" fxLayoutAlign="end start" fxLayoutGap="20px">
+        <button mat-flat-button type="button" fxFlex="30" (click)="cancel()" class="cancel">{{'Cancel' |
+          translate}}</button>
+        <button [disabled]="!form.valid || isSubmitted" mat-flat-button color="primary" fxFlex="30" class="o-add-btn">
+          {{label}}
+        </button>
+      </div>
+      <br>
+    </form>
+  </mat-dialog-content>
+</section>

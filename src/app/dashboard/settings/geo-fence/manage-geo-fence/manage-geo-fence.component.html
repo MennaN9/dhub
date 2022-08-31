@@ -1,0 +1,73 @@
+<section class="geo-fence" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start" dir="ltr">
+
+    <form fxFlex="35%" fxFlex.xs="100%" [formGroup]="form" (ngSubmit)="onSubmit()" dir="auto" setDir>
+        <h4>{{label}} {{"Geo-Fence" | translate}}</h4>
+
+        <mat-divider></mat-divider>
+        <mat-form-field appearance="fill" class="mt-3">
+            <mat-label class="dms-label-color">{{"Name" | translate}} <span class="star">*</span> </mat-label>
+            <input matInput formControlName="name" (keyup)="onType($event)">
+            <mat-error *ngIf="!form.controls['name'].valid">
+                {{getError('name')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label class="dms-label-color">{{"Descripton" | translate}}</mat-label>
+            <input matInput #input maxlength="50" formControlName="description">
+            <mat-hint align="end"><b>{{input.value?.length || 0}}</b>{{"CHARACTERS LEFT" | translate}}/50</mat-hint>
+
+            <mat-error *ngIf="!form.controls['description'].valid">
+                {{getError('description')}}
+            </mat-error>
+        </mat-form-field>
+
+        <!--<div fxLayout="row wrap">
+            <mat-form-field fxFlex="70%" appearance="fill">
+                <mat-label fxFlex="100%" class="dms-label-color">{{'Teams' | translate}}</mat-label>
+                <mat-select #teamSelect multiple="true" class="teams-list" formControlName="teams">
+                    <div class="row">
+                        <mat-option class="col-6" *ngFor="let team of allteams" [value]="team.id">
+                            {{team.name}}
+                        </mat-option>
+                    </div>
+                </mat-select>
+            </mat-form-field>
+
+            <p fxFlex="30%" fxAlign="end end">
+                {{"Entire Team" | translate}} <mat-checkbox [value]="entireTeam" #entireTeamCheckbox class="dms-check">
+                </mat-checkbox>
+            </p>
+
+        </div>
+
+        <mat-form-field appearance="fill">
+            <mat-label class="dms-label-color">{{'Driver(s)' | translate}} <span class="star">*</span> </mat-label>
+            <mat-select multiple="true" formControlName="drivers">
+                <mat-option *ngFor="let driver of drivers" [value]="driver.id">
+                    {{driver.firstName +' '+driver.lastName}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.controls['drivers'].valid">
+                {{getError('drivers')}}
+            </mat-error>
+        </mat-form-field>-->
+
+        <div fxLayout="row wrap" fxLayoutAlign="end end" fxLayoutGap="20px" class="mt-2">
+            <div fxFlex="40%"> </div>
+            <button mat-raised-button fxFlex="25%" (click)="cancel()" class="geo-cancel ml-1 mr-1">
+                {{"Cancel" | translate}}
+            </button>
+
+            <button mat-raised-button fxFlex="25%" color="primary" class="o-add-btn" [disabled]="isSubmitted">
+                {{'Save' | translate}}
+            </button>
+        </div>
+    </form>
+
+    <div fxFlex="60%" fxFlex.xs="100%">
+        <div id="map">
+        </div>
+    </div>
+
+</section>

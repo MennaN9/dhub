@@ -1,0 +1,119 @@
+@import "./../../shared/scss/colors";
+
+:host ::ng-deep {
+    .statics-card {
+        box-shadow: none;
+        border-radius: 0px;
+        border: 1px solid gray;
+        padding-top: 25px;
+        min-height: 200px;
+        height: auto;
+    }
+
+    .dashboard-header {
+        box-shadow: none;
+        border-radius: 0px;
+        border: 1px solid gray;
+        line-height: 10px;
+        min-height: 50px;
+        height: auto;
+    }
+
+    .e-input {
+        color: black !important;
+        font-weight: 500 !important;
+        font-size: large !important;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 0px;
+        margin-top: 10px;
+    }
+
+    .mat-elevation-z8 {
+        box-shadow: none;
+    }
+
+    .mat-form-field-type-mat-native-select .mat-form-field-infix::after {
+        right: 1%;
+    }
+
+    .mat-paginator-container {
+        background-color: white;
+    }
+
+    .mat-card .mat-card-header {
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 0px;
+        background-color: $o-orange;
+
+        .mat-card-title {
+            margin: 0px;
+            padding: 0px;
+        }
+    }
+}
+
+img {
+    height: 64px;
+}
+
+select {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: 500;
+}
+
+.table-container {
+    max-width: 100%;
+    overflow: auto;
+
+    table {
+        width: 100%;
+
+        th {
+            background-color: white;
+            color: blue;
+            font-weight: 500;
+            font-size: medium;
+        }
+    }
+}
+
+.dms-page-title {
+    line-height: 1px;
+}
+
+h4 {
+    color: black;
+    line-height: 1.25rem;
+}
+
+h1 {
+    line-height: 1px;
+}
+
+.table-header {
+    background-color: $o-orange;
+    color: white;
+    font-weight: 500;
+    margin: 0px;
+
+    .dms-page-title {
+        color: white;
+    }
+}
+
+.filter,
+.clear {
+    height: 35px;
+    width: 120px;
+    font-weight: bold;
+}
+
+.clear {
+    background-color: gray;
+    border-radius: 50px;
+}

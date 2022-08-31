@@ -1,0 +1,33 @@
+@import "./../../../../shared/scss/colors";
+
+.type-radio-group {
+    display: flex;
+    flex-direction: row;
+    margin: 15px 0;
+}
+
+.type-radio-button {
+    margin: 5px;
+}
+
+.align-right-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.image-to-upload-label {
+    display: inline-block;
+    padding: 0.5rem;
+    border: 1px solid $o-orange;
+    font-family: sans-serif;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.image-selected {
+    width: 120px;
+    height: 120px;
+    border: 2px dotted $o-orange;
+    border-radius: 50%;
+}

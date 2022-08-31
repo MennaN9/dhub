@@ -1,0 +1,107 @@
+@import "./../../../shared/scss/colors";
+
+.customers {
+  margin-top: 1em;
+
+  .add {
+    border-radius: 50px;
+    background-color: $o-orange;
+    color: white;
+  }
+}
+
+.mat-card {
+  padding: 15px !important;
+  border-radius: 15px;
+}
+
+.Driver {
+  padding: 15px;
+
+  p {
+    color: $grey;
+  }
+
+  .custom-table {
+    margin-top: 50px;
+  }
+
+  td {
+    img {
+      padding: 5px;
+      height: 64px;
+      width: 64px;
+    }
+  }
+
+  .mat-menu-item:hover {
+    border-left: 3px solid $o-orange;
+    background: none !important;
+    padding-left: 13px;
+  }
+
+  table {
+    width: 100%;
+
+    th {
+      color: blue;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .search-input {
+    background-color: white;
+    padding-left: 45px;
+    height: 50px;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  .search-icon {
+    height: 32px;
+    width: 32px;
+    color: $o-orange;
+  }
+
+  #search {
+    cursor: pointer;
+    position: absolute;
+    left: 25px;
+    width: 20px;
+    height: 20px;
+    margin-top: 15px;
+    margin-left: 15px;
+  }
+
+  #search:hover {
+    color: $o-orange;
+  }
+
+  .mat-list-item-content {
+    height: 15px !important;
+  }
+
+  .custom-table {
+    margin-top: 1% !important;
+  }
+}
+
+.search-input {
+  width: 100%;
+}
+
+.ico-color {
+  color: $o-orange;
+}
+
+.table-content {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.mat-button {
+  min-width: 40px !important;
+}

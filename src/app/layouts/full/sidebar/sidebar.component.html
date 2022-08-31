@@ -1,0 +1,21 @@
+<section class="scroll">
+    <div class="text-center mt-5">
+        <img src="{{bankLogo}}" class="user-image">
+        <p>{{fullname}}</p>
+    </div>
+
+    <mat-nav-list id="scroll-top">
+        <app-menu-list-item *ngFor="let item of menuItems.getMenuitem()" [item]="item"></app-menu-list-item>
+    </mat-nav-list>
+
+    <!-- <div class="text-center mt-5">
+        English <mat-slide-toggle (change)="onChangeLanguage($event)"></mat-slide-toggle>
+        عربي
+    </div> -->
+</section>
+
+<div class="text-center mb-5 mt-3">
+    <span (click)="signOut()" class="o-add-btn p-2" style="cursor: pointer">
+        {{'Logout' | translate}}
+    </span>
+</div>

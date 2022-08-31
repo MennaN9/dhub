@@ -1,0 +1,61 @@
+<section>
+    <div class="teams" *ngIf="teams.length > 0">
+        <button mat-raised-button color="primary" (click)="openTeamDialog('add')" class="o-add-btn"
+            *ngxPermissionsOnly="['CreateTeam']">{{"Add team" | translate}}</button>
+    </div>
+
+    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="5px" fxLayoutGap.xs="0">
+        <mat-card fxFlex="22.5%" fxFlex.xs="100%" *ngFor="let team of teams">
+            <mat-card-title>
+                {{team.name}}
+
+                <button mat-icon-button [matMenuTriggerFor]="menu" (click)="setTSelectableTeam(team)"
+                    style="float: right;"
+                    *ngxPermissionsOnly="['UpdateTeam','UpdateAllTeam','DeleteTeam','DeleteAllTeam']">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+            </mat-card-title>
+
+            <mat-card-subtitle>
+                <span class="pt-2">
+                    {{"ID" | translate}}: {{team.id}}
+                </span>
+            </mat-card-subtitle>
+
+            <div class="images-block">
+                <span *ngFor="let driver of team.drivers">
+                    <img matTooltipPosition="below" #tooltip="matTooltip" [matTooltip]="driver.name"
+                        src="{{driver.imageUrl ? baseUrl + driver.imageUrl : altImage}}" class="driver-img">
+                </span>
+            </div>
+        </mat-card>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end center" *ngIf="teams.length > 0">
+        <mat-paginator [length]="total" [pageSize]="pageSize" [pageSizeOptions]="[12, 24, 60, 120]"
+            *ngxPermissionsOnly="['ReadTeam']" (page)="onChangePage($event)">
+        </mat-paginator>
+    </div>
+
+    <div *ngIf="teams.length == 0" class="mt-5">
+        <div class="text-center mt-5">
+            <img src="assets/images/icons/teamwork.png">
+            <h1>{{'Organize your drivers into logical groups to efficiently manage your field operations.' | translate}}
+            </h1>
+            <h1>{{'You may group them on the basis of location, geography, type of service' | translate}}</h1>
+            <div *ngIf="teams.length == 0">
+                <button mat-raised-button color="primary" (click)="openTeamDialog('add')" class="o-add-btn"
+                    *ngxPermissionsOnly="['CreateTeam']">{{'Add team' | translate}}</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openTeamDialog('edit')" *ngxPermissionsOnly="['UpdateTeam','UpdateAllTeam']">{{"Edit"
+        | translate}}</button>
+    <button mat-menu-item *ngxPermissionsOnly="['DeleteTeam','DeleteAllTeam']">
+        <app-confirm-deletion [dialogContent]="dialogContent" (confirm)="onConfirm($event)"></app-confirm-deletion>
+    </button>
+</mat-menu>

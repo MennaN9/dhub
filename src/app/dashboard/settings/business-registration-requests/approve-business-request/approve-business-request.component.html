@@ -1,0 +1,66 @@
+<div class="row title font-weight-bold">
+    <h3 class="col-10">
+        {{'Approve Request' | translate}}
+    </h3>
+
+    <div class="col-2 justify-content-end">
+        <mat-icon class="close-btn" mat-dialog-close>close</mat-icon>
+    </div>
+</div>
+
+<form [formGroup]="form">
+    <div class="row">
+        <p class="col-md-12 font-weight-bold">{{'Please select the below settings for this account' | translate}}</p>
+
+        <div class="col-md-4 col-xs-12 font-weight-bold">
+            {{'D-hub Version' | translate}}
+        </div>
+
+        <div class="col-md-8 col-sm-12 row">
+            <mat-radio-group aria-label="Select an option" class="row" formControlName="isFullVersion"
+                (change)="onChangeVersion($event)">
+                <mat-radio-button value="true" class="col-6">{{'Full Version' | translate}}
+                </mat-radio-button>
+                <mat-radio-button value="false" class="col-6">{{'Customized' | translate}}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <ng-container *ngIf="isFullVersion == 'false'">
+            <div class="col-md-4 mt-5 font-weight-bold">
+                {{'Auto allocation method' | translate}}
+            </div>
+
+            <div class="col-md-8 col-sm-12 mt-5">
+                <mat-form-field appearance="fill" class="col-md-6 col-sm-12">
+                    <mat-label>{{'Please select' | translate}}</mat-label>
+                    <mat-select formControlName="autoAllocationMethod">
+                        <mat-option *ngFor="let method of methods" [value]="method.id">
+                            {{method.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4 col-sm-12 font-weight-bold">
+                {{'Allow Modules' | translate}}
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                <mat-selection-list formControlName="selectedModules">
+                    <ng-container class="col-md-6 col-sm-12">
+                        <mat-list-option *ngFor="let module of modules" [value]="module.id">
+                            {{module.name}}
+                        </mat-list-option>
+                    </ng-container>
+                </mat-selection-list>
+            </div>
+
+        </ng-container>
+    </div>
+</form>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close class="cancel-btn">{{'Cancel' | translate}}</button>
+    <button mat-button class="save-btn" (click)="approve()">{{'Save' | translate}}</button>
+</mat-dialog-actions>

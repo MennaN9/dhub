@@ -1,0 +1,126 @@
+<section class="container">
+  <div class="row mb-1" dir="auto">
+    <div class="col-11">
+      <h4 class="dialog-title">
+        {{label}} {{'Customer' | translate}}
+      </h4>
+    </div>
+    <div class="col-1" (click)="cancel()">
+      <mat-icon class="close">close</mat-icon>
+    </div>
+  </div>
+
+  <form class="row" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="col-6 row mt-2">
+
+      <mat-form-field class="col-12" appearance="fill">
+        <mat-label class="dms-label-color">{{'Name' | translate}} <span class="star">*</span></mat-label>
+        <input matInput type="text" formControlName="name">
+        <mat-error *ngIf="!form.controls['name'].valid">
+          {{getError('name')}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12" appearance="fill">
+        <mat-label class="dms-label-color">
+          {{'Email' | translate}}
+          <!--<span class="star">*</span>-->
+        </mat-label>
+        <input matInput type="email" formControlName="email" [readonly]='editMode'>
+        <mat-error *ngIf="!form.controls['email'].valid">
+          {{getError('email')}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12" appearance="fill">
+        <mat-label class="dms-label-color">
+          {{'CID' | translate}}
+          <!--<span class="star">*</span>-->
+        </mat-label>
+        <input matInput type="text" formControlName="cid">
+        <mat-error *ngIf="!form.controls['cid'].valid">
+          {{getError('cid')}}
+        </mat-error>
+      </mat-form-field>
+
+
+      <div class="col-12 row m-0">
+        <app-country-codes class="col-2 p-0" (country)="onChangeCountry($event)"
+          [previousCountryId]="previousCountryId">
+        </app-country-codes>
+
+        <mat-form-field class="col-10 p-0" appearance="fill">
+          <mat-label class="dms-label-color">{{'Phone' | translate}} <span class="star">*</span></mat-label>
+          <input matInput type="number" formControlName="phone">
+          <mat-error *ngIf="!form.controls['phone'].valid">
+            {{getError('phone')}}
+          </mat-error>
+          <mat-hint class="error" *ngIf="numberMessage !=''">{{numberMessage}}</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="row ml-1 mr-1 p-0" dir="auto" *ngIf="!onMarkerMove">
+        <div class="col-11">
+          <app-address [isPACI]="true" (addressChanges)="findLocation($event)" [addressToReplace]="customer?.location">
+          </app-address>
+        </div>
+
+        <div class="col-1">
+          <mat-icon matSuffix (click)="toggleAddress()">
+            place
+          </mat-icon>
+        </div>
+      </div>
+
+      <app-search-place class="col-12" (onPlace)="onPlace($event)" [previousAddress]="previousAddress"></app-search-place>
+
+      <!-- <mat-form-field class="col-12" appearance="fill" *ngIf="showAddress">
+        <mat-label class="dms-label-color">{{'Address' | translate}} <span class="star">*</span></mat-label>
+        <input matInput formControlName="address" (blur)="checkAddress()" matGoogleMapsAutocomplete
+          (onLocationSelected)="addressClicked($event)" (change)="onChangeText($event)" [value]="prevAddress">
+        <mat-icon matSuffix (click)="toggleManaulLocation()">location_on</mat-icon>
+        <mat-error *ngIf="!form.controls['address'].valid">
+          {{getError('address')}}
+        </mat-error>
+      </mat-form-field> -->
+
+      <mat-form-field class="col-6" *ngIf="onMarkerMove" appearance="fill">
+        <mat-label class="dms-label-color">{{'Latitude' | translate}}</mat-label>
+        <input matInput type="text" formControlName="latitude">
+      </mat-form-field>
+
+      <mat-form-field class="col-6" *ngIf="onMarkerMove" appearance="fill">
+        <mat-label class="dms-label-color">{{'Longitude' | translate}}</mat-label>
+        <input matInput type="text" formControlName="longitude">
+      </mat-form-field>
+
+      <mat-form-field class="col-12" appearance="fill">
+        <mat-chip-list #tagsChips>
+          <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable" (removed)="remove(tag)">
+            {{tag}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+
+          <input placeholder="{{'Tags' | translate}}" [matChipInputFor]="tagsChips"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+      </mat-form-field>
+
+      <div mat-dialog-actions class="col-12">
+        <button mat-button color="primary" type="button" (click)="cancel()" class="cancel-btn">
+          {{'Cancel' | translate}}
+        </button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitted" class="confirm-btn o-add-btn">
+          {{label}}
+        </button>
+      </div>
+    </div>
+
+    <div class="col-6 mt-2">
+      <div id="map">
+      </div>
+    </div>
+
+  </form>
+</section>
